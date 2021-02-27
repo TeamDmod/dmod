@@ -5,7 +5,6 @@ export default class DmodDocument extends Document {
         return (
             <Html>
                 <Head>
-                    <title>Find Server Moderators - Dmod.gg </title>
                 </Head>
 
                 <body>
