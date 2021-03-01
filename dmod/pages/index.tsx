@@ -1,6 +1,9 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import HomeHeader from '../components/headers/HomeHeader';
 
 export default function Home() {
-  return <h1>Hello Next.js</h1>
+  return (
+    <div>
+      <HomeHeader></HomeHeader>
+    </div>
+  );
 }

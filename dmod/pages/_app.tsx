@@ -1,4 +1,6 @@
-import '../styles/globals.css'
+import '../styles/globals.scss';
+import '../styles/navbar.scss';
+import Navbar from '../components/navigation/Navbar';
 import Head from 'next/head';
 
 function MyApp({ Component, pageProps }) {
@@ -7,6 +9,7 @@ function MyApp({ Component, pageProps }) {
       <Head>
         <title>Find Server Moderators - Dmod.gg </title>
       </Head>
+      <Navbar></Navbar>
       <Component {...pageProps} />
     </> 
   );
