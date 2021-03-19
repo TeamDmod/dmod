@@ -1,22 +1,70 @@
 .main_header{
     background-color: #080E1F !important;
-    height: 400px;
+    height: 350px;
     margin: 0;
     width: 100%;
     border-top: 2px  solid #24114C;
     border-bottom: 2px  solid #24114C;
+    text-align: center;
+
+    .search_container {
+        margin-top: 30px;
+
+        .search_bar { 
+            padding: 5px 10px;
+            font-family: "San Francisco", sans-serif;
+            border: none;
+            font-size: 0.9rem;
+            border-top-left-radius: 7px;
+            border-bottom-left-radius: 7px;
+            width: 500px;
+            height: 35px;
+        }
+        
+        .search_button {
+            height: 45px;
+            padding: 5px 10px;
+            font-family: "San Francisco", sans-serif;
+            border: none;
+            border-top-right-radius: 7px;
+            border-bottom-right-radius: 7px;
+            color: white;
+            background-color: #432891;
+        }
+    }
 
     .text_headings{
-        text-align: center;
         margin-top: 75px;
         h1 {
             font-weight: 700;
-            font-size: 39px;
+            font-size: 46px;
         }
 
         P {
             font-size: 16px;
             color: grey;
+            margin-top: -20px;
+        }
+    }
+}
+
+.home_wave {
+    margin-top: -150px;
+}
+
+.home_main_content {
+    min-height: 100px;
+}
+
+.top_rated{
+    padding: 40px 10%;
+    
+    .heading {
+        text-align: center;
+        
+        p {
+            color: rgb(173, 173, 173);
+            margin-top: -10px;
         }
     }
 }
