@@ -1,5 +1,4 @@
-$bg-color-1: #0C142C;
-
+$bg-color-1: #0c142c;
 
 @font-face {
   font-family: "San Francisco";
@@ -12,4 +11,12 @@ body {
   background-color: $bg-color-1;
   color: white;
   margin: 0;
+}
+
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
 }

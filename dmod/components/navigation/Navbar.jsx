@@ -29,7 +29,7 @@ function Navbar() {
                     })}
                 </ul>
             </nav>
-            <Link className="lgn" href="/login"><button className="primary-button">Login</button></Link>
+            <Link className="lgn" href="http://localhost:4000/login"><button className="primary-button">Login</button></Link>
           </header>
         </div>
     )
