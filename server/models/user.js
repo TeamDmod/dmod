@@ -4,6 +4,12 @@ const UserSchema = new Schema({
   username: {
     type: String,
   },
+  user_id: {
+    type: String,
+  },
+  bio:{
+    type: String
+  },
   avatar: {
     type: String,
   },
@@ -15,11 +21,11 @@ const UserSchema = new Schema({
   },
   join_date: {
     type: Date,
-    default: () => new Date.now()
+    default: () => Date.now()
   },
   cv_id: {
     type: String 
   }
 });
 
-module.exports = model("user", UserSchema, "users");
+module.exports = model("user", UserSchema, "uwusers");
