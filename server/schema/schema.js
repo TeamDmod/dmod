@@ -1,6 +1,6 @@
 const { GraphQLObjectType, GraphQLString, GraphQLID, GraphQLSchema, GraphQLList, GraphQLNonNull } = require('graphql');
 const users = require('../models/user');
-
+const authenticate = require('../middleware/gqlauth');
 
 const UserType = new GraphQLObjectType({
     name: "User",
@@ -28,7 +28,7 @@ const RootQuery = new GraphQLObjectType({
         user: {
             type: UserType,
             args: {id:{type: GraphQLID}},
-            resolve(parent, args){
+            resolve(parent, args, context){
                 return users.findOne({user_id:args.id})
             }
         }
@@ -45,10 +45,14 @@ const Mutation = new GraphQLObjectType({
                 avatar: { type: GraphQLString },
                 bio: { type: GraphQLString },
             },
-            async resolve(parent, args) {
+            async resolve (parent, args, context) {
                 
-                let user = await users.findOne({user_id: args.id});
+                let authedUser = await authenticate(parent, args, context);
+                
+                if(authedUser !== args.id) throw new Error("User not permitted to preform this action on this user.")
 
+                let user = await users.findOne({user_id: args.id});
+                
                 if(!user) return {error: "not found"}
 
                 user.avatar = args.avatar ? args.avatar : user.avatar;
