@@ -1,4 +1,4 @@
-const { GraphQLObjectType, GraphQLString, GraphQLID, GraphQLSchema, GraphQLList } = require('graphql');
+const { GraphQLObjectType, GraphQLString, GraphQLID, GraphQLSchema, GraphQLList, GraphQLNonNull } = require('graphql');
 const users = require('../models/user');
 
 
@@ -35,7 +35,35 @@ const RootQuery = new GraphQLObjectType({
     }
 })
 
+const Mutation = new GraphQLObjectType({
+    name: "mutation",
+    fields: {
+        editUser: {
+            type: UserType,
+            args: {
+                id: {type: new GraphQLNonNull(GraphQLID)},
+                avatar: { type: GraphQLString },
+                bio: { type: GraphQLString },
+            },
+            async resolve(parent, args) {
+                
+                let user = await users.findOne({user_id: args.id});
+
+                if(!user) return {error: "not found"}
+
+                user.avatar = args.avatar ? args.avatar : user.avatar;
+                user.bio = args.bio ? args.bio : user.bio;
+                
+                await user.update();
+
+                return user; 
+            }
+        }
+    }
+})
+
 
 module.exports = new GraphQLSchema({
-    query: RootQuery
+    query: RootQuery,
+    mutation: Mutation
 });
