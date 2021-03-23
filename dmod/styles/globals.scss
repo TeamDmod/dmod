@@ -1,13 +1,14 @@
 $bg-color-1: #0c142c;
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 
 @font-face {
   font-family: "San Francisco";
-  font-weight: 400;
+  font-weight: 400, 500, 600, 700;
   src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff");
 }
 
 body {
-  font-family: "San Francisco", sans-serif;
+  font-family: "Roboto", sans-serif;
   background-color: $bg-color-1;
   color: white;
   margin: 0;
