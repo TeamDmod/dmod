@@ -25,7 +25,7 @@ export function useDiscordUser(access_token, refresh_token = null){
 
     const [state, dispatch] = useReducer(userReducer, inital);
 
-
+    console.log(access_token);
     //shh i know this is really scuffed
     if(!state.data && !state.error){
         axios.get("https://discord.com/api/v8/users/@me", {

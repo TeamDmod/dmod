@@ -10,11 +10,15 @@ export default function Apply() {
                     <h1>Hi, Welcome to Dmod.gg.</h1>
                     <p>Before you can start filling out the application we need to know who you are.</p>
 
-                    <button className={`${buttons.big_button} ${buttons.colored}`}>Server Owner</button>
-                    <button className={`${buttons.big_button} ${buttons.colored}`}>Moderator</button>
-                </div>
-                <div className={styles.options}>
-                    <button className={`${buttons.small_button} ${buttons.border}`}>Next</button>
+                    <div className={`${styles.selector_panel}`} style={{float: "left", backgroundImage: `url(https://cdn.discordapp.com/attachments/797808681638690867/825316603004059658/unknown.png)`}}>
+                        <div className={styles.tinted}></div>
+
+                        <h3>Server Owner</h3>
+                    </div>
+                    <div className={`${styles.selector_panel}`} style={{float: "right", backgroundImage: "url(https://cdn.discordapp.com/attachments/797808681638690867/825316877534232617/unknown.png)"}}>
+                    <div className={styles.tinted}></div>
+                        <h3>Moderator</h3>
+                    </div>
                 </div>
             </div>
         </div>

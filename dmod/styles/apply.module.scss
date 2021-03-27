@@ -1,18 +1,76 @@
 .container {
     position: absolute;
     top: 40%;
-    border-radius: 10px;
+    border-radius: 15px;
     left: 50%;
     text-align: center;
     margin-top: 100px;
-    width: 50%;
-    height: 700px;
+    width: 40%;
+    min-height: 600px;
     transform: translate(-50%, -50%);
     background-color: #080e1f !important;
 }
 
 .container_main {
     margin-top: 25px;
+    height: 400px;
+    padding: 10px;
+}
+
+.selector_panel{
+    position: relative;
+    text-align: left;
+    height: 400px;   
+    width: 45%;
+    margin: 10px;
+    border: none;
+    color: white;
+    background: linear-gradient(to bottom right, rgba(28, 21, 90, 0.5), rgba(19, 11, 90, 0.5));
+    border-radius: 5px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 120%;   
+    transition: all 0.3s ease-in-out;
+    background-repeat: none;
+
+    .tinted{
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        transition: all 0.3s ease-in-out;
+        width: 100%;
+        background: rgba(28, 21, 90, 0.7);
+        z-index: 3;
+    }
+    h3 {
+        position: relative;
+        z-index: 4;
+        margin: 20px;
+        font-weight: bold;
+        font-size: 22px;
+    }
+
+    &:hover {
+        background-size: 110%;
+        .tinted{
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba(28, 21, 90, 0.4);
+            z-index: 3;
+        }
+    }
+}
+
+
+.seperator{
+    position: relative;
+    height:200px;
+    width: 100px;
+
 }
 
 .top_progress {
