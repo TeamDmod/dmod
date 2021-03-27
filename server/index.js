@@ -5,6 +5,7 @@ const {graphqlHTTP} = require('express-graphql');
 const auth = require('./routes/auth');
 const api = require('./routes/api/index.js');
 const schema = require('./schema/schema');
+const bodyParser = require('body-parser');
 
 let app = express();
 
@@ -18,7 +19,7 @@ app.use(
     schema: schema,
     graphiql: true,
     }));  
-
+app.use(bodyParser({extended: false}))
 app.use("/api", api);
 app.use("/", auth);
 
