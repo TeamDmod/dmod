@@ -1,18 +1,24 @@
 import '../styles/globals.scss';
 import '../styles/navbar.scss';
+import {Provider} from 'react-redux';
 import Navbar from '../components/navigation/Navbar';
 import Head from 'next/head';
+import store from '../redux/store';
 
 function MyApp({ Component, pageProps }) {
   return ( 
     <>
-      <Head>
-        <title>Find Server Moderators - Dmod.gg </title>
-      </Head>
-      <Navbar></Navbar>
-      <Component {...pageProps} />
+      <Provider store={store}>
+        <Head>
+          <title>Find Server Moderators - Dmod.gg </title>
+        </Head>
+        <Navbar></Navbar>
+        <Component {...pageProps} />
+      </Provider>
     </> 
   );
 }
+
+const makeStore = () => store;
 
 export default MyApp

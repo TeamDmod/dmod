@@ -1,23 +1,58 @@
+import {useEffect, useState} from 'react';
 import styles from '../styles/apply.module.scss';
 import buttons from '../styles/buttons.module.scss';
 
 export default function Apply() {
+
+    let [step, setStep] = useState(0);
+
     return (
         <div>
             <div className={styles.container}>
-                <div className={styles.top_progress}></div>
-                <div className={styles.container_main}>
-                    <h1>Hi, Welcome to Dmod.gg.</h1>
-                    <p>Before you can start filling out the application we need to know who you are.</p>
-
-                    <div className={`${styles.selector_panel}`} style={{float: "left", backgroundImage: `url(https://cdn.discordapp.com/attachments/797808681638690867/825316603004059658/unknown.png)`}}>
-                        <div className={styles.tinted}></div>
-
-                        <h3>Server Owner</h3>
-                    </div>
-                    <div className={`${styles.selector_panel}`} style={{float: "right", backgroundImage: "url(https://cdn.discordapp.com/attachments/797808681638690867/825316877534232617/unknown.png)"}}>
-                    <div className={styles.tinted}></div>
-                        <h3>Moderator</h3>
+                <h1>Welcome to Dmod.gg</h1>
+                <p>Apply for a position, or start a campain.</p>
+                <div className={styles.devider}></div>
+                <div className={styles.main}>
+                    <div className={styles.navigator}>
+                        <div className={styles.n_element}>
+                            <div className={styles.text}>
+                                <h3>Services</h3>
+                                <p>What services are you looking for?</p>
+                            </div>
+                            <div className={` ${styles.image} ${styles.filled} `}>
+                                <img src={"/8rkjej.png"}></img>
+                            </div>
+                        </div>
+                        <div className={styles.spacer}></div>
+                        <div className={styles.n_element}>
+                            <div className={styles.text}>
+                                <h3>About</h3>
+                                <p>Tell us about yourself.</p>
+                            </div>
+                            <div className={` ${styles.image} ${styles.non_filled} `}>
+                                <img src={"/info.png"}></img>
+                            </div>
+                        </div>
+                        <div className={styles.spacer}></div>
+                        <div className={styles.n_element}>
+                            <div className={styles.text}>
+                                <h3>Availability</h3>
+                                <p>When are you avalable?</p>
+                            </div>
+                            <div className={` ${styles.image} ${styles.non_filled} `}>
+                                <img src={"/clock.png"}></img>
+                            </div>
+                        </div>
+                        <div className={styles.spacer}></div>
+                        <div className={styles.n_element}>
+                            <div className={styles.text}>
+                                <h3>Done!</h3>
+                                <p>Publish your listing!</p>
+                            </div>
+                            <div className={` ${styles.image} ${styles.non_filled} `}>
+                                <img src={"/8rkjej.png"}></img>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

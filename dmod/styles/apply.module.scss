@@ -1,89 +1,71 @@
 .container {
-    position: absolute;
-    top: 40%;
-    border-radius: 15px;
-    left: 50%;
-    text-align: center;
-    margin-top: 100px;
-    width: 40%;
-    min-height: 600px;
-    transform: translate(-50%, -50%);
-    background-color: #080e1f !important;
+    padding: 10px 10% ;
+    height: 100%;
 }
 
-.container_main {
-    margin-top: 25px;
-    height: 400px;
-    padding: 10px;
+.main {
+    margin-top: 10px;
+    height: 100%;
 }
 
-.selector_panel{
+.devider {
     position: relative;
-    text-align: left;
-    height: 400px;   
-    width: 45%;
-    margin: 10px;
-    border: none;
-    color: white;
-    background: linear-gradient(to bottom right, rgba(28, 21, 90, 0.5), rgba(19, 11, 90, 0.5));
-    border-radius: 5px;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 120%;   
-    transition: all 0.3s ease-in-out;
-    background-repeat: none;
+    width: 100%;
+    margin-top: 40px;
+    height: 1px;
+    background-color: rgb(39, 32, 75);
+} 
 
-    .tinted{
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        transition: all 0.3s ease-in-out;
-        width: 100%;
-        background: rgba(28, 21, 90, 0.7);
-        z-index: 3;
+.navigator {
+    position: relative;
+    height: 100%;
+    float: left;
+    margin-top: -10px;
+    border-right: 2px solid rgb(39, 32, 75);
+
+    .non_filled {
+        background-color: rgb(126, 126, 126);
     }
-    h3 {
+
+    .filled  {
+        background-color: rgb(148, 111, 233);
+    }
+
+    .n_element{
+        float: right;
         position: relative;
-        z-index: 4;
-        margin: 20px;
-        font-weight: bold;
-        font-size: 22px;
-    }
+        margin-top: 40px;
+        margin-right: 20px;
+        text-align: right;
+        .text {
+            position: relative;
+            float: left;
 
-    &:hover {
-        background-size: 110%;
-        .tinted{
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 100%;
-            background: rgba(28, 21, 90, 0.4);
-            z-index: 3;
+            margin-right: 10px;
+            p {
+                color: rgb(162, 162, 162);
+                font-size: 14px;
+                margin-top: -10px;
+            }
+        }
+         
+        .image {
+            position: relative;
+            float: left;
+            height: 40px;
+            padding: 20px 20px;
+            img {
+                height: 40px;
+            }
+            
+            margin-left: 10px;
+            border-radius: 50px;
         }
     }
 }
 
 
-.seperator{
-    position: relative;
-    height:200px;
-    width: 100px;
-
-}
-
-.top_progress {
-    position: absolute;
-    top: 1px;
-    left: 0;
-    width: 10%;
-    height: 2px;
-    background-color: #432891;
-}
-
-.options {
-    position: absolute;
-    bottom: 15px;
-    right: 15px;
+.spacer {
+    width: 2px;
+    height: 100px;
 }
