@@ -19,23 +19,22 @@
 .navigator {
     position: relative;
     height: 100%;
-    float: left;
     margin-top: -10px;
     border-right: 2px solid rgb(39, 32, 75);
-
+    float: left;
     .non_filled {
         background-color: rgb(126, 126, 126);
     }
 
     .filled  {
-        background-color: rgb(148, 111, 233);
+        background-color: rgb(45, 5, 138);
     }
 
     .n_element{
-        float: right;
         position: relative;
         margin-top: 40px;
-        margin-right: 20px;
+        float: right;
+        margin-right:  30px;
         text-align: right;
         .text {
             position: relative;
@@ -64,6 +63,59 @@
     }
 }
 
+
+.content {
+    overflow-y: hidden;
+    padding: 20px 40px;
+
+    .text_headings{
+        p {
+            margin-top: -10px;
+            color: rgb(148, 148, 148);
+        }
+    }
+}
+
+.large_selector {
+    position: relative;
+    display: flex;
+    margin-top: 20px;
+    padding: 10px 20px;
+    width: 600px;
+    height: auto;
+    border-radius: 10px;
+    border: 1px solid rgb(162, 162, 162);
+
+    .text {
+        text-align: left;
+        float: left;
+        margin-top: -2px;
+        h3 {
+            font-weight: 400;
+        }
+        p {
+            margin-top: -12px;
+            font-size: 15px;
+        }
+    }
+
+    .image {
+        float: left;
+        height: 50px;
+        margin-top: 5px;
+        padding: 10px;
+        margin-right: 10px;
+        background-color: rgb(45, 5, 138);
+        border-radius: 50px;
+        img {
+            height: 50px;
+        }
+    }
+
+    .selected {
+        border: solid 1px rgb(39, 32, 75); 
+    }
+}
 
 .spacer {
     width: 2px;

@@ -1,11 +1,68 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useRef} from 'react';
+import Services from '../components/ApplySteps/Services';
+import About from '../components/ApplySteps/About';
 import styles from '../styles/apply.module.scss';
+import {motion, useAnimation} from 'framer-motion';
 import buttons from '../styles/buttons.module.scss';
+import Step from '../components/ApplySteps/Step';
 
 export default function Apply() {
 
     let [step, setStep] = useState(0);
+    let [data, setData] = useState({});
+    const mainRef = useRef();
+    let animationController = useAnimation();
 
+
+    let advanceStep = () => {
+        if(step > applySteps.length) {
+            console.log("setup done.. Submitting data.");
+        }
+
+        setStep(step + 1);
+
+    };
+
+    let setModerator = (e) => {
+        advanceStep();
+    }   
+
+    let setOwner = (e) => {
+
+    }
+
+    let applySteps = [
+        {
+            step: 1,
+            component: <Services setModerator={setModerator} setOwner={setOwner}></Services>,
+            text: "Services",
+            description: "What services are you looking for?",
+            image: "/8rkjej.png"
+        },
+        {
+            step: 2,
+            component: <About />,
+            text: "About",
+            description: "Tell us about yourself!",
+            image: "info.png"
+        },
+        {
+            step: 3,
+            component: null,
+            text: "Availability",
+            description: "When are you avalable?",
+            image: "clock.png"
+        },
+        {
+            step: 4,
+            component: null,
+            text: "Done!",
+            description: "Publish your listing!",
+            image: "draw.png"
+        }
+    ];
+
+    
     return (
         <div>
             <div className={styles.container}>
@@ -14,46 +71,18 @@ export default function Apply() {
                 <div className={styles.devider}></div>
                 <div className={styles.main}>
                     <div className={styles.navigator}>
-                        <div className={styles.n_element}>
-                            <div className={styles.text}>
-                                <h3>Services</h3>
-                                <p>What services are you looking for?</p>
-                            </div>
-                            <div className={` ${styles.image} ${styles.filled} `}>
-                                <img src={"/8rkjej.png"}></img>
-                            </div>
-                        </div>
-                        <div className={styles.spacer}></div>
-                        <div className={styles.n_element}>
-                            <div className={styles.text}>
-                                <h3>About</h3>
-                                <p>Tell us about yourself.</p>
-                            </div>
-                            <div className={` ${styles.image} ${styles.non_filled} `}>
-                                <img src={"/info.png"}></img>
-                            </div>
-                        </div>
-                        <div className={styles.spacer}></div>
-                        <div className={styles.n_element}>
-                            <div className={styles.text}>
-                                <h3>Availability</h3>
-                                <p>When are you avalable?</p>
-                            </div>
-                            <div className={` ${styles.image} ${styles.non_filled} `}>
-                                <img src={"/clock.png"}></img>
-                            </div>
-                        </div>
-                        <div className={styles.spacer}></div>
-                        <div className={styles.n_element}>
-                            <div className={styles.text}>
-                                <h3>Done!</h3>
-                                <p>Publish your listing!</p>
-                            </div>
-                            <div className={` ${styles.image} ${styles.non_filled} `}>
-                                <img src={"/8rkjej.png"}></img>
-                            </div>
-                        </div>
+                        {applySteps.map(uwu => {
+                            return <> 
+                            <Step name={uwu.text} description={uwu.description} image={uwu.image}></Step> 
+                            <div className={styles.spacer}></div>
+                            </>
+                        })}
                     </div>
+                    
+                    <motion.div animate={animationController} ref={mainRef} className={styles.content}>
+                        {applySteps[step].component}
+                    </motion.div>
+
                 </div>
             </div>
         </div>
