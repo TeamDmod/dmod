@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from '../../styles/apply.module.scss';
 
-function Step(props){
+function Step(props) {
     return (
         <div className={styles.n_element}>
             <div className={styles.text}>

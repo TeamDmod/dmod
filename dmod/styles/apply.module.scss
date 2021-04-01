@@ -1,5 +1,5 @@
 .container {
-    padding: 10px 10% ;
+    padding: 10px 10%;
     height: 100%;
 }
 
@@ -14,7 +14,7 @@
     margin-top: 40px;
     height: 1px;
     background-color: rgb(39, 32, 75);
-} 
+}
 
 .navigator {
     position: relative;
@@ -23,18 +23,18 @@
     border-right: 2px solid rgb(39, 32, 75);
     float: left;
     .non_filled {
-        background-color: rgb(126, 126, 126);
+        background-color: rgb(124, 140, 192);
     }
 
-    .filled  {
+    .filled {
         background-color: rgb(45, 5, 138);
     }
 
-    .n_element{
+    .n_element {
         position: relative;
         margin-top: 40px;
         float: right;
-        margin-right:  30px;
+        margin-right: 30px;
         text-align: right;
         .text {
             position: relative;
@@ -47,7 +47,7 @@
                 margin-top: -10px;
             }
         }
-         
+
         .image {
             position: relative;
             float: left;
@@ -56,19 +56,18 @@
             img {
                 height: 40px;
             }
-            
+
             margin-left: 10px;
             border-radius: 50px;
         }
     }
 }
 
-
 .content {
     overflow-y: hidden;
     padding: 20px 40px;
 
-    .text_headings{
+    .text_headings {
         p {
             margin-top: -10px;
             color: rgb(148, 148, 148);
@@ -113,7 +112,7 @@
     }
 
     .selected {
-        border: solid 1px rgb(39, 32, 75); 
+        border: solid 1px rgb(39, 32, 75);
     }
 }
 
