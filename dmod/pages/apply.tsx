@@ -19,11 +19,14 @@ export default function Apply() {
             console.log("setup done.. Submitting data.");
         }
 
-        console.log(step2)
 
         setStep(step + 1);
 
     };
+
+    let goBack = () => {
+        setStep(step - 1);
+    }
 
     let setModerator = (e) => {
         advanceStep();
@@ -33,11 +36,18 @@ export default function Apply() {
 
     }
 
-    const step1 = useRef();
-    const step2 = useRef();
-    const step3 = useRef();
-    const step4 = useRef();
-    const step5 = useRef();
+    let handleAboutData = (submitter, newData) => {
+        switch (submitter) {
+            case "forward":
+                advanceStep()
+                setData({ ...data, newData })
+                break;
+            case "back":
+                goBack()
+                break;
+
+        }
+    }
 
     const applySteps = [
         {
@@ -45,32 +55,28 @@ export default function Apply() {
             component: <Services setModerator={setModerator} setOwner={setOwner}></Services>,
             text: "Welcome to dmod.gg!",
             description: "Lets get started on your listing! First off we need to know who you are!",
-            image: "/8rkjej.png",
-            navigator_ref: step1
+            image: "/8rkjej.png"
         },
         {
             step: 2,
-            component: <About />,
+            component: <About onSubmit={handleAboutData} data={data} />,
             text: "Who are you??",
             description: "Tell us about yourself! Include things on your hobbys and your interests! It might help the server owner!",
-            image: "info.png",
-            navigator_ref: step2,
+            image: "info.png"
         },
         {
             step: 3,
             component: null,
             text: "Availability",
             description: "When are you avalable?",
-            image: "clock.png",
-            navigator_ref: step3
+            image: "clock.png"
         },
         {
             step: 4,
             component: null,
             text: "Done!",
             description: "Publish your listing!",
-            image: "draw.png",
-            navigator_ref: step4
+            image: "draw.png"
         }
     ];
 

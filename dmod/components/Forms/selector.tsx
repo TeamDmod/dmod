@@ -13,12 +13,15 @@ function Selector(props) {
         if (isDown) {
             dropdownRef.current.className = `${forms.dropdown} ${forms.selected}`
         } else {
-            dropdownRef.current.className = `${forms.dropdown}`
+            dropdownRef.current.className = `${forms.dropdown} ${forms.normal}`
         }
     }
 
     let selectItem = (e) => {
         setSelected(e.target.attributes.content.textContent)
+        if (props.onChange) {
+            props.onChange(currentlySelected)
+        }
     }
 
     return (
