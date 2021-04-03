@@ -4,6 +4,7 @@ import forms from '../../styles/forms.module.scss';
 function Selector(props) {
 
     const dropdownRef = useRef();
+    const [currentlySelected, setSelected] = useState("Please Select one");
     let [isDown, setDown] = useState(false);
 
     let onclick = () => {
@@ -14,17 +15,20 @@ function Selector(props) {
         } else {
             dropdownRef.current.className = `${forms.dropdown}`
         }
+    }
 
+    let selectItem = (e) => {
+        setSelected(e.target.attributes.content.textContent)
     }
 
     return (
         <div className={forms.selector_container}>
             <span><img src={props.image}></img><span className={forms.text_contianer_text}>{props.name}</span></span>
             <div onClick={onclick} ref={dropdownRef} className={forms.dropdown}>
-                <span className={forms.currently_selected}>Please select one <span className={forms.down_arrow}><img src={"./down-arrow.png"} alt="" /></span></span>
+                <span className={forms.currently_selected}>{currentlySelected}<span className={forms.down_arrow}><img src={"./down-arrow.png"} alt="" /></span></span>
                 <div className={forms.dropdown_selector}>
                     {props.items.map(item => {
-                        return <p className={forms.item}>{item}</p>
+                        return <p content={item} key={item} onClick={selectItem} className={forms.item}>{item}</p>
                     })}
                 </div>
             </div>
