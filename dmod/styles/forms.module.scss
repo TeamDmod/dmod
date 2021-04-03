@@ -1,3 +1,5 @@
+$text_container_bg: rgb(16, 17, 34);
+
 .outline_input {
     padding: 10px;
     border: none;
@@ -23,5 +25,42 @@
     width: 500px;
     height: 200px;
     margin-top: 20px;
-    font-family: 'Roboto';
+    font-family: "Roboto";
+}
+
+.text_container {
+    margin: 0;
+    margin-bottom: 0px;
+    background-color: $text_container_bg;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 20px;
+    text-align: left;
+    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+    span {
+        color: rgb(233, 233, 233);
+        font-weight: 400;
+        font-size: 17px;
+        margin-bottom: 10px;
+
+        img {
+            height: 20px;
+
+            margin-right: 2px;
+        }
+    }
+    .embedded_form {
+        background-color: $text_container_bg;
+        border: none;
+        color: white;
+        font-family: "Roboto", sans-serif;
+        font-size: 16px;
+        resize: none;
+        width: 100%;
+        height: 100%;
+        padding: 10px 0px;
+        border-style: none;
+        border-color: Transparent;
+        overflow: auto;
+    }
 }

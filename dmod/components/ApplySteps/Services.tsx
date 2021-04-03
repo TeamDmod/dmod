@@ -1,13 +1,9 @@
 import React from 'react';
 import styles from '../../styles/apply.module.scss';
 
-function Services(props){
+function Services(props) {
     return (
         <>
-            <div className={styles.text_headings}>
-                <h1>Hi! What are you using dmod for?</h1>
-                <p>Are you a server owner or a moderator?</p>
-            </div>
             <div onClick={props.setModerator} id="SERVER_MODERATOR" className={styles.large_selector}>
                 <div className={styles.image}>
                     <img src={"/verified.png"}></img>

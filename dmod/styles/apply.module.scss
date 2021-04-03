@@ -1,11 +1,14 @@
 .container {
     padding: 10px 10%;
     height: 100%;
+    text-align: center;
 }
 
 .main {
     margin-top: 10px;
     height: 100%;
+    width: 50%;
+    margin: 0 auto;
 }
 
 .devider {
@@ -64,15 +67,7 @@
 }
 
 .content {
-    overflow-y: hidden;
-    padding: 20px 40px;
-
-    .text_headings {
-        p {
-            margin-top: -10px;
-            color: rgb(148, 148, 148);
-        }
-    }
+    padding: 10px;
 }
 
 .large_selector {
@@ -80,10 +75,11 @@
     display: flex;
     margin-top: 20px;
     padding: 10px 20px;
-    width: 600px;
+    width: 100%;
+    background-color: #080e1f;
     height: auto;
     border-radius: 10px;
-    border: 1px solid rgb(162, 162, 162);
+    transition: all 0.3s ease;
 
     .text {
         text-align: left;
@@ -113,6 +109,11 @@
 
     .selected {
         border: solid 1px rgb(39, 32, 75);
+    }
+
+    &:hover {
+        transform: scale(1.03);
+        background-color: #050914;
     }
 }
 

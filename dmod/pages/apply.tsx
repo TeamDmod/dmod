@@ -43,16 +43,16 @@ export default function Apply() {
         {
             step: 1,
             component: <Services setModerator={setModerator} setOwner={setOwner}></Services>,
-            text: "Services",
-            description: "What services are you looking for?",
+            text: "Welcome to dmod.gg!",
+            description: "Lets get started on your listing! First off we need to know who you are!",
             image: "/8rkjej.png",
             navigator_ref: step1
         },
         {
             step: 2,
             component: <About />,
-            text: "About",
-            description: "Tell us about yourself!",
+            text: "Who are you??",
+            description: "Tell us about yourself! Include things on your hobbys and your interests! It might help the server owner!",
             image: "info.png",
             navigator_ref: step2,
         },
@@ -77,23 +77,12 @@ export default function Apply() {
     return (
         <div>
             <div className={styles.container}>
-                <h1>Welcome to Dmod.gg</h1>
-                <p>Apply for a position, or start a campain.</p>
-                <div className={styles.devider}></div>
+                <h1>{applySteps[step].text}</h1>
+                <p>{applySteps[step].description}</p>
                 <div className={styles.main}>
-                    <div className={styles.navigator}>
-                        {applySteps.map((uwu, index) => {
-                            return <>
-                                <Step key={index} ref={step2} name={uwu.text} description={uwu.description} image={uwu.image}></Step>
-                                <div className={styles.spacer}></div>
-                            </>
-                        })}
-                    </div>
-
                     <motion.div animate={animationController} ref={mainRef} className={styles.content}>
                         {applySteps[step].component}
                     </motion.div>
-
                 </div>
             </div>
         </div>
