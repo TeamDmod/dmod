@@ -45,6 +45,8 @@ export default function Apply() {
             case "back":
                 goBack()
                 break;
+            default:
+                break;
 
         }
     }

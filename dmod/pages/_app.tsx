@@ -1,12 +1,13 @@
 import '../styles/globals.scss';
 import '../styles/navbar.scss';
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 import Navbar from '../components/navigation/Navbar';
 import Head from 'next/head';
 import store from '../redux/store';
+import "../styles/calender.scss";
 
 function MyApp({ Component, pageProps }) {
-  return ( 
+  return (
     <>
       <Provider store={store}>
         <Head>
@@ -15,7 +16,7 @@ function MyApp({ Component, pageProps }) {
         <Navbar></Navbar>
         <Component {...pageProps} />
       </Provider>
-    </> 
+    </>
   );
 }
 
