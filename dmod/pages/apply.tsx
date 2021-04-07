@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import Services from '../components/ApplySteps/Services';
 import About from '../components/ApplySteps/About';
+import Avaliablility from '../components/ApplySteps/Avaliablilty';
 import styles from '../styles/apply.module.scss';
 import { motion, useAnimation } from 'framer-motion';
 import useIp from '../hooks/useIp';
@@ -71,7 +72,7 @@ export default function Apply() {
         },
         {
             step: 3,
-            component: null,
+            component: <Avaliablility ipData={ipData} />,
             text: "Availability",
             description: "When are you avalable?",
             image: "clock.png"

@@ -1,3 +1,5 @@
+$text_container_bg: rgb(16, 17, 34);
+
 .container {
     padding: 10px 10%;
     height: 100%;
@@ -120,4 +122,58 @@
 .spacer {
     width: 2px;
     height: 100px;
+}
+
+
+
+.multi_form {
+    margin: 0;
+    margin-bottom: 0px;
+    background-color: $text_container_bg;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 20px;
+    text-align: left;
+
+    span {
+        color: rgb(233, 233, 233);
+        font-weight: 400;
+        font-size: 17px;
+        margin-bottom: 10px;
+        margin-top: 0;
+
+        .text_contianer_text {
+            float: left;
+        }
+
+        img {
+            float: left;
+            height: 20px;
+            margin-right: 3px;
+        }
+    }
+    .input_container {
+
+        margin-top: 5px;
+        input {
+            background-color: $text_container_bg;
+            border: none;
+            color: white;
+            font-family: "Roboto", sans-serif;
+            font-size: 16px;
+            resize: none;
+            width: 50px;
+            height: 100%;
+            padding: 10px 0px;
+            border-style: none;
+            border-color: Transparent;
+            overflow: auto;
+        }
+
+        span {
+            font-size: 22px;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+    }
 }
