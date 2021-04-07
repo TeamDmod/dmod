@@ -3,8 +3,10 @@ import Services from '../components/ApplySteps/Services';
 import About from '../components/ApplySteps/About';
 import styles from '../styles/apply.module.scss';
 import { motion, useAnimation } from 'framer-motion';
+import useIp from '../hooks/useIp';
 import buttons from '../styles/buttons.module.scss';
 import Step from '../components/ApplySteps/Step';
+import axios from 'axios';
 
 export default function Apply() {
 
@@ -12,7 +14,8 @@ export default function Apply() {
     let [data, setData] = useState({});
     const mainRef = useRef();
     let animationController = useAnimation();
-
+    let {ipData, loading , error} = useIp();
+    console.log(ipData);
 
     let advanceStep = () => {
         if (step > applySteps.length) {
