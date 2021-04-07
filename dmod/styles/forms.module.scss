@@ -87,7 +87,7 @@ $text_container_secondary: #432891;
         font-size: 17px;
         margin-bottom: 10px;
 
-        .text_contianer_text {
+        .text_contianer_text {  
             float: left;
         }
 
@@ -101,7 +101,7 @@ $text_container_secondary: #432891;
 
 .dropdown {
     padding: 10px 0px;
-    margin-top: 20px;
+    margin-top: 25px;
     width: 100%;
     cursor: pointer;
     position: relative;
@@ -117,7 +117,7 @@ $text_container_secondary: #432891;
     }
 
     .currently_selected {
-        padding: 0px 5px;
+        padding: 0px 6px;
     }
 
     .dropdown_selector {
