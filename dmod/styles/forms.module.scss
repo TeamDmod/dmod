@@ -149,6 +149,61 @@ $text_container_secondary: #432891;
     }
 }
 
+
+.date_picker_container{
+    margin: 0;
+    margin-bottom: 0px;
+    background-color: $text_container_bg;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 20px;
+    text-align: left;
+    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+
+
+    span {
+        color: rgb(233, 233, 233);
+        font-weight: 400;
+        font-size: 17px;
+        margin-bottom: 10px;
+        margin-top: 0;
+
+        .text_contianer_text {
+            float: left;
+        }
+
+        img {
+            float: left;
+            height: 20px;
+            margin-right: 0px;
+        }
+    }
+
+    input {
+        background-color: $text_container_bg;
+        border: none;
+        color: white;
+        font-family: "Roboto", sans-serif;
+        font-size: 16px;
+        resize: none;
+        width: 100%;
+        margin-top: -10px;
+        height: 100%;
+        padding: 10px 0px;
+        border-style: none;
+        border-color: Transparent;
+        overflow: auto;
+
+    }
+
+    .picker_container {
+        margin-top: 10px;
+        margin-left: 10px;
+
+    }
+}
+
+
 @keyframes fade-in {
     from {
         opacity: 0;

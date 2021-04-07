@@ -1,13 +1,14 @@
-$PRIMARY_COLOR: black;
+$PRIMARY_COLOR: #111b3b;
 $SECONDARY_COLOR: white;
 $ACCENT_COLOR: grey;
 $BORDER_COLOR: black;
-$HEADER_COLOR: purple;
+$HEADER_COLOR: #07133b;
 $ARROW_COLOR: white;
 $ARROW_HOVER: black;
 $DISABLED: grey;
-$DAY_SELECTED: white;
-$DAY_HOVER: black;
+$DAY_SELECTED: #6417a3;
+$DAY_HOVER: #511385;
+$DAY_HOVER_2: #6417a3;
 
 .react-datepicker-popper[data-placement^="bottom"] .react-datepicker__triangle, .react-datepicker-popper[data-placement^="top"] .react-datepicker__triangle, .react-datepicker__year-read-view--down-arrow,
 .react-datepicker__month-read-view--down-arrow,
@@ -552,7 +553,7 @@ $DAY_HOVER: black;
 .react-datepicker__year-text--selected:hover,
 .react-datepicker__year-text--in-selecting-range:hover,
 .react-datepicker__year-text--in-range:hover {
-  background-color: #1d5d90;
+  background-color: $DAY_HOVER_2;
 }
 
 .react-datepicker__day--keyboard-selected,

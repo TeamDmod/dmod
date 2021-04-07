@@ -1,5 +1,6 @@
 import react, {useState} from 'react';
 import DatePicker from "react-datepicker";
+import styles from '../../styles/forms.module.scss';
 
 
 function Date_Picker() {
@@ -10,13 +11,17 @@ function Date_Picker() {
     }
 
     return (
-        <div>
-            <DatePicker
-                selected={date}
-                onChange={handleDateChange}
-                showMonthYearDatePicker
-                dateFormat="dd/MM/yyyy"
-            />
+        <div className={styles.date_picker_container}>
+            <span><img src={"/birthday.png"} className={styles.icon}></img><span className={styles.text_container}>Date of brith (DD/MM/YYYY)</span></span>
+            <div className={styles.picker_container}>
+                <DatePicker
+                    selected={date}
+                    placeholder={"DD/MM/yyyy"}
+                    onChange={handleDateChange}
+                    showMonthYearDatePicker
+                    dateFormat="dd/MM/yyyy"
+                />
+            </div>
         </div>
     )
 }
