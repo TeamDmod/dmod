@@ -17,7 +17,6 @@ export default function Apply() {
     let animationController = useAnimation();
     let {ipData, loading , error} = useIp();
     console.log(ipData);
-
     let advanceStep = () => {
         if (step > applySteps.length) {
             console.log("setup done.. Submitting data.");
@@ -72,7 +71,7 @@ export default function Apply() {
         },
         {
             step: 3,
-            component: <Avaliablility ipData={ipData} />,
+            component: <Avaliablility tz={ipData?.data.datetime?.offset_tzab} />,
             text: "Availability",
             description: "When are you avalable?",
             image: "clock.png"

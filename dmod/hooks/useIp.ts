@@ -26,7 +26,7 @@ export default function useIp(){
 
     if(!state.ipData && !state.error){
         axios.get("https://api.ipify.org/?format=json").then((res) => {
-            axios.get(`https://ipapi.co/${res.data.ip}/json/`).then((res_) => {
+            axios.get(`https://timezoneapi.io/api/ip/?${res.data.ip}&token=agpTmvGtLzpZEAgbymNS`).then((res_) => {
                 dispatch({type:"success", payload: res_.data})
             })
         }).catch(err => dispatch({type: "error", payload: err}));

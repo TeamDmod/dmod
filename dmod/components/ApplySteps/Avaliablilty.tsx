@@ -16,7 +16,7 @@ function AvaliablilityStep(props) {
                     <input placeholder={"23:45"} />
                 </div>
             </div>
-            <Selector name={"Timezone"} items={timezones.map((d) => `${d.text}`)} ></Selector>
+            <Selector name={"Timezone"} inital={props.tz} image={"/clock.png"} items={timezones.map((d) => `${d.text}`)} ></Selector>
             <div className={styles.button_container_form}>
                     <button className={`${Buttons.small_button} ${Buttons.border} ${forms.button_spacer}`} name={"back"} >Go Back</button>
                     <button className={`${Buttons.small_button} ${Buttons.colored}`} name={"forward"}>Next</button>
