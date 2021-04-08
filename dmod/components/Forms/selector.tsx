@@ -2,8 +2,8 @@ import React, { useRef, useState } from 'react';
 import forms from '../../styles/forms.module.scss';
 
 function Selector(props) {
-
-    const dropdownRef = useRef();
+    const initial = props.inital || "Please select one";
+    const dropdownRef = useRef(initial);
     const [currentlySelected, setSelected] = useState("Please Select one");
     let [isDown, setDown] = useState(false);
 

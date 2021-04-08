@@ -1,8 +1,9 @@
 import react from 'react';
+import Selector from '../Forms/selector';
 import styles from '../../styles/apply.module.scss';
 import forms from '../../styles/forms.module.scss';
 import Buttons from '../../styles/buttons.module.scss';
-
+import timezones from '../../json/timezones.json';
 
 function AvaliablilityStep(props) {
     return (
@@ -15,6 +16,7 @@ function AvaliablilityStep(props) {
                     <input placeholder={"23:45"} />
                 </div>
             </div>
+            <Selector name={"Timezone"} items={timezones.map((d) => `${d.text}`)} ></Selector>
             <div className={styles.button_container_form}>
                     <button className={`${Buttons.small_button} ${Buttons.border} ${forms.button_spacer}`} name={"back"} >Go Back</button>
                     <button className={`${Buttons.small_button} ${Buttons.colored}`} name={"forward"}>Next</button>
