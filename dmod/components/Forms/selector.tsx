@@ -20,12 +20,12 @@ function Selector(props) {
     let selectItem = (e) => {
         setSelected(e.target.attributes.content.textContent)
         if (props.onChange) {
-            props.onChange(currentlySelected)
+            props.onChange(e.target.attributes.content.textContent)
         }
     }
 
     return (
-        <div className={forms.selector_container}>
+        <div className={`${forms.selector_container} ${props.filled == false ? forms.unfilled_text : ""}`}>
             <span><img src={props.image}></img><span className={forms.text_contianer_text}>{props.name}</span></span>
             <div onClick={onclick} ref={dropdownRef} className={forms.dropdown}>
                 <span className={forms.currently_selected}>{currentlySelected}<span className={forms.down_arrow}><img src={"./down-arrow.png"} alt="" /></span></span>

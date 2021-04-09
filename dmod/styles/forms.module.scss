@@ -100,12 +100,13 @@ $text_container_secondary: #432891;
 }
 
 .dropdown {
+    position: relative;
     padding: 10px 0px;
     margin-top: 25px;
     width: 100%;
     cursor: pointer;
     position: relative;
-
+    z-index: 10000;
     .down_arrow {
         float: right;
 
@@ -201,6 +202,10 @@ $text_container_secondary: #432891;
         margin-left: 10px;
 
     }
+}
+
+.unfilled_text{
+    border: 1px solid red;
 }
 
 

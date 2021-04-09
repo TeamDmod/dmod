@@ -22,7 +22,7 @@ export default function Apply() {
             console.log("setup done.. Submitting data.");
         }
 
-
+        console.log(data);
         setStep(step + 1);
 
     };
@@ -43,7 +43,8 @@ export default function Apply() {
         switch (submitter) {
             case "forward":
                 advanceStep()
-                setData({ ...data, newData })
+                console.log(newData);
+                setData({ ...data, about: newData.about, description: newData.description, pronouns: newData.pronouns, birthday: newData.birthday })
                 break;
             case "back":
                 goBack()
@@ -53,6 +54,22 @@ export default function Apply() {
 
         }
     }
+
+
+    let handleAvaliablilityData = (submitter, newData) => {
+        switch(submitter) {
+            case "forward":
+                advanceStep();
+                setData({...data, newData});
+                break;
+            case "back":
+                goBack()
+                setData({...data, newData});
+                break;
+            default:
+                break;
+        }
+    };
 
     const applySteps = [
         {
@@ -71,7 +88,7 @@ export default function Apply() {
         },
         {
             step: 3,
-            component: <Avaliablility tz={ipData?.data.datetime?.offset_tzab} />,
+            component: <Avaliablility onSubmit={handleAvaliablilityData} tz={ipData?.data.datetime?.offset_tzab} />,
             text: "Availability",
             description: "When are you avalable?",
             image: "clock.png"
