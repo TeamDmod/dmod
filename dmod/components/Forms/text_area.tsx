@@ -11,7 +11,7 @@ function TextArea(props) {
 
 
     return (
-        <div className={`${forms.text_container} ${props.filled == false ? forms.unfilled_text : ""}`}>
+        <div className={`${forms.text_container} ${props.filled == "" ? forms.unfilled_text : ""}`}>
             <span><img src={props.image}></img><span className={forms.text_contianer_text}>{props.name}</span></span>
             <textarea onChange={onChange} className={forms.embedded_form} placeholder={props.placeholder} />
         </div>

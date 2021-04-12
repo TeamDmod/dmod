@@ -21,18 +21,12 @@ function About(props) {
         e.preventDefault();
 
         let submitter = e.nativeEvent.submitter.name;
-        console.log(data);
 
-        //I know this is really bad, sorry!
-        setAboutUnfilled(true);
-        setModUnfilled(true);
-        setGenderUnfilled(true);
-        setBirthdayUnfilled(true);
-
-        if(!data.about) return setAboutUnfilled(false);
-        if(!data.description) return setModUnfilled(false);
-        if(!data.pronouns) return setGenderUnfilled(false);
-        if(!data.birthday) return setBirthdayUnfilled(false);
+        //doing this so that if the user clicks next it showes the red around the box not when they first get to this page
+        if(!data.about) return setData({about: ""});
+        if(!data.description) return setData({description: ""});
+        if(!data.pronouns) return setData({pronouns: ""});
+        if(!data.birthday) return setData({birthday: ""});
 
         if (props.onSubmit) {
             props.onSubmit(submitter, data);
@@ -60,10 +54,10 @@ function About(props) {
     return (
         <>
             <form onSubmit={onFormSubmit}>
-                <FormField onChange={onAboutChange} filled={aboutUnfilled} image={"/pencil.png"} placeholder={"Write your about text here"} name={"About"}></FormField>
-                <FormField onChange={onModChange} filled={modUnfilled} image={"/pencil.png"} placeholder={"Write your text here"} name={"Why do you want to be a mod?"}></FormField>
-                <Selector onChange={onSelectorChange} filled={genderUnfilled} image={"gender.png"} name={"Pronouns (We also support pronoundb)"} items={["He/Him", "She/Her", "They/Them", "Other"]}></Selector>
-                <DatePicker filled={birthdayUnfilled} onChange={onDateChange}></DatePicker>
+                <FormField onChange={onAboutChange} filled={data.about} image={"/pencil.png"} placeholder={"Write your about text here"} name={"About"}></FormField>
+                <FormField onChange={onModChange} filled={data.description} image={"/pencil.png"} placeholder={"Write your text here"} name={"Why do you want to be a mod?"}></FormField>
+                <Selector onChange={onSelectorChange} filled={data.pronouns} image={"gender.png"} name={"Pronouns (We also support pronoundb)"} items={["He/Him", "She/Her", "They/Them", "Other"]}></Selector>
+                <DatePicker filled={birthdayUnfilled} onChange={data.birthday}></DatePicker>
                 <div className={styles.button_container_form}>
                     <button className={`${Buttons.small_button} ${Buttons.border} ${forms.button_spacer}`} name={"back"} >Go Back</button>
                     <button className={`${Buttons.small_button} ${Buttons.colored}`} name={"forward"}>Next</button>

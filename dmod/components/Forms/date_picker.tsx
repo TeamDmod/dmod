@@ -12,7 +12,7 @@ function Date_Picker(props) {
     }
 
     return (
-        <div className={`${styles.date_picker_container} ${props.filled == false ? styles.unfilled_text : ""}`}>
+        <div className={`${styles.date_picker_container} ${props.filled == "" ? styles.unfilled_text : ""}`}>
             <span><img src={"/birthday.png"} className={styles.icon}></img><span className={styles.text_container}>Date of brith (DD/MM/YYYY)</span></span>
             <div className={styles.picker_container}>
                 <DatePicker
