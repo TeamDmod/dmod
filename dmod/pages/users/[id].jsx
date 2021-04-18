@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react';
+import Router from 'next/router';
+import Preloader from '../../components/preloader';
 import { GetUser } from '../../requests/api';
 import { useRouter } from 'next/router';
 import styles from '../../styles/user.module.scss';
@@ -37,15 +39,21 @@ function User(){
     const router = useRouter();
     const { id } = router.query;
     const [user, setUser] = useState({});
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if(id){
             GetUser(id).then((res) => {
                 setUser(res.data.user);
                 console.log(res.data);
-            });
+            }).catch((err) => {
+                console.log(err);
+                Router.push("/404");
+            })
         }
-    }, [id])
+    }, [id]);
+
+    if(loading) return <Preloader></Preloader>;
     
     return (
         <div className={styles.container}>
