@@ -6,6 +6,7 @@ const auth = require('./routes/auth');
 const api = require('./routes/api/index.js');
 const schema = require('./schema/schema');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 let app = express();
 
@@ -20,6 +21,7 @@ app.use(
     graphiql: true,
     }));  
 app.use(bodyParser({extended: false}))
+app.use(cors());
 app.use("/api", api);
 app.use("/", auth);
 

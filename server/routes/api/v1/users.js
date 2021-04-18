@@ -35,6 +35,12 @@ route.get("/:id", async (req, res, next) => {
 
     let avatar = `https://cdn.discordapp.com/avatars/${discord_user.id}/${discord_user.avatar}.png`;
 
+
+    if (discord_user.discriminator !== user.tag) {
+        user.tag = discord_user.discriminator;
+        await user.save();
+    }
+    
     if(discord_user.avatar !== user.avatar) {
         user.avatar = avatar
         await user.save();

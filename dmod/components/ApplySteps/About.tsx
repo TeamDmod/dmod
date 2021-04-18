@@ -21,12 +21,12 @@ function About(props) {
         e.preventDefault();
 
         let submitter = e.nativeEvent.submitter.name;
-
-        //doing this so that if the user clicks next it showes the red around the box not when they first get to this page
-        if(!data.about) return setData({about: ""});
-        if(!data.description) return setData({description: ""});
-        if(!data.pronouns) return setData({pronouns: ""});
-        if(!data.birthday) return setData({birthday: ""});
+        console.log(data);
+        //doing this so that if the user clicks next it showes the red around the box not when they first get to this page 
+        if(!data.about) return setData({ ...data, about: ""});
+        if(!data.description) return setData({...data, description: ""});
+        if(!data.pronouns) return setData({...data, pronouns: ""});
+        if(!data.birthday) return setData({...data, birthday: ""});
 
         if (props.onSubmit) {
             props.onSubmit(submitter, data);
@@ -34,12 +34,10 @@ function About(props) {
     }
 
     let onAboutChange = (d) => {
-        console.log(d);
         setData({ ...data, about: d })
     }
 
     let onModChange = (d) => {
-        console.log(d);
         setData({ ...data, description: d })
     }
 
@@ -52,18 +50,18 @@ function About(props) {
     }
 
     return (
-        <>
+        <div className={styles.fade_in_container}>
             <form onSubmit={onFormSubmit}>
                 <FormField onChange={onAboutChange} filled={data.about} image={"/pencil.png"} placeholder={"Write your about text here"} name={"About"}></FormField>
                 <FormField onChange={onModChange} filled={data.description} image={"/pencil.png"} placeholder={"Write your text here"} name={"Why do you want to be a mod?"}></FormField>
                 <Selector onChange={onSelectorChange} filled={data.pronouns} image={"gender.png"} name={"Pronouns (We also support pronoundb)"} items={["He/Him", "She/Her", "They/Them", "Other"]}></Selector>
-                <DatePicker filled={birthdayUnfilled} onChange={data.birthday}></DatePicker>
+                <DatePicker filled={data.birthday} onChange={onDateChange}></DatePicker>
                 <div className={styles.button_container_form}>
                     <button className={`${Buttons.small_button} ${Buttons.border} ${forms.button_spacer}`} name={"back"} >Go Back</button>
                     <button className={`${Buttons.small_button} ${Buttons.colored}`} name={"forward"}>Next</button>
                 </div>
             </form>
-        </>
+        </div>
     );
 }
 

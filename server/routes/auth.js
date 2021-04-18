@@ -47,7 +47,8 @@ route.get("/callback", async (req, res, next) => {
                     username: user.username,
                     user_id: user.id,
                     avatar: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`,
-                    bio: "We dont know much about this user..."
+                    bio: "We dont know much about this user...",
+                    tag: user.discriminator
                 }).save();
             }
 

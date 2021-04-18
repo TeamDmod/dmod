@@ -25,6 +25,9 @@ const UserSchema = new Schema({
   },
   cv_id: {
     type: String 
+  },
+  tag: {
+    type: String
   }
 });
 

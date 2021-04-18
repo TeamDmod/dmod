@@ -107,8 +107,8 @@ export default function Apply() {
             <div className={styles.container}>
                 <h1>{applySteps[step].text}</h1>
                 <p>{applySteps[step].description}</p>
-                <div className={styles.main}>
-                    <motion.div animate={animationController} ref={mainRef} className={styles.content}>
+                <div className={`${styles.main}`}>
+                    <motion.div animate={animationController} ref={mainRef} className={`${styles.content}`}>
                         {applySteps[step].component}
                     </motion.div>
                 </div>

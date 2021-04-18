@@ -177,3 +177,21 @@ $text_container_bg: rgb(16, 17, 34);
         }
     }
 }
+
+
+.fade_in_container {
+    animation: 1s fade_in; 
+   /* animation: 3s ease-in 1s infinite fade_in; */
+}
+
+
+@keyframes fade_in {
+    from {
+        transform: translateY(100px) !important;
+        opacity: 0 !important;
+    }
+    to {
+        transform: translateY(0px) !important;
+        opacity: 1 !important;
+    }
+}
