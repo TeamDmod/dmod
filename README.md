@@ -14,7 +14,7 @@ Issues should be reported to us through the repository's issues.
 ## The Project 
 We're building a platform connecting Community Owners with Moderators. We want to make the moderation team process within discord as seamless as possible, with as few stops as possible. We look forward to seeing your contributions 
 ### Links 
-Website: link<br>
-Twitter: @handle<br>
-Discord: link
+Website: http://dmod.gg/<br>
+Twitter: https://twitter.com/dmodgg/<br>
+Discord: https://discord.com/invite/VUTu3HyRpN
 
