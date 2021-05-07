@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🌎 Dmod's Webiste
+# 🌎 Dmod's Website
 
 </div>
 
