@@ -1,8 +1,6 @@
 import React from 'react'
 
-//Nya~ Senpai!
-
-function FourZeroFour(props) {
+export default function Error(props) {
     return (
         <div className="fourzerofour_container">
             <div className="text-container">
@@ -14,5 +12,3 @@ function FourZeroFour(props) {
         </div>
     )
 }
-
-export default FourZeroFour;

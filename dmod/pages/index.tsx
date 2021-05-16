@@ -1,13 +1,20 @@
-import { homedir } from 'os';
-import HomeHeader from '../components/headers/HomeHeader';
-import OpenGraphHead from '../components/OpenGraphHead';
 import home from '../styles/home.module.scss';
+import MetaTags from '../components/MetaTags.tsx';
 
 export default function Home() {
   return (
-    <div>
-      <OpenGraphHead title={"Welcome to Dmod.gg"} description={"The best place to hire moderators!"} image={"/logo.png"}></OpenGraphHead>
-      <HomeHeader></HomeHeader>
+    <>
+      <MetaTags title={"Welcome to Dmod.gg"} description={"The best place to hire moderators!"} image={"/logo.png"} />
+      <div className={home.main_header}>
+      	<div className={home.text_headings}>
+          <h1>Welcome to dmod.</h1>
+          <p>Discords most advanced moderator searching application.</p>
+      	</div>
+      	<div className={home.search_container}>
+          <input placeholder="Search dmod." className={home.search_bar}></input>
+          <button className={home.search_button}>Search.</button>
+      	</div>
+      </div>
       <div className={home.home_main_content}>
         <div className={home.top_rated}>
           <div className={home.heading}>
@@ -16,6 +23,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

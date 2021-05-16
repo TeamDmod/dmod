@@ -10,7 +10,7 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
 
 	switch (method) {
 		case 'GET':
-			// Get data from database
+			res.status(200).json({ id })
 			break;
 
 		case 'POST':
