@@ -26,6 +26,7 @@
     "react-datepicker": "^3.7.0",
     "react-dates": "^21.8.0",
     "react-dom": "17.0.1",
+    "react-hook-form": "^7.3.6",
     "react-popper": "^2.2.5",
     "react-redux": "^7.2.3",
     "redux": "^4.0.5"
