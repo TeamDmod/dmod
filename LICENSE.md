@@ -9,7 +9,7 @@
 <p align="center">Dmod reserves the right to all content found in this repository. The content is intellectual property and will remain as such indefinitely. If any one person decides to use, in whole or in part, the code, they agree to be bound by the rules stated herein by the author.</p>
 
 ---
-+ Dmods Discord: https://dmod.gg/discord
++ Dmods Discord: [Discord Link](https://discord.com/invite/VUTu3HyRpN)
 + Founder's Email: vagabonditbusiness@gmail.com
 ---
 
@@ -35,7 +35,7 @@
 ### Approved hosting locations
 - [Dmod Github](https://github.com/dmod-gg)
 - [dmod.gg](https://dmod.gg)
-- [Dmod Discord](https://dmod.gg/discord)
+- [Dmod Discord](https://discord.com/invite/VUTu3HyRpN)
 
 ---
 
