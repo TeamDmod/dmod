@@ -15,6 +15,7 @@ const mongoose = require('mongoose');
    from: {type: Date, required: true},
    to: {type: Date, required: true}
   },
+  tz:{type: String, required: true},
   ratings: [{
    _id: {
     default: () => new Date(),
