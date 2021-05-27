@@ -27,7 +27,7 @@ const mongoose = require('mongoose');
   }]
   },{ versionKey: false, toJSON: { virtuals: true }, toObject: { virtuals: true }});
 
-Users.virtual('avatarURL').get( () => {
+Users.virtual('avatarURL').get(function(){
   if ( (this.avatar === "1") || (this.avatar==="2") || (this.avatar=="3") || (this.avatar === "4") ) return `https://cdn.discordapp.com/embed/avatars/${this.avatar}.png`;
   else {
     const ani = this.avatar.startsWith("a_") ? true : false;
