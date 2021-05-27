@@ -41,7 +41,7 @@ Users.virtual('tag').get(function(){
  return `${this.username}#${this.discriminator}`;
 })
 
-var users;
+let users;
 try{
 console.log("[DB] Compiling Schema into Model - Users");
 users = mongoose.model('Users', Users);
