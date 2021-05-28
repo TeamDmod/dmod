@@ -18,7 +18,7 @@ export interface applyData {
 }
 
 export const starterData: applyData = {
-  step: 1,
+  step: 0,
   about: null,
   description: null,
   birthday: null,
