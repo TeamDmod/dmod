@@ -10,7 +10,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "tspretty": "tsc --pretty"
   },
   "dependencies": {
     "@popperjs/core": "^2.9.2",
@@ -20,7 +21,8 @@
     "framer-motion": "^4.0.3",
     "fs": "0.0.1-security",
     "moment": "^2.29.1",
-    "next": "10.0.7",
+    "mongoose": "^5.12.12",
+    "next": "^10.2.3",
     "next-redux-wrapper": "^6.0.2",
     "react": "17.0.1",
     "react-datepicker": "^3.7.0",

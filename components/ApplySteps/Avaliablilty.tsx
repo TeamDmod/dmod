@@ -3,7 +3,7 @@ import Selector from '../Forms/selector';
 import styles from '../../styles/apply.module.scss';
 import forms from '../../styles/forms.module.scss';
 import Buttons from '../../styles/buttons.module.scss';
-import timezones from '../../json/timezones.json';
+import timezones from '../../lib/timezones.json';
 
 function AvaliablilityStep(props) {
 
