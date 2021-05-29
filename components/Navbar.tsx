@@ -1,9 +1,11 @@
-import React from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/dist/client/router';
+import Link from 'next/link';
+import React from 'react';
+import { ApiUser, sessionFetchedUser } from 'typings/typings';
 
-function Navbar() {
-  const router = useRouter()
+function Navbar({ user }: { user: sessionFetchedUser }) {
+  const router = useRouter();
+
   const navbarLinks = [
     {
       name: 'Apply',
@@ -38,11 +40,20 @@ function Navbar() {
             })}
           </ul>
         </nav>
-        <button className="lgn primary-button" onClick={() => router.push('/') /* login route (gana work on that maybe leter) */}>
-          Login
-          {/* <button className="">Login</button>
-            <Link href="http://localhost:4000/login"></Link> */}
-        </button>
+        {user && user['awaiting'] && <span>Loading user data</span>}
+
+        {user && !user['awaiting'] && (
+          <div>
+            <span>{(user as ApiUser).username}</span>
+            <button onClick={() => router.push('/api/auth/logout')}>Logout</button>
+          </div>
+        )}
+
+        {!user && (
+          <button className="lgn primary-button" onClick={() => router.push('/api/auth/login')}>
+            Login
+          </button>
+        )}
       </header>
     </div>
   );
