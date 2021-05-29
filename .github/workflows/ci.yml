@@ -16,5 +16,5 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run typescrpts pretty check
+      - name: Run typescript pretty check
         run:  npm run tspretty
