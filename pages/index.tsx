@@ -1,5 +1,5 @@
-import home from '../styles/home.module.scss';
-import MetaTags from '../components/MetaTags';
+import home from "../styles/home.module.scss";
+import MetaTags from "../components/MetaTags";
 
 export default function Home() {
   return (
