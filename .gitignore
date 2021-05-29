@@ -10,3 +10,6 @@
 
 # vercel
 .vercel
+
+# envierment
+.env

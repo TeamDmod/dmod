@@ -1,3 +1,5 @@
+// NOTE: Could be deleted as the db will be interacted with by 'lib/mongodb.connection.ts'
+// and will only need to move typings to typings file(s)
 import mongoose, { Schema } from 'mongoose';
 
 const Users = new Schema(
@@ -42,4 +44,12 @@ Users.virtual('tag').get(function () {
   return `${this.username}#${this.discriminator}`;
 });
 
-export default mongoose.model['User'] ?? mongoose.model('Users', Users)
+type userData = mongoose.Model<any>;
+
+let module: userData;
+try {
+  module = mongoose.model('Users', Users);
+} catch (_) {
+  module = mongoose.model('Users');
+}
+export default module;
