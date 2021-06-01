@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { applyData } from 'pages/apply';
+// import { applyData } from 'pages/apply';
 import styles from 'styles/apply.module.scss';
 import Buttons from 'styles/buttons.module.scss';
 import forms from 'styles/forms.module.scss';
@@ -8,12 +8,12 @@ import Selector from '../Forms/selector';
 import FormField from '../Forms/text_area';
 import { useState } from 'react';
 
-interface props {
-  onSubmit: (submitter: string, newData: applyData) => void;
-  data: [applyData, React.Dispatch<React.SetStateAction<applyData>>];
-}
+// interface props {
+//   onSubmit: (submitter: string, newData: applyData) => void;
+//   data: [applyData, React.Dispatch<React.SetStateAction<applyData>>];
+// }
 
-function About(props: props) {
+function About(props) {
   const [data, setData] = props.data;
   const [canContinue, setContionue] = useState(false);
 
