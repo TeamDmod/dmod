@@ -1,6 +1,7 @@
 <div align="center">
 
-# 🌎 Dmod's Website
+# Dmod's Website
+<img src="./public/logo.png" alt="dmodgg-logo">
 
 </div>
 
