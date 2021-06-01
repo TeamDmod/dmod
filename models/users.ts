@@ -1,37 +1,70 @@
-// NOTE: Could be deleted as the db will be interacted with by 'lib/mongodb.connection.ts'
-// and will only need to move typings to typings file(s)
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema, Document } from 'mongoose';
 
 const Users = new Schema(
   {
-    id: { type: String, unique: true, required: true },
     _id: {
-      default: () => new Date(),
-      type: Date,
-    }, //added at
-    username: { type: String, required: true },
-    avatar: { type: String, default: null },
-    discriminator: { type: String, required: true },
-    description: { type: String, required: true },
-    about: { type: String, required: true },
-    available: {
-      from: { type: Date, required: true },
-      to: { type: Date, required: true },
+      type: String,
+      required: true,
+      unique: true,
     },
-    tz: String,
+    active: {
+      type: Boolean,
+      default: true,
+    },
+    pronouns: {
+      type: String,
+      default: null,
+    },
+    site_flags: {
+      type: Number,
+      default: 0,
+    },
+    description: {
+      type: String,
+      default: 'No description found.',
+    },
+    banner: {
+      type: String,
+      default: null,
+    },
+    discriminator: {
+      type: String,
+      required: true,
+    },
+    username: {
+      type: String,
+      required: true,
+    },
+    avatar: {
+      type: String,
+      default: null,
+    },
     ratings: [
       {
         _id: {
-          default: () => new Date(),
-          type: Date,
+          type: String,
+          required: true,
         },
-        id: { type: String, required: true, unique: true },
-        positive: { type: Boolean, required: true },
-        comment: { type: String, required: true },
+        createdAt: {
+          type: Date,
+          default: () => new Date(),
+        },
+        comment: {
+          type: String,
+          required: true,
+        },
+        rating: {
+          type: Number,
+          required: true,
+        },
       },
     ],
   },
-  { versionKey: false, toJSON: { virtuals: true }, toObject: { virtuals: true } }
+  {
+    versionKey: false,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
 );
 
 Users.virtual('avatarURL').get(function () {
@@ -44,12 +77,34 @@ Users.virtual('tag').get(function () {
   return `${this.username}#${this.discriminator}`;
 });
 
-type userData = mongoose.Model<any>;
+export interface ratingData {
+  _id: string;
+  createdAt: Date;
+  comment: string;
+  rating: number;
+}
 
-let module: userData;
+export interface userData {
+  _id: string;
+  description: string;
+  pronouns: string | null;
+  active: boolean;
+  site_flags: number;
+  banner: null;
+  discriminator: string;
+  username: string;
+  avatar: string | null;
+  ratings: ratingData[];
+  avatarURL: string;
+  tag: string;
+}
+
+export type userModleData = mongoose.Model<userData>;
+
+let module: userModleData;
 try {
-  module = mongoose.model('Users', Users);
+  module = mongoose.model('users', Users);
 } catch (_) {
-  module = mongoose.model('Users');
+  module = mongoose.model('users');
 }
 export default module;

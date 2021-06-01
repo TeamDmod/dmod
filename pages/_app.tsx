@@ -1,4 +1,6 @@
 import '../styles/globals.scss';
+import '../styles/global.css';
+import 'tailwindcss/tailwind.css';
 import '../styles/navbar.scss';
 import Navbar from '../components/Navbar';
 import '../styles/calender.scss';

@@ -3,7 +3,7 @@ import forms from '../../styles/forms.module.scss';
 
 interface props {
   inital?: string;
-  onChange?: Function;
+  onChange: (text: string) => void;
   name: string;
   items: any[];
   image: string;

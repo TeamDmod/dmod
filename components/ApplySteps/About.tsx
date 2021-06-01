@@ -1,37 +1,38 @@
-import { useState } from 'react';
-import { useForm, useFormState } from 'react-hook-form';
-import styles from '../../styles/apply.module.scss';
-import Buttons from '../../styles/buttons.module.scss';
-import forms from '../../styles/forms.module.scss';
-import FormField from '../Forms/text_area';
-import Selector from '../Forms/selector';
+import { useForm } from 'react-hook-form';
+import { applyData } from 'pages/apply';
+import styles from 'styles/apply.module.scss';
+import Buttons from 'styles/buttons.module.scss';
+import forms from 'styles/forms.module.scss';
 import DatePicker from '../Forms/date_picker';
-import { applyData, starterData } from '../../pages/apply';
+import Selector from '../Forms/selector';
+import FormField from '../Forms/text_area';
+import { useState } from 'react';
 
-interface propes {
-	onSubmit: (submitter: any, newData: any) => void
-	data: [applyData, React.Dispatch<React.SetStateAction<applyData>>]
+interface props {
+  onSubmit: (submitter: string, newData: applyData) => void;
+  data: [applyData, React.Dispatch<React.SetStateAction<applyData>>];
 }
 
-function About(props: propes) {
+function About(props: props) {
   const [data, setData] = props.data;
+  const [canContinue, setContionue] = useState(false);
 
   const {
     register,
     handleSubmit,
     reset,
-    watch,
     formState: { errors },
     control,
   } = useForm({ mode: 'onTouched' });
 
-  const { isValid, isDirty } = useFormState({ control });
+  // const { isValid, isDirty } = useFormState({ control });
 
-  const updateData = async ({ about, description, pronouns, birthday }) => {
-    console.log(data);
+  const updateData = async ({ about, description }) => {
+    setData({ ...data, about, description });
+    reset({ about, description });
 
-    setData({ ...data, about, description, pronouns, birthday });
-    reset({ about, description, pronouns, birthday });
+    if (Object.keys(data).every(k => data[k] !== null)) return setContionue(true);
+    setContionue(false);
   };
 
   return (
@@ -61,13 +62,32 @@ function About(props: propes) {
             }),
           }}
         />
-        <Selector image={'/gender.png'} name={'Pronouns (We also support pronoundb)'} items={['He/Him', 'She/Her', 'They/Them', 'Other']} />
-        <DatePicker onChange={() => {}} /> {/* NOTE: Make this acually change the date */}
+        <Selector
+          onChange={text => setData({ ...data, pronouns: text })}
+          image={'/gender.png'}
+          name={'Pronouns (We also support pronoundb)'}
+          items={['He/Him', 'She/Her', 'They/Them', 'Other']}
+        />
+        <DatePicker date={data.birthday} onChange={date => setData({ ...data, birthday: date })} />
         <div className={styles.button_container_form}>
-          <button className={`${Buttons.small_button} ${Buttons.border} ${forms.button_spacer}`} name={'back'}>
+          <button
+            onClick={() => {
+              if (!canContinue) return;
+              props.onSubmit('back', data);
+            }}
+            className={`${Buttons.small_button} ${Buttons.border} ${forms.button_spacer}`}
+            name={'back'}
+          >
             Go Back
           </button>
-          <button className={`${Buttons.small_button} ${Buttons.colored}`} name={'forward'}>
+          <button
+            onClick={() => {
+              if (!canContinue) return;
+              props.onSubmit('forward', data);
+            }}
+            className={`${Buttons.small_button} ${Buttons.colored}`}
+            name={'forward'}
+          >
             Next
           </button>
         </div>

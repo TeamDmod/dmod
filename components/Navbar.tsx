@@ -12,6 +12,10 @@ function Navbar({ user }: { user: sessionFetchedUser }) {
       link: '/apply',
     },
     {
+      name: 'Profile',
+      link: '/profile',
+    },
+    {
       name: 'Listings',
       link: '/listings',
     },

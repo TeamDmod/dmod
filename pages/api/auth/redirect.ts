@@ -1,8 +1,10 @@
 import btoa from 'btoa';
 import crypto from 'crypto-js';
-import { connectToDatabase } from 'lib/mongodb.connection';
+import { DEFAULT_FLAGS } from 'lib/constants';
+import connectToDatabase from 'lib/mongodb.connection';
 import withSession from 'lib/session';
-import { credentialsData } from 'models/credentials';
+import credentials from 'models/credentials';
+import users from 'models/users';
 import { NextApiResponse } from 'next';
 import { withSessionRequest } from 'typings/typings';
 
@@ -11,9 +13,7 @@ const json = (res: Response) => res.json();
 
 export default withSession(async (req: withSessionRequest, res: NextApiResponse) => {
   if (!req.query.code) res.redirect('/api/auth/login');
-
-  const connection = await connectToDatabase();
-  const credentialsCollection = connection.db.collection<credentialsData>('credentials');
+  await connectToDatabase();
 
   const params = new URLSearchParams();
   params.set('grant_type', 'authorization_code');
@@ -39,17 +39,38 @@ export default withSession(async (req: withSessionRequest, res: NextApiResponse)
   req.session.set('user', { id: user.id });
   await req.session.save();
 
-  const credentials = await credentialsCollection.findOne({ _id: user.id });
+  const credentials_ = await credentials.findOne({ _id: user.id });
+  const user_ = await users.findOne({ _id: user.id });
 
-  if (!credentials) {
-    await credentialsCollection.insertOne({
+  if (!user_) {
+    users.create({
       _id: user.id,
-      // @ts-expect-error
+      avatar: user.avatar,
+      username: user.username,
+      discriminator: user.discriminator,
+      site_flags: DEFAULT_FLAGS,
+    });
+  } else {
+    users.findOneAndUpdate(
+      { _id: user.id },
+      {
+        $set: {
+          username: user.username,
+          discriminator: user.discriminator,
+          avatar: user.avatar,
+        },
+      }
+    );
+  }
+
+  if (!credentials_) {
+    await credentials.create({
+      _id: user.id,
       AccessToken: encryptedAccesssToken,
       RefreshToken: encryptedRefreshToken,
     });
   } else {
-    credentialsCollection.findOneAndUpdate(
+    credentials.findOneAndUpdate(
       { _id: user.id },
       {
         $set: {

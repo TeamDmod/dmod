@@ -2,8 +2,8 @@ import withSession from 'lib/session';
 import { NextApiResponse } from 'next';
 import { withSessionRequest } from 'typings/typings';
 import crypto from 'crypto-js';
-import { credentialsData } from 'models/credentials';
-import { connectToDatabase } from 'lib/mongodb.connection';
+import credentialsData from 'models/credentials';
+import connectToDatabase from 'lib/mongodb.connection';
 
 export function decryptToken(token: string, string: boolean = false) {
   const decript = crypto.AES.decrypt(token, process.env.ENCRIPT_KEY);
@@ -16,11 +16,9 @@ export default withSession(async (req: withSessionRequest, res: NextApiResponse)
   const user = req.session.get('user');
 
   if (!user) return res.json({ user: null });
-  const connection = await connectToDatabase();
-  const credentialsCollection = connection.db.collection<credentialsData>('credentials');
+  await connectToDatabase();
 
-  const results = await credentialsCollection.findOne({ _id: user.id });
-  // @ts-expect-error
+  const results = await credentialsData.findOne({ _id: user.id });
   const decryptAccessToken = decryptToken(results.AccessToken, true);
 
   const fetchedUser = await fetch(`${API_ENDPOINT}/users/@me`, {

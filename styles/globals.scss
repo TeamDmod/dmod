@@ -1,24 +1,25 @@
 /* I use arch btw. */
 
 $bg-color-1: #0c142c;
-@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
 @font-face {
-  font-family: "San Francisco";
+  font-family: 'San Francisco';
   font-weight: 400, 500, 600, 700;
-  src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff");
+  src: url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff');
 }
 
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   background-color: $bg-color-1;
   color: white;
   margin: 0;
   -webkit-font-smoothing: antialiased !important;
   -webkit-filter: blur(0.000001px) !important;
 }
-html, html a {
-  text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+html,
+html a {
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
 }
 
 .centered {
