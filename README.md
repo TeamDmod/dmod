@@ -12,13 +12,13 @@ Pull requests are maintained by our Code Reviewers. <br>
 Issues should be reported to us through the repository's issues. 
 
 ## The Project 
-We're building a platform connecting Community Owners with Moderators. We want to make the moderation team process within discord as seamless as possible, with as few stops as possible. We look forward to seeing your contributions 
+We're building a platform connecting Community Owners with Moderators. We want to make the moderation team process within discord as seamless as possible, with as few stops as possible. We look forward to seeing your contributions.
 
 ## Contributing
-### Version Control
-Always make a new branch or fork for your work, no matter how small. This makes it easy for others to track each set of changes.
+### Version Controling
+Always make a new branch or fork for your work, no matter how small the change is. This makes it easy for others to track each set of changes.
 
-**Don’t** submit unrelated changes in the same branch/pull request! We shouldn’t have to reject your awesome bugfix because of a feature you bundled it with needs more work.
+**Don’t** submit unrelated changes in the same branch/pull request! We shouldn’t have to reject your awesome bug fix because of a feature you bundled it with needs more work.
 
 New features should branch off of the 'master' branch. Bug fixes should branch off whichever branch the bug effects
 
