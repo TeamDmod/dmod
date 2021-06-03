@@ -7,6 +7,7 @@ import credentials from 'models/credentials';
 import users from 'models/users';
 import { NextApiResponse } from 'next';
 import { withSessionRequest } from 'typings/typings';
+import { customAlphabet } from 'nanoid';
 
 const API_ENDPOINT = 'https://discord.com/api/v8';
 const json = (res: Response) => res.json();
@@ -43,12 +44,15 @@ export default withSession(async (req: withSessionRequest, res: NextApiResponse)
   const user_ = await users.findOne({ _id: user.id });
 
   if (!user_) {
+    const updatesAccessToken = customAlphabet(process.env.USER_ENCRIPT_KEY, 56)();
     users.create({
       _id: user.id,
       avatar: user.avatar,
       username: user.username,
       discriminator: user.discriminator,
       site_flags: DEFAULT_FLAGS,
+      updates_access: updatesAccessToken,
+      vanity: user.id,
     });
   } else {
     users.findOneAndUpdate(

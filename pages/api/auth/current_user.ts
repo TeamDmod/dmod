@@ -4,6 +4,7 @@ import { withSessionRequest } from 'typings/typings';
 import crypto from 'crypto-js';
 import credentialsData from 'models/credentials';
 import connectToDatabase from 'lib/mongodb.connection';
+import userModule from 'models/users';
 
 export function decryptToken(token: string, string: boolean = false) {
   const decript = crypto.AES.decrypt(token, process.env.ENCRIPT_KEY);
@@ -26,6 +27,7 @@ export default withSession(async (req: withSessionRequest, res: NextApiResponse)
       Authorization: `Bearer ${decryptAccessToken}`,
     },
   }).then(json);
+  const user_ = await userModule.findOne({ _id: user.id });
 
-  res.json({ user: fetchedUser });
+  res.json({ user: { ...fetchedUser, ...(user_.toObject() ? { vanity: user_.toObject().vanity } : {}) } });
 });

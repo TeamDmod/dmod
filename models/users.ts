@@ -1,11 +1,10 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 const Users = new Schema(
   {
     _id: {
       type: String,
       required: true,
-      unique: true,
     },
     active: {
       type: Boolean,
@@ -34,6 +33,16 @@ const Users = new Schema(
     username: {
       type: String,
       required: true,
+    },
+    updates_access: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    vanity: {
+      type: String,
+      required: true,
+      unique: true,
     },
     avatar: {
       type: String,
@@ -95,16 +104,18 @@ export interface userData {
   username: string;
   avatar: string | null;
   ratings: ratingData[];
+  updates_access: string;
+  vanity: string;
   avatarURL: string;
   tag: string;
 }
 
 export type userModleData = mongoose.Model<userData>;
 
-let module: userModleData;
+let userModule: userModleData;
 try {
-  module = mongoose.model('users', Users);
+  userModule = mongoose.model('users', Users);
 } catch (_) {
-  module = mongoose.model('users');
+  userModule = mongoose.model('users');
 }
-export default module;
+export default userModule;

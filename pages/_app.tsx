@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import { sessionFetchedUser } from 'typings/typings';
 
 export default function App({ Component, pageProps }) {
-  const [user, setUser] = useState<sessionFetchedUser>({ awaiting: true });
+  const [user, setUser] = useState<sessionFetchedUser>({ awaiting: true } as any);
 
   useEffect(() => {
     user &&

@@ -1,10 +1,11 @@
-import { NextApiRequest } from 'next';
+import { GetServerSidePropsContext, NextApiRequest } from 'next';
 import { Session } from 'next-iron-session';
 
 export interface withSessionRequest extends NextApiRequest {
   session: Session;
 }
 
+export type withSessionGetServerSideProps = GetServerSidePropsContext & { req: { session: Session } };
 export interface ApiUser {
   id: string;
   username: string;
@@ -15,6 +16,7 @@ export interface ApiUser {
   locale: string;
   mfa_enabled: boolean;
   premium_type: number;
+  vanity: string;
 }
 
-export type sessionFetchedUser = ApiUser | null | { awaiting: boolean };
+export type sessionFetchedUser = ApiUser | null;

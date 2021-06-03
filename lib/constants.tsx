@@ -1,19 +1,18 @@
 export const user_flags = {
   STAFF: 1 << 0, // 1
-  // EARLY_SUPPORTER: 1 << 1, // 2
+  EARLY_SUPPORTER: 1 << 1, // 2
   VERIFYED: 1 << 2, // 4
   TOP_RANKING: 1 << 3, // 8
-  // ADMIN: 1 << 0, // 1
-  // SITE_MOD: 1 << 1, // 2
-  // DEVELOPER: 1 << 2, // 4
-  // EARLY_SUPPORTER: 1 << 3, // 8
-  // MOD: 1 << 4, // 16
+  // ADMIN: 1 << 4, // 16
+  // SITE_MOD: 1 << 5, // 32
+  // DEVELOPER: 1 << 6, // 64
+
   // // FIVE_STAR: 1 << 5, // 32
   // // FOUR_STAR: 1 << 6, // 64
   // // THREE_STAR: 1 << 7, // 128
 };
 
-export const DEFAULT_FLAGS = 0;
+export const DEFAULT_FLAGS = 2;
 
 export function evalFlags(flags: number): { [key: string]: boolean } {
   return Object.keys(user_flags).reduce((all, nameFlag) => {
@@ -29,7 +28,10 @@ export const user_badges = {
       <path d='M3.97436 11.5386L0 15.6411L7.94872 23.8463L11.9231 19.7437L3.97436 11.5386Z' fill='#37ADAD' />
     </svg>
   ),
-  // EARLY_SUPPORTER: <>test</>,
+  EARLY_SUPPORTER: null,
+  // ADMIN: null,
+  // SITE_MOD: null,
+  // DEVELOPER: null,
   VERIFYED: (
     <svg width='30' height='30' viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg'>
       <path
@@ -46,7 +48,7 @@ export const user_badges = {
       />
       <defs>
         <linearGradient id='paint0_linear' x1='14.0001' y1='0.116699' x2='14.0001' y2='35.6667' gradientUnits='userSpaceOnUse'>
-          <stop stop-color='#FF0000' />
+          <stop stopColor='#FF0000' />
           <stop offset='1' stopColor='#7513F1' />
         </linearGradient>
       </defs>
@@ -59,6 +61,16 @@ export const user_badges = {
   // MOD: <></>,
 };
 
-export function evalBadges(resoloved: { [key: string]: boolean }): JSX.Element[] {
-  return Object.entries(resoloved).reduce((past, [key, has]) => [...past].concat(has ? user_badges[key] : []), []);
+const user_badges_display_name = {
+  STAFF: 'Staff',
+  VERIFYED: 'Verifed',
+  TOP_RANKING: 'Top rank',
+};
+
+export function evalBadges(resoloved: { [key: string]: boolean }): [JSX.Element, string][] {
+  return Object.entries(resoloved).reduce((past, [key, has]) => (has ? [[user_badges[key], user_badges_display_name[key]]].concat(past) : past), []);
+}
+
+export function clsx(...args: string[]) {
+  return args.filter(Boolean).join(' ');
 }
