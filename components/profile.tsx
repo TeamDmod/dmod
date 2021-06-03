@@ -28,7 +28,7 @@ export default function Profile({ profile, NoSyncData }: props) {
       </div>
       <div className='flex flex-wrap md:flex-row flex-col -my-14 content-center ml-0 md:ml-9 md:space-x-3 space-y-3 lg:space-y-0'>
         <img
-          className='rounded-full h-32 w-32 select-none'
+          className='ml-3 sm:ml-0 rounded-full h-32 w-32 select-none'
           draggable={false}
           src={profile.avatarURL}
           alt='User avatar'
@@ -38,8 +38,9 @@ export default function Profile({ profile, NoSyncData }: props) {
           <span>{profile.tag}</span>
         </span>
 
-        <div className='flex flex-wrap content-center space-x-4 my-0 md:mt-1 md:mb-3'>
-          {badges.map(
+        <div className='flex flex-wrap content-center justify-center space-x-2 sm:space-x-4 my-0 md:mt-1 md:mb-3'>
+          {/* Reverse as on pass in of the profile data the order is reversed */}
+          {badges.reverse().map(
             ([badge, displayName], i) =>
               badge !== null && (
                 <span title={displayName} key={'badges' + i}>
