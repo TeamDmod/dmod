@@ -13,14 +13,15 @@ export default function Profile({ profile, NoSyncData }: props) {
 
   return (
     <div>
-      <div className='h-60 md:h-44 overflow-x-hidden'>
+      <div className='h-80 md:h-60 overflow-x-hidden'>
         {profile.banner && (
           <div
             className='h-full w-full rounded-b max-h-screen bg-no-repeat'
             style={{
               backgroundImage: `url(${profile.banner})`,
               backgroundSize: '100% ',
-              minWidth: '500px',
+              minWidth: '600px',
+              backgroundPosition: 'center center',
             }}
           />
         )}
