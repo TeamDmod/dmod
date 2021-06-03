@@ -5,9 +5,9 @@ import connectToDatabase from 'lib/mongodb.connection';
 import withSession from 'lib/session';
 import credentials from 'models/credentials';
 import users from 'models/users';
+import { customAlphabet } from 'nanoid';
 import { NextApiResponse } from 'next';
 import { withSessionRequest } from 'typings/typings';
-import { customAlphabet } from 'nanoid';
 
 const API_ENDPOINT = 'https://discord.com/api/v8';
 const json = (res: Response) => res.json();
@@ -43,19 +43,21 @@ export default withSession(async (req: withSessionRequest, res: NextApiResponse)
   const credentials_ = await credentials.findOne({ _id: user.id });
   const user_ = await users.findOne({ _id: user.id });
 
+  let vanityURL: string;
   if (!user_) {
     const updatesAccessToken = customAlphabet(process.env.USER_ENCRIPT_KEY, 56)();
-    users.create({
+    const _u = await users.create({
       _id: user.id,
       avatar: user.avatar,
       username: user.username,
       discriminator: user.discriminator,
       site_flags: DEFAULT_FLAGS,
       updates_access: updatesAccessToken,
-      vanity: user.id,
+      vanity: `${user.id + user.discriminator}~`,
     });
+    vanityURL = _u.vanity;
   } else {
-    users.findOneAndUpdate(
+    const _u = await users.findOneAndUpdate(
       { _id: user.id },
       {
         $set: {
@@ -65,6 +67,7 @@ export default withSession(async (req: withSessionRequest, res: NextApiResponse)
         },
       }
     );
+    vanityURL = _u.vanity;
   }
 
   if (!credentials_) {
@@ -85,5 +88,5 @@ export default withSession(async (req: withSessionRequest, res: NextApiResponse)
     );
   }
 
-  res.redirect('/');
+  res.redirect(`/${vanityURL ?? ''}`);
 });
