@@ -14,6 +14,7 @@ export default function Layout({ title = 'dmod.gg', description = 'The best plac
         <meta property='og:title' content={title} />
         <meta property='og:description' content={description} />
         <meta property='og:image' content={image} />
+        <link rel='icon' href='/logo.png' />
       </Head>
       {children}
     </>

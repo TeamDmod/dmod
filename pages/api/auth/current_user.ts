@@ -28,6 +28,20 @@ export default withSession(async (req: withSessionRequest, res: NextApiResponse)
     },
   }).then(json);
   const user_ = await userModule.findOne({ _id: user.id });
+  const user_object = user_.toObject();
 
-  res.json({ user: { ...fetchedUser, ...(user_.toObject() ? { vanity: user_.toObject().vanity } : {}) } });
+  if (user_object.avatar !== fetchedUser.avatar || user_object.username !== fetchedUser.username || user_object.discriminator !== fetchedUser.discriminator) {
+    await user_.updateOne(
+      Object.fromEntries(
+        Object.entries(
+          ['avatar', 'username', 'discriminator']
+            .filter(prop => user_object[prop] !== fetchedUser[prop])
+            .map(prop => {
+              return { [prop]: fetchedUser[prop] };
+            })
+        ).reduce((prev, [, curr]) => [...prev, ...Object.entries(curr)], [])
+      )
+    );
+  }
+  res.json({ user: { ...fetchedUser, ...(user_object ? { vanity: user_object.vanity } : {}) } });
 });

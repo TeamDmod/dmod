@@ -4,10 +4,9 @@ import React from 'react';
 
 interface props {
   profile: userData;
-  NoSyncData?: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 }
 
-export default function Profile({ profile, NoSyncData }: props) {
+export default function Profile({ profile }: props) {
   const evaledFlags = evalFlags(profile.site_flags);
   const badges = evalBadges(evaledFlags);
 
@@ -50,7 +49,6 @@ export default function Profile({ profile, NoSyncData }: props) {
               )
           )}
         </div>
-        {NoSyncData && NoSyncData}
       </div>{' '}
       <div className='mt-16'>
         <div>{profile.description}</div>

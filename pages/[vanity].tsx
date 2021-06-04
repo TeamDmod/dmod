@@ -14,33 +14,21 @@ interface props {
   user: ApiUser;
 }
 
-export default function userProfile({ profile, isOwner, user }: props) {
-  const [canChange, setCan] = useState(false);
-
-  useEffect(() => {
-    if (!isOwner) return;
-    if (!user || user['awaiting']) return;
-    if (profile.avatar !== user.avatar || profile.username !== user.username || profile.discriminator !== user.discriminator) setCan(true);
-  }, [user]);
-
-  function updateData() {
-    console.log('Data updating');
-  }
-
+export default function userProfile({ profile, isOwner }: props) {
   return (
-    <Layout title={`dmod.gg - ${profile.username}`} description='User profile view'>
+    <Layout title={`Dmod.gg - ${profile.username}`} description='User profile view'>
       <Profile
         profile={profile}
-        NoSyncData={
-          canChange ? (
-            <div className='flex flex-wrap content-center m-3 md:m-0'>
-              {/* Update button to update the user profile data from the data pulled form discord. */}
-              <div className='text-gray-100 bg-red-600 p-2 rounded cursor-pointer select-none animate-floting' onClick={updateData}>
-                Update data!
-              </div>
-            </div>
-          ) : undefined
-        }
+        // NoSyncData={
+        //   canChange ? (
+        //     <div className='flex flex-wrap content-center m-3 md:m-0'>
+        //       {/* Update button to update the user profile data from the data pulled form discord. */}
+        //       <div className='text-gray-100 bg-red-600 p-2 rounded cursor-pointer select-none animate-floting' onClick={updateData}>
+        //         Update data!
+        //       </div>
+        //     </div>
+        //   ) : undefined
+        // }
       />
     </Layout>
   );
@@ -56,11 +44,8 @@ export const getServerSideProps: GetServerSideProps = withSession(
     if (user) {
       return {
         props: {
-          profile: (() => {
-            const u = user.toObject();
-            u.updates_access = !!session && user.id === session.id ? u.updates_access : null;
-            return u;
-          })(),
+          // Dont send the access key only on account route(s)
+          profile: Object.fromEntries(Object.entries(user.toObject()).filter(i => i[0] !== 'updates_access')),
           isOwner: !!session && user.id === session.id,
         },
       };
