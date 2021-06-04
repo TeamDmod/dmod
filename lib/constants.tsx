@@ -3,9 +3,9 @@ export const user_flags = {
   EARLY_SUPPORTER: 1 << 1, // 2
   VERIFYED: 1 << 2, // 4
   TOP_RANKING: 1 << 3, // 8
-  // ADMIN: 1 << 4, // 16
-  // SITE_MOD: 1 << 5, // 32
-  // DEVELOPER: 1 << 6, // 64
+  ADMIN: 1 << 4, // 16
+  SITE_MOD: 1 << 5, // 32
+  DEVELOPER: 1 << 6, // 64
 
   // // FIVE_STAR: 1 << 5, // 32
   // // FOUR_STAR: 1 << 6, // 64
@@ -29,9 +29,9 @@ export const user_badges = {
     </svg>
   ),
   EARLY_SUPPORTER: null,
-  // ADMIN: null,
-  // SITE_MOD: null,
-  // DEVELOPER: null,
+  ADMIN: null,
+  SITE_MOD: null,
+  DEVELOPER: null,
   VERIFYED: (
     <svg width='30' height='30' viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg'>
       <path

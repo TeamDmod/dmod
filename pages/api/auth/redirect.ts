@@ -45,7 +45,7 @@ export default withSession(async (req: withSessionRequest, res: NextApiResponse)
 
   let vanityURL: string;
   if (!user_) {
-    const updatesAccessToken = customAlphabet(process.env.USER_ENCRIPT_KEY, 56)();
+    const updatesAccessToken = customAlphabet(process.env.USER_ENCRIPT_KEY, 86)();
     const _u = await users.create({
       _id: user.id,
       avatar: user.avatar,
