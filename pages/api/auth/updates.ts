@@ -1,3 +1,4 @@
+import { Embed, sendToWebhook } from 'lib/backend-utils';
 import { user_flags } from 'lib/constants';
 import connectToDatabase from 'lib/mongodb.connection';
 import userModule from 'models/users';
@@ -7,6 +8,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (!req.headers.authorization) return res.status(401).json({ message: 'Unauthorized', success: false });
   if (req.method !== 'PATCH') return res.status(400).json({ message: 'Method not supported', success: false });
   await connectToDatabase();
+
+  async function returnWithWebhook(data: any, embed: Embed, status = 200) {
+    sendToWebhook(embed).catch(console.log);
+    res.status(status).json(data);
+  }
+
   /**
    * NOTE API PROTECTION: Implement route protection // Shoud all work but still need to fix something small (note down)
    */
@@ -35,7 +42,18 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       (uperUser.site_flags & user_flags.ADMIN) === user_flags.ADMIN) ||
       (uperUser.site_flags & user_flags.DEVELOPER) === user_flags.DEVELOPER)
   )
-    return res.status(400).json({ message: 'Admins cant update admins', success: false });
+    return returnWithWebhook(
+      { message: 'Admins cant update admins', success: false },
+      {
+        fields: [
+          {
+            name: 'Admin attempt update admin.',
+            value: `Admin: \`${user.tag}\` (${user._id}) \n Target: \`${uperUser.tag}\` (${uperUser._id})`,
+          },
+        ],
+      },
+      400
+    );
 
   /**
    * Although `AllMutations` is declared its mainly like a list of currently supported mutations/updates
@@ -51,8 +69,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     ((!uperUser ? user.site_flags : uperUser.site_flags) & user_flags.DEVELOPER) === user_flags.DEVELOPER;
 
   const isMod = ((!uperUser ? user.site_flags : uperUser.site_flags) & user_flags.SITE_MOD) === user_flags.SITE_MOD;
-
-  console.log(isAdmin, isMod, !uperUser ? 'user' : 'uper');
 
   const bodyData = JSON.parse(req.body);
   let typeError = false;
@@ -83,8 +99,22 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     const updateData = await userModule.findOneAndUpdate({ _id: user._id }, objectedUpdateQuery);
-    res.json({ message: Object.fromEntries(Object.entries(updateData.toObject()).filter(i => i[0] !== 'updates_access')), success: true });
+
+    return returnWithWebhook(
+      { message: Object.fromEntries(Object.entries(updateData.toObject()).filter(i => i[0] !== 'updates_access')), success: true },
+      {
+        color: parseInt('#19e302'.replace('#', ''), 16),
+        fields: [
+          {
+            name: `${uperUser ? 'Uper user update' : 'User self update'} \`${user.tag}\` (${user._id})`,
+            value: `Body update targets; \`${Object.keys(objectedUpdateQuery).join(', ')}\`
+            (Admin: \`${isAdmin}\`) (Mod: \`${isMod}\`)`,
+          },
+        ],
+      }
+    );
+    // res.json({ message: Object.fromEntries(Object.entries(updateData.toObject()).filter(i => i[0] !== 'updates_access')), success: true });
   } catch (_) {
-    res.json({ message: 'Unknown update error: ' + _.message ?? _, success: false });
+    returnWithWebhook({ message: `Unknown update error: ${_.message ?? _}`, success: false }, { description: `Error while updating ${user._id}; ${_.message ?? _}` }, 500);
   }
 };
