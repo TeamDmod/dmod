@@ -16,7 +16,6 @@ export default function Server({ user }) {
   const [IsError, setIsError] = useState(false);
   const [IsModalOpen, setModalOpen] = useState(false);
   const [selectedGuildModalData, setGuildModleData] = useState(null);
-  const [ModalErrorData, setModalErrorData] = useState<[boolean, string | null]>([false, null]);
 
   const [userGuildData, setData] = useState<ApiUserGuildData>({} as ApiUserGuildData);
 
@@ -106,7 +105,7 @@ export default function Server({ user }) {
           </div>
         </div>
       </div>
-      <CreateGuildApplicationModal guild={selectedGuildModalData} closeModal={() => setModalOpen(false)} isOpen={IsModalOpen} errorState={[ModalErrorData, setModalErrorData]} />
+      <CreateGuildApplicationModal guild={selectedGuildModalData} closeModal={() => setModalOpen(false)} isOpen={IsModalOpen} />
     </Layout>
   );
 }
