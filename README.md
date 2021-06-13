@@ -30,6 +30,10 @@ Follow the style you see used in the primary repository! Consistency with the re
 
 The appropriate formatting guidelines will be updated soon.
 
+## Licensing
+
+All the information on licensing can be viewed [here](https://github.com/dmod-gg/dmod/blob/master/LICENSE.md)
+
 ### Links 
 Website: http://dmod.gg/<br>
 Twitter: https://twitter.com/dmodgg/<br>
