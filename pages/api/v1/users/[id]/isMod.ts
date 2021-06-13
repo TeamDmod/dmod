@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import Users from "../../../../models/users"; /*i think this correctly requires the users model*/
+import Users from "../../../../../../models/users"; /*i think this correctly requires the users model*/
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
  const user = await Users.findOne({id: req.query.id});
