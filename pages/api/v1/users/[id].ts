@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-var Users = require("../../../models/users.ts"); /*i think this correctly requires the users model*/
+import Users from "../../../models/users.ts"; /*i think this correctly requires the users model*/
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
 	const {
