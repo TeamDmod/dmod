@@ -9,6 +9,8 @@ module.exports = {
         mainbg: '#0c142c',
         buttonsbg: '#5700C6',
         dorpdown: '#181944',
+        servercard: '#142045',
+        popupcard: '#152761',
       }),
     },
     animation: {

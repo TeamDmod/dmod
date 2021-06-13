@@ -98,7 +98,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (Object.keys(objectedUpdateQuery).length <= 0) return res.json({ message: 'Body keys was left at length of 0', success: false });
 
   try {
-    const updateData = await userModule.findOneAndUpdate({ _id: user._id }, objectedUpdateQuery);
+    const updateData = await userModule.findOneAndUpdate({ _id: user._id }, objectedUpdateQuery, { new: true });
 
     return returnWithWebhook(
       { message: Object.fromEntries(Object.entries(updateData.toObject()).filter(i => i[0] !== 'updates_access')), success: true },

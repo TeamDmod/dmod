@@ -1,15 +1,11 @@
 import withSession from 'lib/session';
 import { NextApiResponse } from 'next';
 import { withSessionRequest } from 'typings/typings';
-import crypto from 'crypto-js';
 import credentialsData from 'models/credentials';
 import connectToDatabase from 'lib/mongodb.connection';
 import userModule from 'models/users';
+import { decryptToken } from 'lib/backend-utils';
 
-export function decryptToken(token: string, string: boolean = false) {
-  const decript = crypto.AES.decrypt(token, process.env.ENCRIPT_KEY);
-  return string ? decript.toString(crypto.enc.Utf8) : decript;
-}
 const API_ENDPOINT = 'https://discord.com/api/v8';
 const json = (res: Response) => res.json();
 
@@ -27,6 +23,19 @@ export default withSession(async (req: withSessionRequest, res: NextApiResponse)
       Authorization: `Bearer ${decryptAccessToken}`,
     },
   }).then(json);
+
+  /**
+   * Check for a unauth code error meaning that the user most likely
+   * deauthed from discord and not worn out session, so try session destroying and credentials.
+   */
+  if (fetchedUser.code === 0) {
+    try {
+      results.delete();
+      req.session.destroy();
+    } catch (_) {}
+    return res.json({ user: null });
+  }
+
   const user_ = await userModule.findOne({ _id: user.id });
   const user_object = user_.toObject();
 
@@ -43,5 +52,6 @@ export default withSession(async (req: withSessionRequest, res: NextApiResponse)
       )
     );
   }
+
   res.json({ user: { ...fetchedUser, ...(user_object ? { vanity: user_object.vanity } : {}) } });
 });

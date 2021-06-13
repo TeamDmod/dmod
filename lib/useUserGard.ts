@@ -11,5 +11,5 @@ export default function useUserGard(user?: ApiUser) {
     if (user && !user['awaiting']) setLoading(false);
   }, [user]);
 
-  return { loading };
+  return { loading, mutateLoading: setLoading };
 }

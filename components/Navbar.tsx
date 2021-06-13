@@ -14,6 +14,10 @@ function Navbar({ user }: { user: sessionFetchedUser }) {
       link: '/listings',
     },
     {
+      name: 'Servers',
+      link: '/servers',
+    },
+    {
       name: 'Discord',
       link: '/discord',
     },
