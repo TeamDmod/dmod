@@ -11,7 +11,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
 	switch (method) {
 		case 'GET':
-			const user = await Users.findOne({id: req.params.id});
+			const user = await Users.findOne({id: req.query.id});
 			await res.status(200).json(user);
 			break;
 
