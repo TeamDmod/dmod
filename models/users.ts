@@ -95,16 +95,40 @@ export interface ratingData {
 
 export interface userData {
   _id: string;
+  /**
+   * User discription (makdown?)
+   */
   description: string;
+  /**
+   * Public prefered pronouns
+   */
   pronouns: string | null;
+  /**
+   * User's optional public status of activity
+   */
   active: boolean;
+  /**
+   * The user's site flags
+   */
   site_flags: number;
+  /**
+   * User profile banner
+   */
   banner: null;
   discriminator: string;
   username: string;
   avatar: string | null;
+  /**
+   * Data on the users ratings
+   */
   ratings: ratingData[];
+  /**
+   * A token to update the users data
+   */
   updates_access: string;
+  /**
+   * The user's profile vanity
+   */
   vanity: string;
   avatarURL: string;
   tag: string;
