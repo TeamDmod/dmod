@@ -33,4 +33,4 @@ The appropriate formatting guidelines will be updated soon.
 ### Links 
 Website: http://dmod.gg/<br>
 Twitter: https://twitter.com/dmodgg/<br>
-Discord: https://discord.com/invite/VUTu3HyRpN
+Discord: https://dmod.gg/discord
