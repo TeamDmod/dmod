@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import Users from "@models/users"; /*i think this correctly requires the users model*/
 
-export default (req: NextApiRequest, res: NextApiResponse) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
 	const {
 		query: { id },
 		body,
@@ -10,10 +11,12 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
 
 	switch (method) {
 		case 'GET':
-			res.status(200).json({ id })
+			const user = await Users.findOne({id: req.query.id});
+			await res.status(200).json(user);
 			break;
 
 		case 'POST':
+		 // wait a min, why are you going to update data here? lemme make auto sync for you then
 			// Create/Update data in database
 			break;
 
