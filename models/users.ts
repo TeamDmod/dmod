@@ -1,3 +1,4 @@
+import { DEFAULT_BANNER_COLOR } from 'lib/constants';
 import mongoose, { Schema } from 'mongoose';
 
 const Users = new Schema(
@@ -24,7 +25,7 @@ const Users = new Schema(
     },
     banner: {
       type: String,
-      default: null,
+      default: `color:${DEFAULT_BANNER_COLOR}`,
     },
     discriminator: {
       type: String,

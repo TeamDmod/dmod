@@ -61,6 +61,8 @@ export const user_badges = {
   // MOD: <></>,
 };
 
+export const DEFAULT_BANNER_COLOR = 'rgb(76,29,149)';
+
 const user_badges_display_name = {
   STAFF: 'Staff',
   VERIFYED: 'Verifed',
@@ -73,4 +75,40 @@ export function evalBadges(resoloved: { [key: string]: boolean }): [JSX.Element,
 
 export function clsx(...args: string[]) {
   return args.filter(Boolean).join(' ');
+}
+
+export type bannerTypes = 'color' | 'img' | 'unknown';
+
+export interface reslovedBanner {
+  type: bannerTypes;
+  color: string | null;
+  image: string | null;
+}
+
+export const bannerResloverRegExps = {
+  COLOR_RGB: /^rgb\((\d{1,3}),(\d{1,3}),(\d{1,3})\)$/,
+  COLOR_HEX: /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/,
+  IMAGE: /^https:\/\//,
+};
+
+/**
+ * * Color banner: "color:rgb()" or "color:#hex"
+ * * Image banner: "img:https:/--"
+ */
+export function bannerReslover(bannerResolvable: string): reslovedBanner {
+  const type = bannerResolvable.slice(0, bannerResolvable.indexOf(':'));
+  const data = bannerResolvable.slice(bannerResolvable.indexOf(':') + 1);
+  if (!['color', 'img'].includes(type)) return { type: 'unknown', color: null, image: null };
+
+  if (type === 'img') {
+    if (bannerResloverRegExps.IMAGE.test(data)) return { type: 'img', color: null, image: data };
+    return { type: 'unknown', color: null, image: null };
+  }
+
+  if (type === 'color') {
+    if (!bannerResloverRegExps.COLOR_HEX.test(data) && !bannerResloverRegExps.COLOR_RGB.test(data)) return { type: 'color', color: DEFAULT_BANNER_COLOR, image: null };
+    return { type: 'color', color: data, image: null };
+  }
+
+  return { type: 'unknown', color: null, image: null };
 }
