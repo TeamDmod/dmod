@@ -78,7 +78,7 @@ const Users = new Schema(
 );
 
 Users.virtual('avatarURL').get(function () {
-  if (!this.avatar) return `https://cdn.discordapp.com/embed/avatars/${+this.discriminator % 5}.png`;
+  if (!this.avatar) return `https://cdn.discordapp.com/embed/avatars/${this.discriminator % 5}.png`;
   const isAnimated = this.avatar.startsWith('a_');
   return `https://cdn.discordapp.com/avatars/${this.id}/${this.avatar}.${isAnimated ? 'gif' : 'png'}`;
 });

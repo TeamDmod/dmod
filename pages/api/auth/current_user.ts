@@ -1,3 +1,4 @@
+import crypto from 'crypto-js';
 import withSession from 'lib/session';
 import { NextApiResponse } from 'next';
 import { withSessionRequest } from 'typings/typings';

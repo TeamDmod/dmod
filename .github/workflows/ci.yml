@@ -1,5 +1,6 @@
 name: CI
 on: [push, pull_request]
+
 jobs:
   linter:
     name: Run ts pretty
@@ -15,6 +16,9 @@ jobs:
         
       - name: Install dependencies
         run: npm install
+
+      - name: Run Linter
+        run: npm run lint
 
       - name: Run typescript pretty check
         run:  npm run tspretty
