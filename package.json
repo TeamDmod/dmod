@@ -13,7 +13,8 @@
     "start": "next start",
     "tspretty": "tsc --pretty",
     "lint": "npx eslint . --ext .ts",
-    "lint:fix": "npx eslint . --ext .ts --fix"
+    "lint:fix": "npx eslint . --ext .ts --fix",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@popperjs/core": "^2.9.2",
@@ -24,6 +25,7 @@
     "dotenv": "^8.2.0",
     "framer-motion": "^4.0.3",
     "fs": "0.0.1-security",
+    "husky": "^6.0.0",
     "moment": "^2.29.1",
     "mongodb": "^3.6.9",
     "mongoose": "^5.12.12",
@@ -56,6 +58,7 @@
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "prettier": "^2.2.1",
     "sass": "^1.32.13",
+    "lint-staged": "^10.4.2",
     "typescript": "^4.2.4"
   }
 }
