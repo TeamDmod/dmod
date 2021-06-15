@@ -21,6 +21,7 @@
     "btoa": "^1.2.1",
     "crypto-js": "^4.0.0",
     "dotenv": "^8.2.0",
+    "formik": "^2.2.9",
     "framer-motion": "^4.0.3",
     "fs": "0.0.1-security",
     "moment": "^2.29.1",
