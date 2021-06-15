@@ -5,7 +5,7 @@ export default function withSession(handler: Handler) {
 		cookieName: 'dmod_gg',
 		password: process.env.SECRET_SESSION_PASSCODE,
 		cookieOptions: {
-			secure: process.env.NODE_ENV === 'production',
-		},
+			secure: process.env.NODE_ENV === 'production'
+		}
 	});
 }

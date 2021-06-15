@@ -6,7 +6,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 		query: { id },
 		body,
 		headers,
-		method,
+		method
 	} = req;
 
 	switch (method) {

@@ -5,16 +5,16 @@ import mongoose, { Schema } from 'mongoose';
 const credentials = new Schema({
 	_id: {
 		type: String,
-		required: true,
+		required: true
 	},
 	AccessToken: {
 		type: String,
-		required: true,
+		required: true
 	},
 	RefreshToken: {
 		type: String,
-		required: true,
-	},
+		required: true
+	}
 });
 
 export type credentialsData = mongoose.Model<{

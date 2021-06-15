@@ -12,25 +12,22 @@ export function decryptToken(token: string, string: boolean = false) {
 const API_ENDPOINT = 'https://discord.com/api/v8';
 const json = (res: Response) => res.json();
 
-export default withSession(
-	async (req: withSessionRequest, res: NextApiResponse) => {
-		const user = req.session.get('user');
+export default withSession(async (req: withSessionRequest, res: NextApiResponse) => {
+	const user = req.session.get('user');
 
-		if (!user) return res.json({ user: null });
-		const connection = await connectToDatabase();
-		const credentialsCollection =
-			connection.db.collection<credentialsData>('credentials');
+	if (!user) return res.json({ user: null });
+	const connection = await connectToDatabase();
+	const credentialsCollection = connection.db.collection<credentialsData>('credentials');
 
-		const results = await credentialsCollection.findOne({ _id: user.id });
-		// @ts-expect-error
-		const decryptAccessToken = decryptToken(results.AccessToken, true);
+	const results = await credentialsCollection.findOne({ _id: user.id });
+	// @ts-expect-error
+	const decryptAccessToken = decryptToken(results.AccessToken, true);
 
-		const fetchedUser = await fetch(`${API_ENDPOINT}/users/@me`, {
-			headers: {
-				Authorization: `Bearer ${decryptAccessToken}`,
-			},
-		}).then(json);
+	const fetchedUser = await fetch(`${API_ENDPOINT}/users/@me`, {
+		headers: {
+			Authorization: `Bearer ${decryptAccessToken}`
+		}
+	}).then(json);
 
-		return res.json({ user: fetchedUser });
-	}
-);
+	return res.json({ user: fetchedUser });
+});
