@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default (req: NextApiRequest, res: NextApiResponse) => {
 	res.redirect(
@@ -6,6 +6,6 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
 			process.env.CLIENT_ID
 		}&scope=identify&response_type=code&redirect_uri=${encodeURIComponent(
 			process.env.REDIRECT_URL
-		)}&state=${req.query.state ?? "no"}`
+		)}&state=${req.query.state ?? 'no'}`
 	);
 };

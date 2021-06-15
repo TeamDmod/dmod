@@ -17,7 +17,7 @@ module.exports = {
         "react/react-in-jsx-scope": "off",
         "react/no-unescaped-entities": "warn",
         "react/prop-types": "off",
-        "prettier/prettier": ["error", {}, { usePrettierrc: true }],
+        "prettier/prettier": ["warn", {}, { usePrettierrc: true }],
         "simple-import-sort/imports": "error",
         "jsx-a11y/anchor-is-valid": [
             "error",

@@ -2,5 +2,6 @@
   "semi": true,
   "useTabs": true,
   "tabWidth": 2,
-  "jsxBracketSameLine": true
+  "jsxBracketSameLine": true,
+  "singleQuote": true
 }

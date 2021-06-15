@@ -1,6 +1,6 @@
 // NOTE: Could be deleted as the db will be interacted with by 'lib/mongodb.connection.ts'
 // and will only need to move typings to typings file(s)
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema } from 'mongoose';
 
 const credentials = new Schema({
 	_id: {
@@ -25,8 +25,8 @@ export type credentialsData = mongoose.Model<{
 
 let module: credentialsData;
 try {
-	module = mongoose.model("credentials", credentials);
+	module = mongoose.model('credentials', credentials);
 } catch (_) {
-	module = mongoose.model("credentials");
+	module = mongoose.model('credentials');
 }
 export default module;

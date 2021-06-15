@@ -1,5 +1,5 @@
-import { NextApiRequest } from "next";
-import { Session } from "next-iron-session";
+import { NextApiRequest } from 'next';
+import { Session } from 'next-iron-session';
 
 export interface withSessionRequest extends NextApiRequest {
 	session: Session;

@@ -1,6 +1,6 @@
 // NOTE: Could be deleted as the db will be interacted with by 'lib/mongodb.connection.ts'
 // and will only need to move typings to typings file(s)
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema } from 'mongoose';
 
 const Users = new Schema(
 	{
@@ -38,18 +38,18 @@ const Users = new Schema(
 	}
 );
 
-Users.virtual("avatarURL").get(function () {
+Users.virtual('avatarURL').get(function () {
 	if (!this.avatar)
 		return `https://cdn.discordapp.com/embed/avatars/${
 			this.discriminator % 5
 		}.png`;
-	const isAnimated = this.avatar.startsWith("a_");
+	const isAnimated = this.avatar.startsWith('a_');
 	return `https://cdn.discordapp.com/avatars/${
 		this.id
-	}/${this.avatar}.${isAnimated ? "gif" : "png"}`;
+	}/${this.avatar}.${isAnimated ? 'gif' : 'png'}`;
 });
 
-Users.virtual("tag").get(function () {
+Users.virtual('tag').get(function () {
 	return `${this.username}#${this.discriminator}`;
 });
 
@@ -57,8 +57,8 @@ type userData = mongoose.Model<any>;
 
 let module: userData;
 try {
-	module = mongoose.model("Users", Users);
+	module = mongoose.model('Users', Users);
 } catch (_) {
-	module = mongoose.model("Users");
+	module = mongoose.model('Users');
 }
 export default module;
