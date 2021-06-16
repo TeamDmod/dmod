@@ -1,38 +1,53 @@
 module.exports = {
-    root: true,
-    extends: ["airbnb-typescript", "plugin:prettier/recommended"],
-    env: {
-        browser: true,
-        node: true,
-        es2020: true
-    },
-    parserOptions: {
-        project: "./tsconfig.json"
-    },
-    rules: {
-        "@typescript-eslint/explicit-function-return-type": "off",
-        "@typescript-eslint/no-unused-vars": "warn",
-        "@typescript-eslint/naming-convention": "off",
-        "react/jsx-filename-extension": [1, { extensions: [".tsx"] }],
-        "react/react-in-jsx-scope": "off",
-        "react/no-unescaped-entities": "warn",
-        "react/prop-types": "off",
-        "prettier/prettier": ["warn", {}, { usePrettierrc: true }],
-        "simple-import-sort/imports": "error",
-        "jsx-a11y/anchor-is-valid": [
-            "error",
-            {
-                components: ["Link"],
-                specialLink: ["hrefLeft", "hrefRight"],
-                aspects: ["invalidHref", "preferButton"]
-            }
-        ],
-        "jsx-a11y/alt-text": "warn",
-        "import/no-mutable-exports": "off",
-        "import/prefer-default-export": "off",
-        "no-console": "off",
-        "no-multi-assign": "off",
-        "no-case-declarations": "off"
-    },
-    plugins: ["simple-import-sort"]
+  root: true,
+  extends: ['airbnb-typescript', 'plugin:prettier/recommended'],
+  env: {
+    browser: true,
+    node: true,
+    es2020: true,
+  },
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    project: './tsconfig.json',
+  },
+  rules: {
+    'prettier/prettier': [0, { endOfLine: 'auto', printWidth: 110 }, { usePrettierrc: true }],
+    '@typescript-eslint/explicit-function-return-type': 0,
+    'no-unused-expressions': 0,
+    'jsx-a11y/no-static-element-interactions': [0],
+    'jsx-a11y/click-events-have-key-events': 0,
+    'no-bitwise': [0],
+    'no-restricted-syntax': [0],
+    'no-underscore-dangle': [0],
+    '@typescript-eslint/no-unused-expressions': [0],
+    'react/no-unescaped-entities': [0],
+    '@typescript-eslint/no-unused-vars': 1,
+    'consistent-return': 0,
+    'jsx-a11y/no-noninteractive-element-interactions': [0],
+    'no-return-assign': 0,
+    'react/jsx-props-no-spreading': [0],
+    'jsx-a11y/label-has-associated-control': [0],
+    'react/require-default-props': [0],
+    '@typescript-eslint/naming-convention': 0,
+    'react/jsx-filename-extension': [1, { extensions: ['.tsx'] }],
+    'react/react-in-jsx-scope': 0,
+    'react/button-has-type': [0],
+    'react/prop-types': 1,
+    'simple-import-sort/imports': 2,
+    'jsx-a11y/anchor-is-valid': [
+      2,
+      {
+        components: ['Link'],
+        specialLink: ['hrefLeft', 'hrefRight'],
+        aspects: ['invalidHref', 'preferButton'],
+      },
+    ],
+    'jsx-a11y/alt-text': 1,
+    'import/no-mutable-exports': 0,
+    'import/prefer-default-export': 0,
+    'no-console': 0,
+    'no-multi-assign': 0,
+    'no-case-declarations': 0,
+  },
+  plugins: ['simple-import-sort'],
 };

@@ -9,7 +9,6 @@ import useUserGard from 'lib/useUserGard';
 import userModule, { userData } from 'models/users';
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
 import React from 'react';
-import { useState } from 'react';
 import { ApiUser, withSessionGetServerSideProps } from 'typings/typings';
 
 interface MiniEditorProps {
@@ -43,7 +42,7 @@ export default function Settings({ user, settings }: props) {
 
   if (loading)
     return (
-      <Layout title={`Loading...`}>
+      <Layout title='Loading...'>
         <AnimatedLoader />
       </Layout>
     );
@@ -53,7 +52,7 @@ export default function Settings({ user, settings }: props) {
       <div>
         <Formik
           initialValues={{ description: settings.description, active: settings.active, bannerData: { type: 'unknown' } }}
-          validate={values => {
+          validate={() => {
             const errors: any = {};
 
             return errors;
@@ -61,7 +60,9 @@ export default function Settings({ user, settings }: props) {
           onSubmit={(values, { setSubmitting }) => {
             const endValues: any = Object.fromEntries(Object.entries(values).filter(([key, value]) => value !== settings[key]));
             setTimeout(() => {
-              alert(JSON.stringify(endValues, null, 2));
+              // alert(JSON.stringify(endValues, null, 2));
+              console.log(endValues);
+
               setSubmitting(false);
             }, 400);
           }}

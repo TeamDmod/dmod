@@ -4,8 +4,7 @@ import connectToDatabase from 'lib/mongodb.connection';
 import withSession from 'lib/session';
 import users, { userData } from 'models/users';
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
-import React, { useEffect } from 'react';
-import { useState } from 'react';
+import React from 'react';
 import { ApiUser, withSessionGetServerSideProps } from 'typings/typings';
 
 interface props {
@@ -14,7 +13,7 @@ interface props {
   user: ApiUser;
 }
 
-export default function userProfile({ profile, isOwner }: props) {
+export default function userProfile({ profile }: props) {
   return (
     <Layout title={`Dmod.gg - ${profile.username}`} description='User profile view'>
       <Profile

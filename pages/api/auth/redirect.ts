@@ -20,11 +20,12 @@ export default withSession(async (req: withSessionRequest, res: NextApiResponse)
   params.set('grant_type', 'authorization_code');
   params.set('code', req.query.code as string);
   params.set('redirect_uri', process.env.REDIRECT_URL);
+  const btoaString = `${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`;
   const userAccessData = await fetch('https://discord.com/api/oauth2/token', {
     method: 'POST',
     body: params.toString(),
     headers: {
-      Authorization: `Basic ${btoa(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET)}`,
+      Authorization: `Basic ${btoa(btoaString)}`,
       'Content-Type': 'application/x-www-form-urlencoded',
     },
   }).then(json);

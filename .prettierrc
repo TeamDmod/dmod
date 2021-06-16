@@ -1,6 +1,6 @@
 {
   "semi": true,
-  "useTabs": true,
+  "useTabs": false,
   "tabWidth": 2,
   "jsxBracketSameLine": true,
   "trailingComma": "es5",

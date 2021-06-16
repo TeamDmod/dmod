@@ -4,14 +4,14 @@ import CreateGuildApplicationModal from 'components/CreateGuildApplicationModal'
 import Layout from 'components/layout';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { RawUserGuildIs, RawUserGivenGuild } from 'typings/typings';
+import { RawUserGivenGuild, RawUserGuildIs } from 'typings/typings';
 
 interface ApiUserGuildData {
   included: RawUserGuildIs[];
   excluded: RawUserGivenGuild[];
 }
 
-export default function Server({ user }) {
+export default function Server({ user }: any) {
   const [loading, setLoading] = useState(true);
   const [IsError, setIsError] = useState(false);
   const [IsModalOpen, setModalOpen] = useState(false);
@@ -23,7 +23,7 @@ export default function Server({ user }) {
 
   useEffect(() => {
     if (!user) router.push('/');
-    if (user && !user['awaiting']) {
+    if (user && !user.awaiting) {
       fetch(`${window.origin}/api/discord/guilds`)
         .then(_ => _.json())
         .then(data => {
@@ -31,7 +31,7 @@ export default function Server({ user }) {
           setData(data.data);
           setLoading(false);
         })
-        .catch(_ => {
+        .catch(() => {
           setIsError(true);
         });
     }

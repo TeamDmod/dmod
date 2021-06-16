@@ -46,7 +46,10 @@ export default function Profile({ profile }: props) {
           draggable={false}
           src={profile.avatarURL}
           alt='User avatar'
-          onError={({ currentTarget }) => (currentTarget.src = `https://cdn.discordapp.com/embed/avatars/${+profile.discriminator % 5}.png`)}
+          onError={({ currentTarget }) => {
+            // eslint-disable-next-line no-param-reassign
+            currentTarget.src = `https://cdn.discordapp.com/embed/avatars/${+profile.discriminator % 5}.png`;
+          }}
         />
         <span className='flex flex-wrap content-center text-xl'>
           <span>{profile.tag}</span>
@@ -57,7 +60,8 @@ export default function Profile({ profile }: props) {
           {badges.reverse().map(
             ([badge, displayName], i) =>
               badge !== null && (
-                <span title={displayName} key={'badges' + i}>
+                // eslint-disable-next-line react/no-array-index-key
+                <span title={displayName} key={`badges${i}`}>
                   {badge}
                 </span>
               )

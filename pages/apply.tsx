@@ -127,5 +127,5 @@
 // }
 
 export default function apply() {
-  return <div className="text-center">Page out of commission.</div>;
+  return <div className='text-center'>Page out of commission.</div>;
 }

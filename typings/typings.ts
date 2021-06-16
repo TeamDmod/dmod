@@ -1,5 +1,6 @@
 import { GetServerSidePropsContext, NextApiRequest } from 'next';
 import { Session } from 'next-iron-session';
+
 import { GuildData } from '../models/guilds';
 import { RawEmoji, RawRole, RawUser } from './discord.object.typings';
 

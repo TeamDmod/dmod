@@ -1,4 +1,3 @@
-import crypto from 'crypto-js';
 import { decryptToken } from 'lib/backend-utils';
 import withSession from 'lib/session';
 import credentialsData from 'models/credentials';

@@ -1,9 +1,8 @@
-import crypto from 'crypto-js';
-import { isSnowflake, sendToWebhook } from 'lib/backend-utils';
+import btoa from 'btoa';
+import { sendToWebhook } from 'lib/backend-utils';
 import GuildModule from 'models/guilds';
 import PreviewGuildModule from 'models/preview_guilds';
 import { nanoid } from 'nanoid';
-import btoa from 'btoa';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { RawGuild } from 'typings/typings';
 
@@ -17,12 +16,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   params.set('grant_type', 'authorization_code');
   params.set('code', req.query.code as string);
   params.set('redirect_uri', process.env.INVITE_REDIRECT_URL);
+  const btoaString = `${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`;
 
   const token = await fetch('https://discord.com/api/oauth2/token', {
     method: 'POST',
     body: params.toString(),
     headers: {
-      Authorization: `Basic ${btoa(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET)}`,
+      Authorization: `Basic ${btoa(btoaString)}`,
       'Content-Type': 'application/x-www-form-urlencoded',
     },
   }).then(json);

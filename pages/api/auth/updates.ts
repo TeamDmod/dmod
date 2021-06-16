@@ -27,7 +27,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   const user = await userModule.findOne({ updates_access: updateToken });
 
-  let uperUser = undefined;
+  let uperUser;
   if (UperToken) uperUser = await userModule.findOne({ updates_access: UperToken });
 
   if (uperUser === null) return res.status(404).json({ message: 'Unknow uper user', success: false });

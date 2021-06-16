@@ -1,11 +1,10 @@
-import crypto from 'crypto-js';
+import { decryptToken } from 'lib/backend-utils';
+import connectToDatabase from 'lib/mongodb.connection';
 import withSession from 'lib/session';
+import credentialsData from 'models/credentials';
+import userModule from 'models/users';
 import { NextApiResponse } from 'next';
 import { withSessionRequest } from 'typings/typings';
-import credentialsData from 'models/credentials';
-import connectToDatabase from 'lib/mongodb.connection';
-import userModule from 'models/users';
-import { decryptToken } from 'lib/backend-utils';
 
 const API_ENDPOINT = 'https://discord.com/api/v8';
 const json = (res: Response) => res.json();
@@ -33,6 +32,7 @@ export default withSession(async (req: withSessionRequest, res: NextApiResponse)
     try {
       results.delete();
       req.session.destroy();
+      // eslint-disable-next-line no-empty
     } catch (_) {}
     return res.json({ user: null });
   }

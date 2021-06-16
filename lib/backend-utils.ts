@@ -1,5 +1,6 @@
 import crypto from 'crypto-js';
 import { RawGuild, RawGuildMember } from 'typings/typings';
+
 const API_ENDPOINT = 'https://discord.com/api/v8';
 const json = (res: Response) => res.json();
 
@@ -40,7 +41,7 @@ export function decryptToken(token: string, string: boolean = false) {
 }
 
 export function isSnowflake(str: string) {
-  return !isNaN(+str) && str.length >= 16 && /^([0-9]*)$/.test(str);
+  return !Number.isNaN(+str) && str.length >= 16 && /^([0-9]*)$/.test(str);
 }
 
 /**

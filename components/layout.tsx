@@ -1,6 +1,13 @@
 import Head from 'next/head';
 
-export default function Layout({ title = 'dmod.gg', description = 'The best place to hire moderators!', image = '/logo.png', children }) {
+interface props {
+  title?: string;
+  description?: string;
+  image?: string;
+  children: React.ReactNode;
+}
+
+export default function Layout({ title = 'dmod.gg', description = 'The best place to hire moderators!', image = '/logo.png', children }: props) {
   return (
     <>
       <Head>
