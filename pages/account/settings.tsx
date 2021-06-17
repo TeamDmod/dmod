@@ -2,7 +2,7 @@ import { Switch } from '@headlessui/react';
 import AnimatedLoader from 'components/AnimatedLoader';
 import Layout from 'components/layout';
 import { Formik } from 'formik';
-import { clsx } from 'lib/constants';
+import { bannerFlatten, bannerReslover, bannerTypes, clsx } from 'lib/constants';
 import connectToDatabase from 'lib/mongodb.connection';
 import withSession from 'lib/session';
 import useUserGard from 'lib/useUserGard';
@@ -47,42 +47,95 @@ export default function Settings({ user, settings }: props) {
       </Layout>
     );
 
+  const bannerData = bannerReslover(settings.banner);
+
   return (
     <Layout title={`${user.username} - Settings`}>
-      <div>
-        <Formik
-          initialValues={{ description: settings.description, active: settings.active, bannerData: { type: 'unknown' } }}
-          validate={() => {
-            const errors: any = {};
+      <Formik
+        initialValues={{ description: settings.description, active: settings.active, bannerData }}
+        validate={() => {
+          const errors: any = {};
 
-            return errors;
-          }}
-          onSubmit={(values, { setSubmitting }) => {
-            const endValues: any = Object.fromEntries(Object.entries(values).filter(([key, value]) => value !== settings[key]));
-            setTimeout(() => {
-              // alert(JSON.stringify(endValues, null, 2));
-              console.log(endValues);
+          return errors;
+        }}
+        onSubmit={async (values, { setSubmitting, resetForm }) => {
+          setSubmitting(true);
+          const ValidValues: any = Object.fromEntries(Object.entries(values).filter(([key, value]) => value !== settings[key] && key !== 'bannerData'));
+          const bannerflat = bannerFlatten(values.bannerData ?? { type: 'unknown', image: null, color: null });
 
-              setSubmitting(false);
-            }, 400);
-          }}
-        >
-          {({ handleSubmit, handleChange, handleBlur, values, isSubmitting, setValues, dirty, resetForm }) => (
-            <form onSubmit={handleSubmit}>
-              <div className='flex flex-wrap flex-col content-center space-y-2 overflow-x-hidden'>
+          const body = Object.assign(ValidValues, { ...(settings.banner === bannerflat ? {} : { banner: bannerflat }) });
+
+          const data = await fetch(`${window.origin}/api/auth/updates`, {
+            method: 'PATCH',
+            body: JSON.stringify(body),
+            headers: {
+              authorization: `${settings._id}=+${settings.updates_access}`,
+            },
+          }).then(d => d.json());
+
+          if (!data.success) return;
+
+          const updateObjectMapping = Object.fromEntries(Object.entries(data.message).filter(([key]) => ValidValues[key]));
+
+          /**
+           * NOTE: settings value is reset / destructuerd as to update the new date
+           * and not interfere with the values check. settings is destructuerd because "updates" patch doesn't
+           * return the users profile "update_access" token so the token will be destructuerd back into settings data.
+           */
+          // eslint-disable-next-line no-param-reassign
+          settings = { ...settings, ...data.message };
+          resetForm({ values: { ...values, ...updateObjectMapping } });
+
+          setSubmitting(false);
+        }}
+      >
+        {({ handleSubmit, handleChange, handleBlur, values, isSubmitting, setValues, dirty, resetForm }) => (
+          <>
+            <span>
+              <div
+                className={clsx(
+                  'transition duration-500 ease-in-out transform absolute -bottom-16 left-0 w-full min-w-max sm:w-4/12 p-3 overflow-y-hidden',
+                  dirty ? 'translate-y-0 opacity-1' : '-translate-y-6 opacity-0 pointer-events-none'
+                )}
+              >
+                <div className='flex bg-popupcard rounded p-2 justify-between space-x-2'>
+                  <span className='inline-flex flex-wrap content-center'>Change detected!</span>
+                  <div className='flex space-x-2'>
+                    <button className='px-2 py-1 bg-blue-800 rounded focus:outline-none' type='button' onClick={() => resetForm()}>
+                      Cancel
+                    </button>
+                    <button className='px-2 py-1 bg-blue-800 rounded focus:outline-none space-x-2' type='submit' disabled={isSubmitting} onClick={() => handleSubmit()}>
+                      {isSubmitting && <span title='Saving data...' className='relative inline-flex rounded-full h-3 w-3 bg-red-500' />}
+                      <span>Save</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </span>
+
+            <form>
+              <div className='flex flex-wrap flex-col sm:content-center space-y-2 overflow-x-hidden'>
                 <label>Description</label>
                 <MiniEditor {...{ handleBlur, handleChange, value: values.description }} />
 
-                <label>Active</label>
-                <div className='flex flex-wrap justify-center'>
-                  <Switch
-                    checked={values.active}
-                    onChange={active => setValues({ ...values, active })}
-                    className={`${values.active ? 'bg-blue-600' : 'bg-gray-200'} relative inline-flex items-center h-6 rounded-full w-11 focus:outline-none`}
-                  >
-                    <span className='sr-only'>Active</span>
-                    <span className={`${values.active ? 'translate-x-6' : 'translate-x-1'} inline-block w-4 h-4 transform bg-white rounded-full`} />
-                  </Switch>
+                <div className='flex flex-wrap justify-center space-x-3'>
+                  <label>Active</label>
+                  <div>
+                    <Switch
+                      checked={values.active}
+                      onChange={active => setValues({ ...values, active })}
+                      className={`transition duration-300 ease-in-out transform  ${
+                        values.active ? 'bg-blue-600' : 'bg-gray-300'
+                      } relative inline-flex items-center h-6 rounded-full w-11 focus:outline-none`}
+                    >
+                      <span className='sr-only'>Active</span>
+                      <span
+                        className={`transition duration-300 ease-in-out transform  ${
+                          values.active ? 'translate-x-6' : 'translate-x-1'
+                        } inline-block w-4 h-4 transform bg-white rounded-full`}
+                      />
+                    </Switch>
+                  </div>
                 </div>
 
                 <label>Banner ({values.bannerData.type})</label>
@@ -90,47 +143,32 @@ export default function Settings({ user, settings }: props) {
                   name='banner type'
                   id='banner_type'
                   className='text-gray-700 rounded focus:outline-none'
-                  onChange={e => setValues({ ...values, bannerData: { ...values.bannerData, type: e.currentTarget.value } })}
+                  onChange={e => setValues({ ...values, bannerData: { ...values.bannerData, type: e.currentTarget.value as bannerTypes } })}
+                  value={values.bannerData.type}
                 >
-                  <option value='solid' selected={values.bannerData.type === 'solid'}>
-                    Solid color background
-                  </option>
-                  <option value='url' selected={values.bannerData.type === 'url'}>
-                    Url background image (test)
-                  </option>
+                  <option value='color'>Solid color background</option>
+                  <option value='img'>Url background image (test)</option>
                 </select>
-              </div>
 
-              <span>
-                <div
-                  className={clsx(
-                    'transition duration-500 ease-in-out transform absolute -bottom-10 left-0 w-full sm:w-4/12 p-3 overflow-y-hidden',
-                    dirty ? 'translate-y-0 opacity-1' : '-translate-y-6 opacity-0 pointer-events-none'
-                  )}
-                >
-                  <div className='flex bg-popupcard rounded p-2 justify-between'>
-                    <span className='inline-flex flex-wrap content-center'>Change detected!</span>
-                    <div className='flex space-x-2'>
-                      <button
-                        className='px-2 py-1 bg-blue-800 rounded'
-                        type='button'
-                        onClick={() => {
-                          resetForm();
-                        }}
-                      >
-                        Cancel
-                      </button>
-                      <button className='px-2 py-1 bg-blue-800 rounded' type='submit' disabled={isSubmitting}>
-                        Submit
-                      </button>
+                <div className='pt-3'>
+                  {values.bannerData.type === 'color' && <div>Color picker</div>}
+                  {values.bannerData.type === 'img' && (
+                    <div>
+                      <input
+                        type='text'
+                        placeholder='Image url'
+                        value={values.bannerData.image}
+                        className='rounded px-2 py-1 focus:outline-none text-black'
+                        onChange={e => setValues({ ...values, bannerData: { ...values.bannerData, image: e.currentTarget.value } })}
+                      />
                     </div>
-                  </div>
+                  )}
                 </div>
-              </span>
+              </div>
             </form>
-          )}
-        </Formik>
-      </div>
+          </>
+        )}
+      </Formik>
     </Layout>
   );
 }

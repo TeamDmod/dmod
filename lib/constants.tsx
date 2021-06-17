@@ -92,6 +92,7 @@ export const bannerResloverRegExps = {
 };
 
 /**
+ * Resolve the string based banner to an object data form
  * * Color banner: "color:rgb()" or "color:#hex"
  * * Image banner: "img:https:/--"
  */
@@ -111,4 +112,13 @@ export function bannerReslover(bannerResolvable: string): reslovedBanner {
   }
 
   return { type: 'unknown', color: null, image: null };
+}
+
+/**
+ * Flatten the object back into a resolvable banner string
+ */
+export function bannerFlatten(banner: reslovedBanner): string {
+  if (banner.type === 'unknown' || !['color', 'img'].includes(banner.type)) return `color:${DEFAULT_BANNER_COLOR}`;
+  const color = banner.color == null ? DEFAULT_BANNER_COLOR : banner.color;
+  return `${banner.type}:${banner.type === 'img' ? banner.image : color}`;
 }

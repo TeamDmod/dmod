@@ -115,7 +115,7 @@ export interface userData {
   /**
    * User profile banner
    */
-  banner: null;
+  banner: string;
   discriminator: string;
   username: string;
   avatar: string | null;

@@ -19,7 +19,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
    */
 
   const [userId, updateToken, UperToken] = req.headers.authorization.split('=+');
-  if (!userId || !updateToken) return res.json({ message: 'Unauthorized', success: false });
+  if (!userId || !updateToken) return res.status(401).json({ message: 'Unauthorized', success: false });
 
   const userMutations = ['active', 'banner', 'description', 'pronouns'];
   const AllMutations = [...userMutations, 'site_flags', 'ratings', 'username', 'discriminator', 'avatar'];
