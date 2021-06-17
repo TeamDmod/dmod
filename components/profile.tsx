@@ -1,4 +1,4 @@
-import { bannerReslover, evalBadges, evalFlags } from 'lib/constants';
+import { bannerReslover, clsx, evalBadges, evalFlags } from 'lib/constants';
 import { userData } from 'models/users';
 import React from 'react';
 
@@ -42,7 +42,7 @@ export default function Profile({ profile }: props) {
       </div>
       <div className='flex flex-wrap md:flex-row flex-col -my-14 content-center ml-0 md:ml-9 md:space-x-3 space-y-3 lg:space-y-0'>
         <img
-          className='ml-3 sm:ml-0 rounded-full h-32 w-32 select-none'
+          className={clsx('ml-3 sm:ml-0 rounded-full h-32 w-32 select-none border-3', profile.active ? 'border-green-600' : 'border-gray-500')}
           draggable={false}
           src={profile.avatarURL}
           alt='User avatar'

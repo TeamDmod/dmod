@@ -16,19 +16,7 @@ interface props {
 export default function userProfile({ profile }: props) {
   return (
     <Layout title={`Dmod.gg - ${profile.username}`} description='User profile view'>
-      <Profile
-        profile={profile}
-        // NoSyncData={
-        //   canChange ? (
-        //     <div className='flex flex-wrap content-center m-3 md:m-0'>
-        //       {/* Update button to update the user profile data from the data pulled form discord. */}
-        //       <div className='text-gray-100 bg-red-600 p-2 rounded cursor-pointer select-none animate-floting' onClick={updateData}>
-        //         Update data!
-        //       </div>
-        //     </div>
-        //   ) : undefined
-        // }
-      />
+      <Profile profile={profile} />
     </Layout>
   );
 }
