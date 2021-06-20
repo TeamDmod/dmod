@@ -1,3 +1,4 @@
+import { typeValidators, validators } from '@lib/userUpdateValidators';
 import { Embed, sendToWebhook } from 'lib/backend-utils';
 import { user_flags } from 'lib/constants';
 import connectToDatabase from 'lib/mongodb.connection';
@@ -21,8 +22,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const [userId, updateToken, UperToken] = req.headers.authorization.split('=+');
   if (!userId || !updateToken) return res.status(401).json({ message: 'Unauthorized', success: false });
 
-  const userMutations = ['active', 'banner', 'description', 'pronouns'];
-  const AllMutations = [...userMutations, 'site_flags', 'ratings', 'username', 'discriminator', 'avatar'];
+  const userMutations = ['active', 'banner', 'description', 'pronouns', 'vanity'];
+  const AllMutations = [...userMutations, 'site_flags', 'username', 'discriminator', 'avatar'];
   const modMutations = [...userMutations.filter(config => !['pronouns'].includes(config))];
 
   const user = await userModule.findOne({ updates_access: updateToken });
@@ -60,9 +61,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
    * This is the whole key propertys of the doc filtering off some.
    */
   const fullPropers = Object.keys(user.toObject()).filter(i => !['id', 'tag', 'avatarURL'].includes(i));
-  const propertyTypes: { [key: string]: string } = fullPropers.reduce((prev, curr) => {
-    return { ...prev, [curr]: typeof user.toObject()[curr] };
-  }, {});
 
   const isAdmin =
     ((!uperUser ? user.site_flags : uperUser.site_flags) & user_flags.ADMIN) === user_flags.ADMIN ||
@@ -75,18 +73,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const objectedUpdateQuery = Object.fromEntries(
     Object.entries(bodyData).filter(([key, value]) => {
       if (!fullPropers.includes(key)) return false;
-      /**
-       * NOTE: better type checking. E.g: updating ratings and setting it to an object instead of an array
-       */
-      if (typeof value !== propertyTypes[key]) {
+      if (!(typeValidators[key] ?? (() => false))(value)) {
         typeError = true;
         return false;
       }
 
-      /**
-       * NOTE: will have to create a resolver for if you're updating `site_flags` (as admin) on your self it will be blocked or will check if the
-       * perms are lower what you have
-       */
       if (isAdmin && AllMutations.includes(key)) return true;
       if (isMod && modMutations.includes(key)) return true;
 
@@ -96,6 +87,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (typeError) return res.json({ message: 'Error invalid property type in body', success: false });
   if (Object.keys(objectedUpdateQuery).length <= 0) return res.json({ message: 'Body keys was left at length of 0', success: false });
+
+  const validatorData = { user_premium: 0, updater: uperUser?.toObject(), user: user.toObject() };
+  let error = null;
+  Object.entries(objectedUpdateQuery).forEach(([key, value]) => {
+    const validation = validators[key] ?? validators.DEFAULT;
+    const validated = validation({ value, ...validatorData });
+    if (validated.error) error = validated.message;
+  });
+
+  if (error) return res.json({ message: error, success: false });
 
   try {
     const updateData = await userModule.findOneAndUpdate({ _id: user._id }, objectedUpdateQuery, { new: true });

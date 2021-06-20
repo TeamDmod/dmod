@@ -114,6 +114,14 @@ export function bannerReslover(bannerResolvable: string): reslovedBanner {
   return { type: 'unknown', color: null, image: null };
 }
 
+export function isBannerResolvable(bannerResolvable: string): boolean {
+  const type = bannerResolvable.slice(0, bannerResolvable.indexOf(':'));
+  const data = bannerResolvable.slice(bannerResolvable.indexOf(':') + 1);
+  if (!['color', 'img'].includes(type)) return false;
+  if (data.length <= 0) return false;
+  return true;
+}
+
 /**
  * Flatten the object back into a resolvable banner string
  */
