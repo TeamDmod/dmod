@@ -2,7 +2,7 @@ import Head from 'next/head';
 
 export default function Metatags({
 	title = 'dmod.gg',
-	description = 'The best place to hire moderators!',
+	description = 'The best place to find moderators!',
 	image = '/logo.png',
 }) {
 	return (
