@@ -4,7 +4,7 @@ import MetaTags from "../components/MetaTags";
 export default function Home() {
   return (
     <>
-      <MetaTags title={'Welcome to Dmod.gg'} description={'The best place to hire moderators!'} image={'/logo.png'} />
+      <MetaTags title={'Welcome to Dmod.gg'} description={'The best place to find moderators!'} image={'/logo.png'} />
       <div className={home.main_header}>
         <div className={home.text_headings}>
           <h1>Welcome to dmod.</h1>
