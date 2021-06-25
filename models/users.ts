@@ -49,6 +49,10 @@ const Users = new Schema(
       type: String,
       default: null,
     },
+    premium: {
+      type: Number,
+      default: 0,
+    },
     ratings: [
       {
         _id: {
@@ -133,6 +137,10 @@ export interface userData {
   vanity: string;
   avatarURL: string;
   tag: string;
+  /**
+   * The type of premium this user has.
+   */
+  premium: number;
 }
 
 export type userModleData = mongoose.Model<userData>;

@@ -43,7 +43,7 @@ const validators: Ivalidators = {
 
     return {
       error: true,
-      message: 'Description length unmeet reslove.',
+      message: 'Description length unmet reslove.',
     };
   },
   banner({ value }) {
@@ -51,7 +51,7 @@ const validators: Ivalidators = {
     const resolvable = isBannerResolvable(bannerString);
 
     return {
-      error: resolvable,
+      error: !resolvable,
       ...(resolvable ? {} : { message: 'Banner unresolvable.' }),
     };
   },
@@ -91,7 +91,7 @@ const validators: Ivalidators = {
      * TODO/NOTE: check if vainity includes valid characters length is 3 or more up to 50
      * * valid: @_.\w\d
      */
-    return { error: true, message: 'Vanity updating not avalive yet.' };
+    return { error: true, message: 'Vanity updating not available yet.' };
   },
 
   DEFAULT() {

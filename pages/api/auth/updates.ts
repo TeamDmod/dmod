@@ -88,7 +88,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (typeError) return res.json({ message: 'Error invalid property type in body', success: false });
   if (Object.keys(objectedUpdateQuery).length <= 0) return res.json({ message: 'Body keys was left at length of 0', success: false });
 
-  const validatorData = { user_premium: 0, updater: uperUser?.toObject(), user: user.toObject() };
+  const validatorData = { user_premium: user.premium, updater: uperUser?.toObject(), user: user.toObject() };
   let error = null;
   Object.entries(objectedUpdateQuery).forEach(([key, value]) => {
     const validation = validators[key] ?? validators.DEFAULT;

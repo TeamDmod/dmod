@@ -119,7 +119,9 @@ export function isBannerResolvable(bannerResolvable: string): boolean {
   const data = bannerResolvable.slice(bannerResolvable.indexOf(':') + 1);
   if (!['color', 'img'].includes(type)) return false;
   if (data.length <= 0) return false;
-  return true;
+  if (type === 'img') return bannerResloverRegExps.IMAGE.test(data);
+  if (type === 'color') return bannerResloverRegExps.COLOR_HEX.test(data) || bannerResloverRegExps.COLOR_RGB.test(data);
+  return false;
 }
 
 /**
