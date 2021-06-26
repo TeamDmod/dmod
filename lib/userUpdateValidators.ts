@@ -17,8 +17,12 @@ const DESCRIPTION_MAX_DATA = { PREMIUM: 4000, NORMAL: 2000 };
 const DESCRIPTION_MIN = 80;
 // const SHOR_DESCRIPTION_MIN = 20;
 
-// const VANITY_ALLOWED = '_'.split('');
-// const VANITY_ALLOWED_REGEXP = /[\w\d@$]{3,50}/i;
+const VANITY_ALLOWED = ['_', '.', '\\-'];
+const VANITY_FOBIDEN_REGEXP = new RegExp(`[^${VANITY_ALLOWED}a-z\\d]`, 'g');
+const VANITY_ALLOWED_REGEXP = new RegExp(`[${VANITY_ALLOWED}a-z\\d]{3,50}`);
+// const VANITY_ALL_CHARACTER = new RegExp(`[${VANITY_ALLOWED}]`, 'g');
+const VANITY_ALL_NONE_CHARACTER = new RegExp(`[a-z\\d]`, 'g');
+const VANITY_LENGTH_NONE_CHARACTER = 3;
 
 // Note: Removes function repeat
 const validatorPasses = Object.create(null);
@@ -84,14 +88,19 @@ const validators: Ivalidators = {
       error: false,
     };
   },
-  vanity() {
-    // const vanity = value as string;
+  vanity({ value }) {
+    const vanity = value as string;
+    const allowedMatch = vanity.match(VANITY_ALLOWED_REGEXP);
+    const fobidenMatch = vanity.match(VANITY_FOBIDEN_REGEXP);
 
-    /**
-     * TODO/NOTE: check if vainity includes valid characters length is 3 or more up to 50
-     * * valid: @_.\w\d
-     */
-    return { error: true, message: 'Vanity updating not available yet.' };
+    if ((fobidenMatch || []).length > 0) return { error: true, message: 'Forbiden character(s) in value.' };
+    if (!allowedMatch[0]) return { error: true, message: 'Value unmatched.' };
+
+    // const characters = vanity.match(VANITY_ALL_CHARACTER);
+    const noneCharacters = vanity.match(VANITY_ALL_NONE_CHARACTER) || [];
+    if (noneCharacters.length < VANITY_LENGTH_NONE_CHARACTER) return { error: true, message: 'Vanity must include minimum of 3 none specially allowed charterers.' };
+
+    return { error: false };
   },
 
   DEFAULT() {
