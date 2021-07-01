@@ -1,7 +1,7 @@
 import { resolveGuildMemberPerms } from '@lib/backend-utils';
 import { user_flags } from '@lib/constants';
 import connectToDatabase from '@lib/mongodb.connection';
-import { typeValidators } from '@lib/serverUpdateValidators';
+import { typeValidators, validators } from '@lib/serverUpdateValidators';
 import GuildModule from '@models/guilds';
 import PreviewGuildModule from '@models/preview_guilds';
 import userModule from '@models/users';
@@ -63,6 +63,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (typeError) return res.status(400).json({ message: 'Error invalid property type in body', code: 400 });
   if (Object.keys(body).length <= 0) return res.status(400).json({ message: 'Body keys was left at length of 0', code: 400 });
+
+  const validatorData = { user_premium: dbUser.premium, guildID: dbGuild._id };
+  let e = null;
+  for await (const [key, value] of Object.entries(body)) {
+    const validation = validators[key] ?? validators.DEFAULT;
+    const validated = await validation({ value, ...validatorData });
+    if (validated.error) e = validated.message;
+  }
+
+  if (e) return res.json({ message: e, success: false });
 
   try {
     const Inew = await GuildModule.findOneAndUpdate({ _access_key: guild_updateAccess }, body, { new: true });
