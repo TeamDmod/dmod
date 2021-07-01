@@ -1,4 +1,4 @@
-import { userData } from '@models/users';
+import type { userData } from '@models/users';
 
 import { isBannerResolvable, user_flags } from './constants';
 
@@ -11,11 +11,8 @@ export interface dataPassed {
 type validatorFunctions = (args: dataPassed) => { error: boolean; message?: string };
 type Ivalidators = { [key: string]: validatorFunctions };
 
-const DESCRIPTION_MAX_DATA = { PREMIUM: 4000, NORMAL: 2000 };
-// const SHOR_DESCRIPTION_MAX_DATA = { PREMIUM: 200, NORMAL: 100 };
-
-const DESCRIPTION_MIN = 80;
-// const SHOR_DESCRIPTION_MIN = 20;
+export const DESCRIPTION_MAX_DATA = { PREMIUM: 4000, NORMAL: 2000 };
+export const DESCRIPTION_MIN = 30;
 
 const VANITY_ALLOWED = ['_', '.', '\\-'];
 const VANITY_FOBIDEN_REGEXP = new RegExp(`[^${VANITY_ALLOWED}a-z\\d]`, 'g');
@@ -38,7 +35,7 @@ const validators: Ivalidators = {
   ...validatorPasses,
   description({ value }) {
     const des = value as string;
-    const validation = des.length <= DESCRIPTION_MIN && des.length <= DESCRIPTION_MAX_DATA.NORMAL;
+    const validation = des.length >= DESCRIPTION_MIN && des.length <= DESCRIPTION_MAX_DATA.NORMAL;
     if (validation) {
       return {
         error: false,

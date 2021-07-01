@@ -5,6 +5,14 @@ const previewGuild = new Schema({
     type: String,
     required: true,
   },
+  name: {
+    type: String,
+    required: true,
+  },
+  owner_id: {
+    type: String,
+    required: true,
+  },
   short_description: {
     type: String,
     required: true,
@@ -25,6 +33,11 @@ const previewGuild = new Schema({
 
 export interface PreviewGuildData {
   _id: string;
+  /**
+   * Id of server owner used to display on the owners profile
+   */
+  owner_id: string;
+  name: string;
   short_description: string;
   look_types: string[];
   completed: boolean;

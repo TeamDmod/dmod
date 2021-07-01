@@ -1,4 +1,6 @@
+import Profile from '@components/profile';
 import { Switch } from '@headlessui/react';
+import { validators } from '@lib/userUpdateValidators';
 import AnimatedLoader from 'components/AnimatedLoader';
 import Layout from 'components/layout';
 import { Formik } from 'formik';
@@ -8,7 +10,7 @@ import withSession from 'lib/session';
 import useUserGard from 'lib/useUserGard';
 import userModule, { userData } from 'models/users';
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ApiUser, withSessionGetServerSideProps } from 'typings/typings';
 
 interface MiniEditorProps {
@@ -27,7 +29,7 @@ function MiniEditor({ value, handleBlur, handleChange }: MiniEditorProps) {
       value={value}
       onBlur={handleBlur}
       onChange={handleChange}
-      spellCheck={false}
+      spellCheck
     />
   );
 }
@@ -39,6 +41,22 @@ interface props {
 
 export default function Settings({ user, settings }: props) {
   const { loading } = useUserGard(user);
+  const [error, setError] = useState<string | null>(null);
+  const [previewOpen, setPreviewOpen] = useState(false);
+
+  useEffect(() => {
+    function _(evt) {
+      const is = document.getElementById('preview_392sf').classList[0].split('pre-')[1];
+      const isEscape = evt.key === 'Escape' || evt.key === 'Esc';
+      if (is === 'open' && isEscape) setPreviewOpen(false);
+    }
+
+    document.addEventListener('keydown', _);
+
+    return () => {
+      document.removeEventListener('keydown', _);
+    };
+  }, []);
 
   if (loading)
     return (
@@ -51,10 +69,29 @@ export default function Settings({ user, settings }: props) {
 
   return (
     <Layout title={`${user.username} - Settings`}>
+      <span id='preview_392sf' className={previewOpen ? 'pre-open' : 'pre-close'} />
+      <div className='text-center'>
+        <button className='bg-green-700 rounded p-1 mb-3 focus:outline-none' onClick={() => setPreviewOpen(!previewOpen)}>
+          Preview changes
+        </button>
+      </div>
       <Formik
         initialValues={{ description: settings.description, active: settings.active, bannerData }}
-        validate={() => {
+        validate={values => {
           const errors: any = {};
+          const bannerflat = bannerFlatten(values.bannerData ?? { type: 'unknown', image: null, color: null });
+
+          const validatorData = { user_premium: user.premium_type, user: { ...settings, ...values, banner: bannerflat } };
+          let err = null;
+          Object.entries({ ...values, banner: bannerflat })
+            .filter(([k]) => k !== 'bannerData')
+            .forEach(([key, value]) => {
+              const validation = validators[key] ?? validators.DEFAULT;
+
+              const validated = validation({ value, ...validatorData });
+              if (validated.error) err = validated.message;
+            });
+          setError(err);
 
           return errors;
         }}
@@ -73,7 +110,11 @@ export default function Settings({ user, settings }: props) {
             },
           }).then(d => d.json());
 
-          if (!data.success) return;
+          if (!data.success) {
+            setError(data.message);
+            setTimeout(() => setError(null), 3000);
+            return;
+          }
 
           const updateObjectMapping = Object.fromEntries(Object.entries(data.message).filter(([key]) => ValidValues[key]));
 
@@ -91,10 +132,32 @@ export default function Settings({ user, settings }: props) {
       >
         {({ handleSubmit, handleChange, handleBlur, values, isSubmitting, setValues, dirty, resetForm }) => (
           <>
+            <div
+              className={clsx(
+                'transform transition duration-300 ease-in-out fixed z-40 inset-y-0 inset-x-0 h-screen w-full bg-gray-800 bg-opacity-90',
+                previewOpen ? 'scale-100 opacity-100' : 'scale-50 opacity-0 visible pointer-events-none'
+              )}
+            >
+              <div className='px-10 sm:px-16 pt-5 rounded h-full flex'>
+                <div className='p-2 bg-dorpdown w-full h-full overflow-y-auto'>
+                  <Profile profile={{ ...settings, ...values, banner: bannerFlatten(values.bannerData ?? { type: 'unknown', image: null, color: null }) }} />
+                </div>
+                <div className='relative'>
+                  <div className='ml-1 focus:outline-none absolute flex flex-col text-center space-y-1'>
+                    <span
+                      className='border-2 border-gray-200 h-8 w-8 rounded-full hover:bg-gray-300 hover:bg-opacity-30 cursor-pointer'
+                      onClick={() => setPreviewOpen(!previewOpen)}
+                    />
+                    <span className='cursor-default text-sm'>ESC</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <span>
               <div
                 className={clsx(
-                  'transition duration-500 ease-in-out transform absolute -bottom-16 left-0 w-full min-w-max sm:w-4/12 p-3 overflow-y-hidden',
+                  'transition duration-500 ease-in-out transform absolute z-0 -bottom-16 left-0 w-full min-w-max sm:w-4/12 p-3 overflow-y-hidden',
                   dirty ? 'translate-y-0 opacity-1' : '-translate-y-6 opacity-0 pointer-events-none'
                 )}
               >
@@ -111,6 +174,15 @@ export default function Settings({ user, settings }: props) {
                   </div>
                 </div>
               </div>
+
+              <div
+                className={clsx(
+                  'transition duration-500 ease-in-out transform absolute z-0 -bottom-16 right-0 w-full min-w-max sm:w-4/12 p-3 overflow-y-hidden',
+                  error ? 'translate-y-0 opacity-1' : '-translate-y-6 opacity-0 pointer-events-none'
+                )}
+              >
+                <div className='px-2 py-1 bg-red-600 rounded font-bold'>{error}</div>
+              </div>
             </span>
 
             <form>
@@ -120,7 +192,7 @@ export default function Settings({ user, settings }: props) {
 
                 <div className='flex flex-wrap justify-center space-x-3'>
                   <label>Active</label>
-                  <div>
+                  <div className='z-0'>
                     <Switch
                       checked={values.active}
                       onChange={active => setValues({ ...values, active })}

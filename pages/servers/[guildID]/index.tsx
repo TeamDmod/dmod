@@ -1,3 +1,4 @@
+import GuildView from '@components/guildView';
 import Layout from 'components/layout';
 import { resolveGuildMemberPerms } from 'lib/backend-utils';
 // import crypto from 'crypto-js';
@@ -6,15 +7,16 @@ import withSession from 'lib/session';
 // import credentials from 'models/credentials';
 import guilds, { GuildData } from 'models/guilds';
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
+import React from 'react';
 import { RawGuild, RawGuildMember, withSessionGetServerSideProps } from 'typings/typings';
 
 interface props {
   failed: boolean;
   isManager: boolean;
-  guild: RawGuild & GuildData;
+  guild: RawGuild & GuildData & { guild_description: string };
 }
 
-export default function guildView({ failed }: props) {
+export default function guildView({ failed, guild, isManager }: props) {
   if (failed) {
     return (
       <Layout>
@@ -24,8 +26,8 @@ export default function guildView({ failed }: props) {
   }
 
   return (
-    <Layout>
-      <div>Guilds view</div>
+    <Layout title={`${guild.name} - dmod.gg`}>
+      <GuildView guild={guild} isManager={isManager} Inpreview={false} />
     </Layout>
   );
 }
@@ -48,9 +50,9 @@ export const getServerSideProps: GetServerSideProps = withSession(
     if (guild.code || guild.message) return { props: { failed: true } };
 
     let member: RawGuildMember = null;
-    if (session.id) member = await fetch(`${API_ENDPOINT}/guilds/${context.query.guildID}/members/${session.id}`, authHead).then(json);
+    if (session?.id) member = await fetch(`${API_ENDPOINT}/guilds/${context.query.guildID}/members/${session.id}`, authHead).then(json);
     // @ts-expect-error
-    if (member.code || member.message) return { props: { failed: true } };
+    if (member && (member.code || member.message)) return { props: { failed: true } };
 
     const memberPerms = member ? resolveGuildMemberPerms(guild, member) : 0;
 
@@ -63,8 +65,9 @@ export const getServerSideProps: GetServerSideProps = withSession(
         isManager,
         failed: false,
         guild: {
-          ...Object.fromEntries(Object.entries(guildData.toObject()).filter(d => !['applyed', '_access_key'].includes(d[0]))),
           ...guild,
+          guild_description: guild.description,
+          ...Object.fromEntries(Object.entries(guildData.toObject()).filter(d => !['applyed', '_access_key'].includes(d[0]))),
         },
       },
     };

@@ -63,9 +63,9 @@ export default function UserDropDown({ user }: props) {
   }
 
   return (
-    <Menu as='div' className='relative  pl-1'>
+    <Menu as='div' className='relative pl-1'>
       <div>
-        <Menu.Button className='focus:outline-none '>
+        <Menu.Button className='focus:outline-none'>
           <div className='h-full flex flex-wrap content-center space-x-3'>
             <img className='rounded-full h-9 sm:h-11 w-9 sm:w-11' src={userAvatarUrl()} alt='User Avatar' />
           </div>
@@ -81,7 +81,7 @@ export default function UserDropDown({ user }: props) {
         leaveFrom='transform opacity-100 scale-100'
         leaveTo='transform opacity-0 scale-95'
       >
-        <Menu.Items className='absolute right-0 w-40 mt-2 bg-dorpdown rounded-md shadow-lg divide-y-3 focus:outline-none text-white'>
+        <Menu.Items className='absolute z-50 right-0 w-40 mt-2 bg-dorpdown rounded-md shadow-lg divide-y-3 focus:outline-none text-white'>
           <div className='px-1 py-2'>
             <Menu.Item>
               <Link href={`/${user.vanity}`}>

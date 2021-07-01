@@ -61,6 +61,9 @@ export const user_badges = {
   // MOD: <></>,
 };
 
+export const PERMIUM_TIER = ['None', 'Tier 1', 'Tier 2', 'Tier 3'];
+export const VERIFACTION_LEVEL = ['None', 'Low', 'Medium', 'High', 'Vary High'];
+
 export const DEFAULT_BANNER_COLOR = 'rgb(76,29,149)';
 
 const user_badges_display_name = {
@@ -88,7 +91,7 @@ export interface reslovedBanner {
 export const bannerResloverRegExps = {
   COLOR_RGB: /^rgb\((\d{1,3}),(\d{1,3}),(\d{1,3})\)$/,
   COLOR_HEX: /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/,
-  IMAGE: /^https:\/\//,
+  IMAGE: /^https:\/\/.*\.(gif|png|jpg)$/,
 };
 
 /**
@@ -131,4 +134,20 @@ export function bannerFlatten(banner: reslovedBanner): string {
   if (banner.type === 'unknown' || !['color', 'img'].includes(banner.type)) return `color:${DEFAULT_BANNER_COLOR}`;
   const color = banner.color == null ? DEFAULT_BANNER_COLOR : banner.color;
   return `${banner.type}:${banner.type === 'img' ? banner.image : color}`;
+}
+
+export function NormilizeSearchQ(searchFlat: string): string {
+  let search = `q=${searchFlat}`;
+  const mu = (str: string) => str.replace(/\s+/g, '%20');
+
+  console.log(searchFlat);
+
+  if (searchFlat.match(/^tags:*/i)) {
+    const t = [];
+    const [, tags] = search.split('tags:');
+    tags.split(',').forEach(tag => t.push(mu(tag).replace(/,/g, '')));
+    search = `tags=${t.join(',')}`;
+  }
+
+  return search;
 }

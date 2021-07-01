@@ -19,6 +19,7 @@
   "dependencies": {
     "@headlessui/react": "^1.2.0",
     "@popperjs/core": "^2.9.2",
+    "@types/markdown-it": "^12.0.2",
     "@y0c/react-datepicker": "^1.0.4",
     "axios": "^0.21.1",
     "btoa": "^1.2.1",
@@ -28,6 +29,7 @@
     "framer-motion": "^4.0.3",
     "fs": "0.0.1-security",
     "husky": "^6.0.0",
+    "markdown-it": "^12.0.6",
     "moment": "^2.29.1",
     "mongodb": "^3.6.9",
     "mongoose": "^5.12.12",
@@ -42,18 +44,17 @@
     "react-hook-form": "^7.3.6",
     "react-popper": "^2.2.5",
     "react-redux": "^7.2.3",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "sanitize-html": "^2.4.0"
   },
   "devDependencies": {
+    "@types/sanitize-html": "^2.3.1",
     "@types/crypto-js": "^4.0.1",
     "@types/node": "^15.3.0",
     "@types/react": "^17.0.6",
-    "autoprefixer": "^10.2.6",
-    "postcss": "^8.3.0",
-    "sass": "^1.32.13",
-    "tailwindcss": "^2.1.2",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.21.0",
+    "autoprefixer": "^10.2.6",
     "eslint": "^7.22.0",
     "eslint-config-airbnb-typescript": "^12.3.1",
     "eslint-config-prettier": "^8.1.0",
@@ -63,8 +64,11 @@
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
-    "prettier": "^2.2.1",
     "lint-staged": "^10.4.2",
+    "postcss": "^8.3.0",
+    "prettier": "^2.2.1",
+    "sass": "^1.32.13",
+    "tailwindcss": "^2.1.2",
     "typescript": "^4.2.4"
   }
 }

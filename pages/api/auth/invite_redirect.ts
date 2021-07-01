@@ -39,12 +39,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       _id: tokenGivenGuild.id,
       description: tokenGivenGuild.description ?? description_default,
       short_description,
+      owner_id: tokenGivenGuild.owner_id,
       _access_key: nanoid(156),
     });
 
     const preview = await PreviewGuildModule.create({
       _id: tokenGivenGuild.id,
       short_description,
+      owner_id: tokenGivenGuild.owner_id,
+      name: tokenGivenGuild.name,
     });
 
     await sendToWebhook({

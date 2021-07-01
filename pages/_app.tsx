@@ -5,10 +5,9 @@ import '../styles/global.css';
 import '../styles/navbar.scss';
 import '../styles/calender.scss';
 
+import Navbar from 'components/Navbar';
 import { useEffect, useState } from 'react';
 import { sessionFetchedUser } from 'typings/typings';
-
-import Navbar from '../components/Navbar';
 
 export default function App({ Component, pageProps }: any) {
   const [user, setUser] = useState<sessionFetchedUser>({ awaiting: true } as any);

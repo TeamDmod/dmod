@@ -58,10 +58,10 @@ function Navbar({ user }: { user: sessionFetchedUser }) {
   const router = useRouter();
 
   const navbarLinks = [
-    {
-      name: 'Listings',
-      link: '/listings',
-    },
+    // {
+    //   name: 'Listings',
+    //   link: '/listings',
+    // },
     {
       name: 'Servers',
       link: '/servers',

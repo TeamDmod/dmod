@@ -1,3 +1,4 @@
+import MarkDown from '@lib/markdown';
 import { bannerReslover, clsx, evalBadges, evalFlags } from 'lib/constants';
 import { userData } from 'models/users';
 import React from 'react';
@@ -68,8 +69,9 @@ export default function Profile({ profile }: props) {
           )}
         </div>
       </div>{' '}
-      <div className='mt-16'>
-        <div>{profile.description}</div>
+      <div className='mt-16 mx-3'>
+        {/* eslint-disable-next-line react/no-danger */}
+        <div dangerouslySetInnerHTML={{ __html: new MarkDown(profile.description).render() }} />
       </div>
     </div>
   );

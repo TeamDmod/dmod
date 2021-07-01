@@ -37,6 +37,14 @@ const Guilds = new Schema({
     type: Array,
     default: [],
   },
+  invite: {
+    type: String,
+    default: null,
+  },
+  owner_id: {
+    type: String,
+    required: true,
+  },
   other_fields: [
     {
       postition: {
@@ -102,6 +110,10 @@ export enum FieldTypes {
 export interface GuildData {
   _id: string;
   /**
+   * Id of server owner used to display on the owners profile
+   */
+  owner_id: string;
+  /**
    * Server description (markdown?)
    */
   description: string;
@@ -134,6 +146,10 @@ export interface GuildData {
    * Fields object array
    */
   other_fields: FieldData[];
+  /**
+   * Server invite
+   */
+  invite: string | null;
   /**
    * Key to update this guild application
    */
