@@ -1,15 +1,15 @@
-import GuildView from '@components/guildView';
-import Layout from '@components/layout';
 import { Switch } from '@headlessui/react';
-import { resolveGuildMemberPerms } from '@lib/backend-utils';
-import { clsx } from '@lib/constants';
-import connectToDatabase from '@lib/mongodb.connection';
-import { SHOR_DESCRIPTION_MAX_DATA, SHOR_DESCRIPTION_MIN } from '@lib/serverUpdateValidators';
-import withSession from '@lib/session';
-import { DESCRIPTION_MAX_DATA, DESCRIPTION_MIN } from '@lib/userUpdateValidators';
-import guilds, { GuildData } from '@models/guilds';
-import userModule, { userData } from '@models/users';
+import GuildView from 'components/guildView';
+import Layout from 'components/layout';
 import { Formik } from 'formik';
+import { resolveGuildMemberPerms } from 'lib/backend-utils';
+import { clsx } from 'lib/constants';
+import connectToDatabase from 'lib/mongodb.connection';
+import { SHORT_DESCRIPTION_MAX_DATA, SHORT_DESCRIPTION_MIN } from 'lib/serverUpdateValidators';
+import withSession from 'lib/session';
+import { DESCRIPTION_MAX_DATA, DESCRIPTION_MIN } from 'lib/userUpdateValidators';
+import guilds, { GuildData } from 'models/guilds';
+import userModule, { userData } from 'models/users';
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
 // import { useRouter } from 'next/dist/client/router';
 import React, { useEffect, useState } from 'react';
@@ -68,8 +68,8 @@ export default function GuildSettings({ guild, userProfile }: props) {
             if (values.description.length < DESCRIPTION_MIN || values.description.length > DESCRIPTION_MAX_DATA.NORMAL)
               errors.description = `Description length to long or short. max: ${DESCRIPTION_MAX_DATA.NORMAL} min: ${DESCRIPTION_MIN}`;
 
-            if (values.short_description.length < SHOR_DESCRIPTION_MIN || values.short_description.length > SHOR_DESCRIPTION_MAX_DATA.NORMAL)
-              errors.description = `Short description length to long or short. max: ${SHOR_DESCRIPTION_MAX_DATA.NORMAL} min: ${SHOR_DESCRIPTION_MIN}`;
+            if (values.short_description.length < SHORT_DESCRIPTION_MIN || values.short_description.length > SHORT_DESCRIPTION_MAX_DATA.NORMAL)
+              errors.description = `Short description length to long or short. max: ${SHORT_DESCRIPTION_MAX_DATA.NORMAL} min: ${SHORT_DESCRIPTION_MIN}`;
 
             if (!/[a-zA-Z0-9\\-]{2,32}/.test(values.invite) || (values.invite && values.invite.includes(' '))) errors.invite = 'Invalid invite';
 

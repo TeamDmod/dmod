@@ -1,7 +1,7 @@
 export const DESCRIPTION_MAX_DATA = { PREMIUM: 4000, NORMAL: 2000 };
-export const SHOR_DESCRIPTION_MAX_DATA = { PREMIUM: 200, NORMAL: 100 };
+export const SHORT_DESCRIPTION_MAX_DATA = { PREMIUM: 200, NORMAL: 100 };
 
-export const SHOR_DESCRIPTION_MIN = 20;
+export const SHORT_DESCRIPTION_MIN = 20;
 export const DESCRIPTION_MIN = 80;
 
 const API_ENDPOINT = 'https://discord.com/api/v8';
@@ -27,7 +27,7 @@ const validators = {
     };
   },
   short_description({ value }) {
-    if (value.length >= SHOR_DESCRIPTION_MIN && value.length <= SHOR_DESCRIPTION_MAX_DATA.NORMAL) return { error: false };
+    if (value.length >= SHORT_DESCRIPTION_MIN && value.length <= SHORT_DESCRIPTION_MAX_DATA.NORMAL) return { error: false };
 
     return {
       error: true,

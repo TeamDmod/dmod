@@ -1,4 +1,4 @@
-import { bannerReslover, clsx, evalBadges, evalFlags } from 'lib/constants';
+import { bannerResolver, clsx, evalBadges, evalFlags } from 'lib/constants';
 import MarkDown from 'lib/markdown';
 import { userData } from 'models/users';
 import React from 'react';
@@ -11,7 +11,7 @@ export default function Profile({ profile }: props) {
   const evaledFlags = evalFlags(profile.site_flags);
   const badges = evalBadges(evaledFlags);
 
-  const bannerData = bannerReslover(profile.banner);
+  const bannerData = bannerResolver(profile.banner);
 
   return (
     <div>

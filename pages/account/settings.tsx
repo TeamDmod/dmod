@@ -3,7 +3,7 @@ import AnimatedLoader from 'components/AnimatedLoader';
 import Layout from 'components/layout';
 import Profile from 'components/profile';
 import { Formik } from 'formik';
-import { bannerFlatten, bannerReslover, bannerTypes, clsx } from 'lib/constants';
+import { bannerFlatten, bannerResolver, bannerTypes, clsx } from 'lib/constants';
 import connectToDatabase from 'lib/mongodb.connection';
 import withSession from 'lib/session';
 import { validators } from 'lib/userUpdateValidators';
@@ -65,7 +65,7 @@ export default function Settings({ user, settings }: props) {
       </Layout>
     );
 
-  const bannerData = bannerReslover(settings.banner);
+  const bannerData = bannerResolver(settings.banner);
 
   return (
     <Layout title={`${user.username} - Settings`}>

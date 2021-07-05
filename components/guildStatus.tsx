@@ -1,4 +1,4 @@
-import { clsx, PERMIUM_TIER, VERIFACTION_LEVEL } from 'lib/constants';
+import { clsx, PREMIUM_TIER, VERIFICATION_LEVEL } from 'lib/constants';
 import { GuildData } from 'models/guilds';
 import router from 'next/router';
 import React from 'react';
@@ -75,11 +75,11 @@ export default function GuildStatus({ guild, sticky }: props) {
         </span>
         <br />
         <span title='Server premium tier'>
-          <b>Premium Tier</b>: {PERMIUM_TIER[guild.premium_tier]}
+          <b>Premium Tier</b>: {PREMIUM_TIER[guild.premium_tier]}
         </span>
         <br />
         <span title='Server verifction level'>
-          <b>Verfiction Level</b>: {VERIFACTION_LEVEL[guild.verification_level]}
+          <b>Verfiction Level</b>: {VERIFICATION_LEVEL[guild.verification_level]}
         </span>
         <br />
         {guild.emojis.length > 0 && (
