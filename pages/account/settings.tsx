@@ -1,4 +1,4 @@
-import Profile from '@components/profile';
+import Profile from 'components/profile';
 import { Switch } from '@headlessui/react';
 import { validators } from '@lib/userUpdateValidators';
 import AnimatedLoader from 'components/AnimatedLoader';
