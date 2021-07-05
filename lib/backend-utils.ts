@@ -36,7 +36,7 @@ export function sendToWebhook(embed: Embed) {
 }
 
 export function decryptToken(token: string, string: boolean = false) {
-  const decript = crypto.AES.decrypt(token, process.env.ENCRIPT_KEY);
+  const decript = crypto.AES.decrypt(token, process.env.ENCRYPT_KEY);
   return string ? decript.toString(crypto.enc.Utf8) : decript;
 }
 

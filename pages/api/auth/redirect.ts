@@ -30,8 +30,8 @@ export default withSession(async (req: withSessionRequest, res: NextApiResponse)
     },
   }).then(json);
 
-  const encryptedAccesssToken = crypto.AES.encrypt(userAccessData.access_token, process.env.ENCRIPT_KEY).toString();
-  const encryptedRefreshToken = crypto.AES.encrypt(userAccessData.refresh_token, process.env.ENCRIPT_KEY).toString();
+  const encryptedAccesssToken = crypto.AES.encrypt(userAccessData.access_token, process.env.ENCRYPT_KEY).toString();
+  const encryptedRefreshToken = crypto.AES.encrypt(userAccessData.refresh_token, process.env.ENCRYPT_KEY).toString();
 
   // Get the user to set the users refresh and access to their id.
   const user = await fetch(`${API_ENDPOINT}/users/@me`, {
