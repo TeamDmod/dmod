@@ -1,4 +1,4 @@
-import userModule from '@models/users';
+import userModule from 'models/users';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 const MAX_RETURN = 20;
