@@ -1,12 +1,12 @@
-import Profile from 'components/profile';
 import { Switch } from '@headlessui/react';
-import { validators } from 'lib/userUpdateValidators';
 import AnimatedLoader from 'components/AnimatedLoader';
 import Layout from 'components/layout';
+import Profile from 'components/profile';
 import { Formik } from 'formik';
 import { bannerFlatten, bannerReslover, bannerTypes, clsx } from 'lib/constants';
 import connectToDatabase from 'lib/mongodb.connection';
 import withSession from 'lib/session';
+import { validators } from 'lib/userUpdateValidators';
 import useUserGard from 'lib/useUserGard';
 import userModule, { userData } from 'models/users';
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';

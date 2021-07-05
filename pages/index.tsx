@@ -1,6 +1,6 @@
+import Layout from 'components/layout';
 import { clsx } from 'lib/constants';
 import { PreviewGuildData } from 'models/preview_guilds';
-import Layout from 'components/layout';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 

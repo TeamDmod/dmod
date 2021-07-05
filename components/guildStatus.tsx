@@ -1,4 +1,4 @@
-import { clsx, PERMIUM_TIER, VERIFACTION_LEVEL } from '@lib/constants';
+import { clsx, PERMIUM_TIER, VERIFACTION_LEVEL } from 'lib/constants';
 import { GuildData } from 'models/guilds';
 import router from 'next/router';
 import React from 'react';

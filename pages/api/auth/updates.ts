@@ -1,7 +1,7 @@
-import { typeValidators, validators } from 'lib/userUpdateValidators';
 import { Embed, sendToWebhook } from 'lib/backend-utils';
 import { user_flags } from 'lib/constants';
 import connectToDatabase from 'lib/mongodb.connection';
+import { typeValidators, validators } from 'lib/userUpdateValidators';
 import userModule from 'models/users';
 import { NextApiRequest, NextApiResponse } from 'next';
 
