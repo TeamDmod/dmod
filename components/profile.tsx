@@ -1,4 +1,4 @@
-import MarkDown from '@lib/markdown';
+import MarkDown from 'lib/markdown';
 import { bannerReslover, clsx, evalBadges, evalFlags } from 'lib/constants';
 import { userData } from 'models/users';
 import React from 'react';
