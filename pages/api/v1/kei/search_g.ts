@@ -1,5 +1,5 @@
-import GuildModule from '@models/guilds';
-import PreviewGuildModule from '@models/preview_guilds';
+import GuildModule from 'models/guilds';
+import PreviewGuildModule from 'models/preview_guilds';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 const MAX_RETURN = 20;
