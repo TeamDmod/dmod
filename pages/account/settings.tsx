@@ -1,6 +1,6 @@
 import Profile from 'components/profile';
 import { Switch } from '@headlessui/react';
-import { validators } from '@lib/userUpdateValidators';
+import { validators } from 'lib/userUpdateValidators';
 import AnimatedLoader from 'components/AnimatedLoader';
 import Layout from 'components/layout';
 import { Formik } from 'formik';
