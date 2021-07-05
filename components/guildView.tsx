@@ -1,6 +1,6 @@
 import { clsx } from 'lib/constants';
 import MarkDown from 'lib/markdown';
-import { GuildData } from '@models/guilds';
+import { GuildData } from 'models/guilds';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { RawGuild } from 'typings/typings';
