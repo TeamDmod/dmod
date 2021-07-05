@@ -1,4 +1,4 @@
-import type { userData } from '@models/users';
+import type { userData } from 'models/users';
 
 import { isBannerResolvable, user_flags } from './constants';
 
