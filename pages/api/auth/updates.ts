@@ -1,4 +1,4 @@
-import { typeValidators, validators } from '@lib/userUpdateValidators';
+import { typeValidators, validators } from 'lib/userUpdateValidators';
 import { Embed, sendToWebhook } from 'lib/backend-utils';
 import { user_flags } from 'lib/constants';
 import connectToDatabase from 'lib/mongodb.connection';
