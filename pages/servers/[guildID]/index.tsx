@@ -1,4 +1,4 @@
-import GuildView from '@components/guildView';
+import GuildView from 'components/guildView';
 import Layout from 'components/layout';
 import { resolveGuildMemberPerms } from 'lib/backend-utils';
 // import crypto from 'crypto-js';
