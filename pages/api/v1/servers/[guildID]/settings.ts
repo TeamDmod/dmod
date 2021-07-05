@@ -1,10 +1,10 @@
-import { resolveGuildMemberPerms } from '@lib/backend-utils';
-import { user_flags } from '@lib/constants';
-import connectToDatabase from '@lib/mongodb.connection';
-import { typeValidators, validators } from '@lib/serverUpdateValidators';
-import GuildModule from '@models/guilds';
-import PreviewGuildModule from '@models/preview_guilds';
-import userModule from '@models/users';
+import { resolveGuildMemberPerms } from 'lib/backend-utils';
+import { user_flags } from 'lib/constants';
+import connectToDatabase from 'lib/mongodb.connection';
+import { typeValidators, validators } from 'lib/serverUpdateValidators';
+import GuildModule from 'models/guilds';
+import PreviewGuildModule from 'models/preview_guilds';
+import userModule from 'models/users';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { RawGuild, RawGuildMember } from 'typings/typings';
 
