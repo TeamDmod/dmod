@@ -1,6 +1,6 @@
-import Layout from '@components/layout';
-import { PreviewGuildData } from '@models/preview_guilds';
-import { userData } from '@models/users';
+import Layout from 'components/layout';
+import { PreviewGuildData } from 'models/preview_guilds';
+import { userData } from 'models/users';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
