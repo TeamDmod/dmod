@@ -66,8 +66,8 @@ export default function GuildStatus({ guild, sticky }: props) {
         </span>
         <br />
         <span title='Server tags'>
-          <b>Tags</b>: <span className='space-x-1'>{toLinkTags(['roblox', 'gaming'])}</span>
-          {/* <b>Tags</b>: <span className='space-x-1'>{guild.tags.length > 0 ? toLinkTags(guild.tags) : 'None'}</span> */}
+          {/* <b>Tags</b>: <span className='space-x-1'>{toLinkTags(['roblox', 'gaming'])}</span> */}
+          <b>Tags</b>: <span className='space-x-1'>{guild.tags.length > 0 ? toLinkTags(guild.tags) : 'None'}</span>
         </span>
         <br />
         <span title='Server looking for'>
