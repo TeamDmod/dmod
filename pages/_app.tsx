@@ -4,10 +4,18 @@ import '../styles/globals.scss';
 import '../styles/global.css';
 import '../styles/navbar.scss';
 import '../styles/calender.scss';
+import 'nprogress/nprogress.css';
 
 import Navbar from 'components/Navbar';
+import Router from 'next/router';
+import NProgress from 'nprogress';
 import { useEffect, useState } from 'react';
 import { sessionFetchedUser } from 'typings/typings';
+
+NProgress.configure({ showSpinner: false });
+Router.events.on('routeChangeStart', () => NProgress.start());
+Router.events.on('routeChangeComplete', () => NProgress.done());
+Router.events.on('routeChangeError', () => NProgress.done());
 
 export default function App({ Component, pageProps }: any) {
   const [user, setUser] = useState<sessionFetchedUser>({ awaiting: true } as any);

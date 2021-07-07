@@ -22,6 +22,10 @@ body {
   -webkit-filter: blur(0.000001px) !important;
 }
 
+#nprogress .bar {
+  background-color: rgb(88, 74, 216) !important;
+}
+
 body::-webkit-scrollbar {
   width: 0.3rem;
 }
