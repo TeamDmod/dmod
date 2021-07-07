@@ -90,11 +90,11 @@ export default function GuildView({ guild, isManager, Inpreview }: props) {
                 shapeRendering: 'auto',
               }}
               width='110px'
-              height='110px'
+              height='130px'
               viewBox='0 0 100 100'
               preserveAspectRatio='xMidYMid'
             >
-              <g transform='translate(50 50)'>
+              <g transform='translate(50 50) scale(1.5)'>
                 <g>
                   <animateTransform attributeName='transform' type='rotate' values='0;40' keyTimes='0;1' dur='0.3076923076923077s' repeatCount='indefinite' />
                   <path

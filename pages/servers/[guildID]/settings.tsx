@@ -47,7 +47,7 @@ export default function GuildSettings({ guild, userProfile }: props) {
             Back to view
           </button>
         </div> */}
-        <div className='mx-4 my-2'>
+        <div className='mx-4 my-2 text-center'>
           <button className='bg-red-600 rounded focus:outline-none px-3 py-2' onClick={() => setPreviewOpen(!previewOpen)}>
             Preview
           </button>
@@ -57,7 +57,7 @@ export default function GuildSettings({ guild, userProfile }: props) {
           initialValues={{
             description: guild.description,
             short_description: guild.short_description,
-            invite: guild.vanity_url_code ?? null,
+            invite: guild.vanity_url_code ?? guild.invite,
             recruiting: guild.recruiting,
             completed: guild.completed,
             view: guild.view,
@@ -146,33 +146,35 @@ export default function GuildSettings({ guild, userProfile }: props) {
                 </div>
               </span>
 
-              <form>
-                <div className='mx-4 my-2'>
+              <form className='flex justify-center'>
+                <div className='mx-4 my-2 space-y-1.5'>
                   {/* Update description content */}
-                  <div>
+                  <div className='flex flex-col'>
                     <label htmlFor='description'>Description</label>
-                    <textarea
-                      className='bg-popupcard text-gray-100 focus:outline-none rounded'
-                      id='description'
-                      cols={60}
-                      rows={15}
-                      value={values.description}
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      spellCheck='true'
-                    />
+                    <div className='ml-1'>
+                      <textarea
+                        className='bg-popupcard text-gray-100 focus:outline-none rounded'
+                        id='description'
+                        cols={60}
+                        rows={15}
+                        value={values.description}
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        spellCheck='true'
+                      />
+                    </div>
                     {errors.description && <span>{errors.description}</span>}
                   </div>
 
                   {/* update short descript content */}
 
-                  <div>
+                  <div className='space-x-1'>
                     <label htmlFor='description'>Short description</label>
-                    <textarea
-                      className='bg-popupcard text-gray-100 focus:outline-none rounded'
+                    <input
+                      className='bg-popupcard text-gray-100 focus:outline-none rounded w-80 px-1 py-0.5'
                       id='short_description'
-                      cols={60}
-                      rows={15}
+                      // cols={60}
+                      // rows={15}
                       value={values.short_description}
                       onBlur={handleBlur}
                       onChange={handleChange}
