@@ -1,3 +1,4 @@
+import connectToDatabase from 'lib/mongodb.connection';
 import GuildModule from 'models/guilds';
 import PreviewGuildModule from 'models/preview_guilds';
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -9,6 +10,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     res.setHeader('Allow', 'GET');
     return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
+  await connectToDatabase();
 
   if (req.query.id && typeof req.query.id === 'string') {
     const guild = await GuildModule.findOne({ _id: req.query.id as string });

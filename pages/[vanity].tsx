@@ -15,7 +15,7 @@ interface props {
 
 export default function userProfile({ profile }: props) {
   return (
-    <Layout title={`Dmod.gg - ${profile.username}`} description='User profile view'>
+    <Layout title={`Dmod.gg - ${profile.username}`} description={`${profile.username} profile`} image={profile.avatarURL}>
       <Profile profile={profile} />
     </Layout>
   );

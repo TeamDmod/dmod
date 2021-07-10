@@ -56,7 +56,7 @@ export default function Server({ user }: any) {
   }
 
   return (
-    <Layout title='Servers'>
+    <Layout title='Servers' description='User Server list'>
       <div className='space-y-6 w-screen'>
         {userGuildData.included.length > 0 && (
           <div className='space-y-3 text-xl'>
@@ -68,7 +68,7 @@ export default function Server({ user }: any) {
                     <img
                       draggable={false}
                       className='rounded-full w-14 h-14 md:w-20 md:h-20'
-                      src={`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=128`}
+                      src={guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=128` : `/logo.png`}
                       alt='guild icon'
                     />
                     <span className='inline-flex flex-wrap content-center text-xl md:text-2xl overflow-x-hidden'>{guild.name}</span>
@@ -95,7 +95,7 @@ export default function Server({ user }: any) {
                   <img
                     draggable={false}
                     className='rounded-full w-14 h-14 md:w-20 md:h-20'
-                    src={`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=128`}
+                    src={guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=128` : `/logo.png`}
                     alt='guild icon'
                   />
                   <span className='inline-flex flex-wrap content-center text-xl md:text-2xl overflow-x-hidden'>{guild.name}</span>

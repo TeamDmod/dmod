@@ -6,7 +6,7 @@ export default function Error() {
   const router = useRouter();
 
   return (
-    <Layout title='Dmod - 404 not found!'>
+    <Layout title='Dmod - 404 not found!' description='Page not found.'>
       <div className='flex flex-row w-full px-5'>
         <div className='flex flex-wrap content-center text-center w-full'>
           <div className='flex flex-wrap flex-col content-center text-xl space-y-2 w-full'>

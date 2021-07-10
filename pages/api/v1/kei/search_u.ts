@@ -1,3 +1,4 @@
+import connectToDatabase from 'lib/mongodb.connection';
 import userModule from 'models/users';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -8,6 +9,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     res.setHeader('Allow', 'GET');
     res.status(405).end(`Method ${req.method} Not Allowed`);
   }
+  await connectToDatabase();
 
   if (req.query.id && typeof req.query.id === 'string') {
     const user = await userModule.findOne({ _id: req.query.id as string });

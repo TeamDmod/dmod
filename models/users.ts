@@ -21,7 +21,7 @@ const Users = new Schema(
     },
     description: {
       type: String,
-      default: 'No description found.',
+      default: 'Not much is currently known about this user.',
     },
     banner: {
       type: String,

@@ -68,7 +68,7 @@ export default function Settings({ user, settings }: props) {
   const bannerData = bannerResolver(settings.banner);
 
   return (
-    <Layout title={`${user.username} - Settings`}>
+    <Layout title={`${user.username} - Settings`} description='User settings'>
       <span id='preview_392sf' className={previewOpen ? 'pre-open' : 'pre-close'} />
       <div className='text-center'>
         <button className='bg-green-700 rounded p-1 mb-3 focus:outline-none' onClick={() => setPreviewOpen(!previewOpen)}>
@@ -177,7 +177,7 @@ export default function Settings({ user, settings }: props) {
 
               <div
                 className={clsx(
-                  'transition duration-500 ease-in-out transform absolute z-0 -bottom-16 right-0 w-full min-w-max sm:w-4/12 p-3 overflow-y-hidden',
+                  'transition duration-500 ease-in-out transform absolute z-0 sm:-bottom-16 -bottom-24 right-0 w-full min-w-max sm:w-4/12 p-3 overflow-y-hidden',
                   error ? 'translate-y-0 opacity-1' : '-translate-y-6 opacity-0 pointer-events-none'
                 )}
               >

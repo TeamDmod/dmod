@@ -26,7 +26,7 @@ export default function guildView({ failed, guild, isManager }: props) {
   }
 
   return (
-    <Layout title={`${guild.name} - dmod.gg`}>
+    <Layout title={`${guild.name} - dmod.gg`} description={`${guild.name} server listing`}>
       <GuildView guild={guild} isManager={isManager} Inpreview={false} />
     </Layout>
   );

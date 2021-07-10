@@ -12,10 +12,11 @@ const json = (res: Response) => res.json();
 export default withSession(async (req: withSessionRequest, res: NextApiResponse) => {
   const user = req.session.get('user');
 
-  if (!user) return res.json({ user: null });
+  if (!user || (user && !user.id)) return res.json({ user: null });
   await connectToDatabase();
 
   const results = await credentialsData.findOne({ _id: user.id });
+  if (!results) return res.json({ user: null });
   const decryptAccessToken = decryptToken(results.AccessToken, true);
 
   const fetchedUser = await fetch(`${API_ENDPOINT}/users/@me`, {
@@ -38,6 +39,7 @@ export default withSession(async (req: withSessionRequest, res: NextApiResponse)
   }
 
   const user_ = await userModule.findOne({ _id: user.id });
+  if (!user_) return res.json({ user: null });
   const user_object = user_.toObject();
 
   if (user_object.avatar !== fetchedUser.avatar || user_object.username !== fetchedUser.username || user_object.discriminator !== fetchedUser.discriminator) {

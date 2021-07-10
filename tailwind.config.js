@@ -21,6 +21,7 @@ module.exports = {
         servercard: '#142045',
         popupcard: '#152761',
         listingcard: '#181944',
+        footer: '#050514',
       }),
     },
     animation: {

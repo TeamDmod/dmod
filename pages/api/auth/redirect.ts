@@ -13,7 +13,7 @@ const API_ENDPOINT = 'https://discord.com/api/v8';
 const json = (res: Response) => res.json();
 
 export default withSession(async (req: withSessionRequest, res: NextApiResponse) => {
-  if (!req.query.code) res.redirect('/api/auth/login');
+  if (!req.query.code) return res.redirect('/api/auth/login');
   await connectToDatabase();
 
   const params = new URLSearchParams();

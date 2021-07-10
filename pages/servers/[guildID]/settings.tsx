@@ -39,7 +39,7 @@ export default function GuildSettings({ guild, userProfile }: props) {
   }, []);
 
   return (
-    <Layout title={`${guild.name} - dmod.gg`}>
+    <Layout title={`${guild.name} - dmod.gg`} description='Server settings'>
       <span id='preview_392sf' className={previewOpen ? 'pre-open' : 'pre-close'} />
       <>
         {/* <div className='ml-2'>

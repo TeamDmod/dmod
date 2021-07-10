@@ -82,13 +82,13 @@ export function clsx(...args: string[]) {
 
 export type bannerTypes = 'color' | 'img' | 'unknown';
 
-export interface reslovedBanner {
+export interface resolvedBanner {
   type: bannerTypes;
   color: string | null;
   image: string | null;
 }
 
-export const bannerResloverRegExps = {
+export const bannerResolverRegExps = {
   COLOR_RGB: /^rgb\((\d{1,3}),(\d{1,3}),(\d{1,3})\)$/,
   COLOR_HEX: /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/,
   IMAGE: /^https:\/\/.*\.(gif|png|jpg)$/,
@@ -99,18 +99,18 @@ export const bannerResloverRegExps = {
  * * Color banner: "color:rgb()" or "color:#hex"
  * * Image banner: "img:https:/--"
  */
-export function bannerResolver(bannerResolvable: string): reslovedBanner {
+export function bannerResolver(bannerResolvable: string): resolvedBanner {
   const type = bannerResolvable.slice(0, bannerResolvable.indexOf(':'));
   const data = bannerResolvable.slice(bannerResolvable.indexOf(':') + 1);
   if (!['color', 'img'].includes(type)) return { type: 'unknown', color: null, image: null };
 
   if (type === 'img') {
-    if (bannerResloverRegExps.IMAGE.test(data)) return { type: 'img', color: null, image: data };
+    if (bannerResolverRegExps.IMAGE.test(data)) return { type: 'img', color: null, image: data };
     return { type: 'unknown', color: null, image: null };
   }
 
   if (type === 'color') {
-    if (!bannerResloverRegExps.COLOR_HEX.test(data) && !bannerResloverRegExps.COLOR_RGB.test(data)) return { type: 'color', color: DEFAULT_BANNER_COLOR, image: null };
+    if (!bannerResolverRegExps.COLOR_HEX.test(data) && !bannerResolverRegExps.COLOR_RGB.test(data)) return { type: 'color', color: DEFAULT_BANNER_COLOR, image: null };
     return { type: 'color', color: data, image: null };
   }
 
@@ -122,15 +122,15 @@ export function isBannerResolvable(bannerResolvable: string): boolean {
   const data = bannerResolvable.slice(bannerResolvable.indexOf(':') + 1);
   if (!['color', 'img'].includes(type)) return false;
   if (data.length <= 0) return false;
-  if (type === 'img') return bannerResloverRegExps.IMAGE.test(data);
-  if (type === 'color') return bannerResloverRegExps.COLOR_HEX.test(data) || bannerResloverRegExps.COLOR_RGB.test(data);
+  if (type === 'img') return bannerResolverRegExps.IMAGE.test(data);
+  if (type === 'color') return bannerResolverRegExps.COLOR_HEX.test(data) || bannerResolverRegExps.COLOR_RGB.test(data);
   return false;
 }
 
 /**
  * Flatten the object back into a resolvable banner string
  */
-export function bannerFlatten(banner: reslovedBanner): string {
+export function bannerFlatten(banner: resolvedBanner): string {
   if (banner.type === 'unknown' || !['color', 'img'].includes(banner.type)) return `color:${DEFAULT_BANNER_COLOR}`;
   const color = banner.color == null ? DEFAULT_BANNER_COLOR : banner.color;
   return `${banner.type}:${banner.type === 'img' ? banner.image : color}`;
