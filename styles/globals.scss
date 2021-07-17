@@ -1,24 +1,50 @@
 /* I use arch btw. */
 
 $bg-color-1: #0c142c;
-@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+$bg-scroll-track: #1a2c61;
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
 @font-face {
-  font-family: "San Francisco";
+  font-family: 'San Francisco', sans-serif;
   font-weight: 400, 500, 600, 700;
-  src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff");
+  src: url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff');
+}
+* {
+  box-sizing: border-box;
 }
 
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   background-color: $bg-color-1;
   color: white;
   margin: 0;
   -webkit-font-smoothing: antialiased !important;
   -webkit-filter: blur(0.000001px) !important;
 }
-html, html a {
-  text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+
+#nprogress .bar {
+  background-color: rgb(88, 74, 216) !important;
+}
+
+body::-webkit-scrollbar {
+  width: 0.3rem;
+}
+body::-webkit-scrollbar-track {
+  background: $bg-color-1;
+}
+body::-webkit-scrollbar-thumb {
+  background: $bg-scroll-track;
+  border-radius: 5px;
+}
+
+html,
+html a {
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
+}
+.markdown-content-contaner {
+  a {
+    color: #3b57ac;
+  }
 }
 
 .centered {
@@ -46,4 +72,80 @@ html, html a {
       font-weight: 400;
     }
   }
+}
+
+footer ul span {
+  color: #9ca3af;
+}
+
+// Animated loader found from ; https://codepen.io/Siddharth11/pen/xbGrpG
+
+// loader
+$grey: rgba(247, 247, 247, 0.753);
+$blue: rgba(15, 89, 226, 0.856);
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotate2 {
+  0% {
+    transform: rotate(0deg);
+    border-top-color: $grey;
+  }
+  50% {
+    transform: rotate(180deg);
+    border-top-color: $blue;
+  }
+  100% {
+    transform: rotate(360deg);
+    border-top-color: $grey;
+  }
+}
+
+@mixin loaderDivMixin {
+  border-radius: 50%;
+  padding: 8px;
+  border: 2px solid transparent;
+  animation: rotate linear 3.5s infinite;
+}
+
+.loader {
+  position: relative;
+  margin: 75px auto;
+  width: 300px;
+  height: 300px;
+  display: block;
+  overflow: hidden;
+  div {
+    height: 100%;
+    &:hover {
+      animation-play-state: paused;
+    }
+  }
+  &:hover {
+    animation-play-state: paused;
+  }
+}
+
+/* loader 4 */
+.loader4,
+.loader4 div {
+  @include loaderDivMixin;
+  border-radius: 50%;
+  padding: 4px;
+  animation: rotate2 5s infinite linear;
+}
+
+.loader,
+.loader * {
+  will-change: transform;
 }

@@ -1,59 +1,154 @@
-// NOTE: Could be deleted as the db will be interacted with by 'lib/mongodb.connection.ts'
-// and will only need to move typings to typings file(s)
+import { DEFAULT_BANNER_COLOR } from 'lib/constants';
 import mongoose, { Schema } from 'mongoose';
 
 const Users = new Schema(
-	{
-		id: { type: String, unique: true, required: true },
-		_id: {
-			default: () => new Date(),
-			type: Date
-		}, // added at
-		username: { type: String, required: true },
-		avatar: { type: String, default: null },
-		discriminator: { type: String, required: true },
-		description: { type: String, required: true },
-		about: { type: String, required: true },
-		available: {
-			from: { type: Date, required: true },
-			to: { type: Date, required: true }
-		},
-		tz: String,
-		ratings: [
-			{
-				_id: {
-					/* time of making this */ default: () => new Date(),
-					type: Date
-				},
-				id: { type: String, required: true, unique: true },
-				positive: { type: Boolean, required: true },
-				comment: { type: String, required: true }
-			}
-		]
-	},
-	{
-		versionKey: false,
-		toJSON: { virtuals: true },
-		toObject: { virtuals: true }
-	}
+  {
+    _id: {
+      type: String,
+      required: true,
+    },
+    active: {
+      type: Boolean,
+      default: true,
+    },
+    pronouns: {
+      type: String,
+      default: null,
+    },
+    site_flags: {
+      type: Number,
+      default: 0,
+    },
+    description: {
+      type: String,
+      default: 'Not much is currently known about this user.',
+    },
+    banner: {
+      type: String,
+      default: `color:${DEFAULT_BANNER_COLOR}`,
+    },
+    discriminator: {
+      type: String,
+      required: true,
+    },
+    username: {
+      type: String,
+      required: true,
+    },
+    updates_access: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    vanity: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    avatar: {
+      type: String,
+      default: null,
+    },
+    premium: {
+      type: Number,
+      default: 0,
+    },
+    ratings: [
+      {
+        _id: {
+          type: String,
+          required: true,
+        },
+        createdAt: {
+          type: Date,
+          default: () => new Date(),
+        },
+        comment: {
+          type: String,
+          required: true,
+        },
+        rating: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
+  },
+  {
+    versionKey: false,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
 );
 
-Users.virtual('avatarURL').get(function () {
-	if (!this.avatar) return `https://cdn.discordapp.com/embed/avatars/${this.discriminator % 5}.png`;
-	const isAnimated = this.avatar.startsWith('a_');
-	return `https://cdn.discordapp.com/avatars/${this.id}/${this.avatar}.${isAnimated ? 'gif' : 'png'}`;
+Users.virtual('avatarURL').get(function avatarURL() {
+  if (!this.avatar) return `https://cdn.discordapp.com/embed/avatars/${this.discriminator % 5}.png`;
+  const isAnimated = this.avatar.startsWith('a_');
+  return `https://cdn.discordapp.com/avatars/${this.id}/${this.avatar}.${isAnimated ? 'gif' : 'png'}`;
 });
 
-Users.virtual('tag').get(function () {
-	return `${this.username}#${this.discriminator}`;
+Users.virtual('tag').get(function tag() {
+  return `${this.username}#${this.discriminator}`;
 });
 
-type userData = mongoose.Model<any>;
-
-let module: userData;
-try {
-	module = mongoose.model('Users', Users);
-} catch (_) {
-	module = mongoose.model('Users');
+export interface ratingData {
+  _id: string;
+  createdAt: Date;
+  comment: string;
+  rating: number;
 }
-export default module;
+
+export interface userData {
+  _id: string;
+  /**
+   * User discription (makdown?)
+   */
+  description: string;
+  /**
+   * Public prefered pronouns
+   */
+  pronouns: string | null;
+  /**
+   * User's optional public status of activity
+   */
+  active: boolean;
+  /**
+   * The user's site flags
+   */
+  site_flags: number;
+  /**
+   * User profile banner
+   */
+  banner: string;
+  discriminator: string;
+  username: string;
+  avatar: string | null;
+  /**
+   * Data on the users ratings
+   */
+  ratings: ratingData[];
+  /**
+   * A token to update the users data
+   */
+  updates_access: string;
+  /**
+   * The user's profile vanity
+   */
+  vanity: string;
+  avatarURL: string;
+  tag: string;
+  /**
+   * The type of premium this user has.
+   */
+  premium: number;
+}
+
+export type userModleData = mongoose.Model<userData>;
+
+let userModule: userModleData;
+try {
+  userModule = mongoose.model('users', Users);
+} catch (_) {
+  userModule = mongoose.model('users');
+}
+export default userModule;

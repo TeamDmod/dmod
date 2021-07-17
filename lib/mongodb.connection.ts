@@ -1,13 +1,12 @@
-import { Db, MongoClient } from 'mongodb';
+/**
+ * Templated off https://github.com/vercel/next.js/tree/canary/examples/with-mongodb-mongoose
+ */
+import mongoose from 'mongoose';
 
-const { MONGODB_URI, MONGODB_DB } = process.env;
+const { MONGODB_URI } = process.env;
 
 if (!MONGODB_URI) {
-	throw new Error('Please define the MONGODB_URI environment variable inside .env');
-}
-
-if (!MONGODB_DB) {
-	throw new Error('Please define the MONGODB_DB environment variable inside .env');
+  throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
 }
 
 /**
@@ -16,32 +15,34 @@ if (!MONGODB_DB) {
  * during API Route usage.
  */
 // @ts-expect-error
-let cached = global.mongo;
+let cached = global.mongoose;
 
 if (!cached) {
-	// @ts-expect-error
-	cached = global.mongo = { conn: null, promise: null };
+  // @ts-expect-error
+  cached = global.mongoose = { conn: null, promise: null };
 }
 
-type connection = { client: MongoClient; db: Db };
-export async function connectToDatabase(): Promise<connection> {
-	if (cached.conn) {
-		return cached.conn;
-	}
+async function connectToDatabase() {
+  if (cached.conn) {
+    return cached.conn;
+  }
 
-	if (!cached.promise) {
-		const opts = {
-			useNewUrlParser: true,
-			useUnifiedTopology: true
-		};
+  if (!cached.promise) {
+    const opts = {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      bufferCommands: false,
+      bufferMaxEntries: 0,
+      useFindAndModify: false,
+      useCreateIndex: true,
+    };
 
-		cached.promise = MongoClient.connect(MONGODB_URI, opts).then((client) => {
-			return {
-				client,
-				db: client.db(MONGODB_DB)
-			};
-		});
-	}
-	cached.conn = await cached.promise;
-	return cached.conn;
+    cached.promise = mongoose.connect(MONGODB_URI, opts).then(mango => {
+      return mango;
+    });
+  }
+  cached.conn = await cached.promise;
+  return cached.conn;
 }
+
+export default connectToDatabase;

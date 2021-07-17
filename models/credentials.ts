@@ -1,5 +1,3 @@
-// NOTE: Could be deleted as the db will be interacted with by 'lib/mongodb.connection.ts'
-// and will only need to move typings to typings file(s)
 import mongoose, { Schema } from 'mongoose';
 
 const credentials = new Schema({

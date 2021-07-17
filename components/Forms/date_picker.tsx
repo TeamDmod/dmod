@@ -1,28 +1,26 @@
-import react, { useState } from 'react';
 import DatePicker from 'react-datepicker';
+
 import styles from '../../styles/forms.module.scss';
 
 interface props {
-  onChange: Function;
-  filled?: string
+  onChange: (date: Date) => void;
+  filled?: string;
+  date: Date;
 }
 
-function Date_Picker(props: props) {
-  const [date, setDate] = useState(new Date());
-
-  let handleDateChange = d => {
-    setDate(d);
-    props.onChange(d);
+function Date_Picker({ filled, onChange, date }: props) {
+  const handleDateChange = d => {
+    onChange(new Date(d));
   };
 
   return (
-    <div className={`${styles.date_picker_container} ${props.filled == '' ? styles.unfilled_text : ''}`}>
+    <div className={`${styles.date_picker_container} ${filled === '' ? styles.unfilled_text : ''}`}>
       <span>
-        <img src={'/birthday.png'} className={styles.icon}></img>
+        <img src='/birthday.png' className={styles.icon} alt='birthday' />
         <span className={styles.text_container}>Date of brith (DD/MM/YYYY)</span>
       </span>
       <div className={styles.picker_container}>
-        <DatePicker selected={date} placeholder={'DD/MM/yyyy'} onChange={handleDateChange} showMonthYearDatePicker dateFormat="dd/MM/yyyy" />
+        <DatePicker selected={date} placeholder='DD/MM/yyyy' onChange={handleDateChange} showMonthYearDatePicker dateFormat='dd/MM/yyyy' />
       </div>
     </div>
   );
