@@ -1,5 +1,6 @@
 import btoa from 'btoa';
 import crypto from 'crypto-js';
+// import { hasBetaAccess } from 'lib/backend-utils';
 import { DEFAULT_FLAGS } from 'lib/constants';
 import connectToDatabase from 'lib/mongodb.connection';
 import withSession from 'lib/session';
@@ -37,6 +38,9 @@ export default withSession(async (req: withSessionRequest, res: NextApiResponse)
   const user = await fetch(`${API_ENDPOINT}/users/@me`, {
     headers: { Authorization: `Bearer ${userAccessData.access_token}` },
   }).then(json);
+
+  // const access = await hasBetaAccess(user.id);
+  // if (!access) return res.redirect('/?a=0');
 
   req.session.set('user', { id: user.id });
   await req.session.save();

@@ -4,6 +4,28 @@ import { RawGuild, RawGuildMember } from 'typings/typings';
 const API_ENDPOINT = 'https://discord.com/api/v8';
 const json = (res: Response) => res.json();
 
+export async function hasBetaAccess(id: string): Promise<boolean> {
+  const DMOD_SERVER_ID = '791278367960858635';
+  const ACCESS_GRANT_ROLES = ['867846891185242152', '867846891185242152', '801746227712622593'];
+
+  const Member = await fetch(`${API_ENDPOINT}/guilds/${DMOD_SERVER_ID}/members/${id}`, { headers: { Authorization: `Bot ${process.env.CLIENT_TOKEN}` } });
+  const header = Object.fromEntries(Member.headers.entries());
+  // eslint-disable-next-line no-new
+  if (header['x-ratelimit-remaining'] === '0') {
+    return new Promise(reslove =>
+      setTimeout(async () => {
+        reslove(await hasBetaAccess(id));
+      }, 2000)
+    );
+  }
+  const member: RawGuildMember = await Member.json();
+  // @ts-expect-error
+  if (member.code || member.message) return false;
+  const filtered = member.roles.filter(r => ACCESS_GRANT_ROLES.includes(r));
+
+  return filtered.length > 0;
+}
+
 export interface Embed {
   fields?: field[];
   color?: number;
