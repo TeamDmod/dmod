@@ -13,3 +13,6 @@
 
 # envierment
 .env
+
+# redis cache
+dump.rdb

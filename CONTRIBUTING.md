@@ -60,9 +60,11 @@ Before submitting a pull request, please make sure the following is done:
 
 1. Fork the repository and create your branch from master
 2. Run `npm i` in the repository root
-3. Run `npm run dev` to test in the production environment
-4. Format your code (automatic formatting coming soon)
-5. Open the pull request
+3. Rename `.example.env` to `.env` and fill in the information
+4. Install [redis](https://redis.io/) to your system. And start up the redis server. [Windows Help](https://github.com/ServiceStack/redis-windows)
+5. Run `npm run dev` to test in the production environment
+6. Format your code (automatic formatting coming soon)
+7. Open the pull request
 
 ## Development Workflow
 

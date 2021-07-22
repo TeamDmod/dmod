@@ -5,6 +5,7 @@ import { Formik } from 'formik';
 import { resolveGuildMemberPerms } from 'lib/backend-utils';
 import { clsx } from 'lib/constants';
 import connectToDatabase from 'lib/mongodb.connection';
+import redis from 'lib/redis';
 import { DESCRIPTION_MAX_DATA, DESCRIPTION_MIN, SHORT_DESCRIPTION_MAX_DATA, SHORT_DESCRIPTION_MIN } from 'lib/serverUpdateValidators';
 import withSession from 'lib/session';
 import guilds, { GuildData } from 'models/guilds';
@@ -264,6 +265,7 @@ export default function GuildSettings({ guild, userProfile }: props) {
 }
 
 const API_ENDPOINT = 'https://discord.com/api/v8';
+const TIME = 60 * 60 * 2; // 2h in seconds
 const json = (res: Response) => res.json();
 
 export const getServerSideProps: GetServerSideProps = withSession(
@@ -280,11 +282,17 @@ export const getServerSideProps: GetServerSideProps = withSession(
     if (!user) return { notFound: true };
 
     const authHead = { headers: { Authorization: `Bot ${process.env.CLIENT_TOKEN}` } };
+    const guildCache = await redis.get(`guild:${context.query.guildID}`);
+    let guild: RawGuild;
+    if (!guildCache) {
+      guild = await fetch(`${API_ENDPOINT}/guilds/${context.query.guildID}?with_counts=true`, authHead).then(json);
+      // @ts-expect-error
+      if (guild.code || guild.message) return { notFound: true };
 
-    const guild: RawGuild = await fetch(`${API_ENDPOINT}/guilds/${context.query.guildID}?with_counts=true`, authHead).then(json);
-    // @ts-expect-error
-    if (guild.code || guild.message) return { notFound: true };
-
+      await redis.setex(`guild:${context.query.guildID}`, TIME, JSON.stringify(guild));
+    } else {
+      guild = JSON.parse(guildCache);
+    }
     let member: RawGuildMember = null;
     if (session.id) member = await fetch(`${API_ENDPOINT}/guilds/${context.query.guildID}/members/${session.id}`, authHead).then(json);
     // @ts-expect-error
