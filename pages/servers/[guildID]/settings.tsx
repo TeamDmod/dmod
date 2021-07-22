@@ -293,12 +293,40 @@ export const getServerSideProps: GetServerSideProps = withSession(
     } else {
       guild = JSON.parse(guildCache);
     }
-    let member: RawGuildMember = null;
-    if (session.id) member = await fetch(`${API_ENDPOINT}/guilds/${context.query.guildID}/members/${session.id}`, authHead).then(json);
-    // @ts-expect-error
-    if (member.code || member.message) return { notFound: true };
 
-    const memberPerms = member ? resolveGuildMemberPerms(guild, member) : 0;
+    const limited = await redis.get('limited?type=memberfetch');
+    let isLimited: boolean;
+    if (!limited) {
+      isLimited = false;
+    } else {
+      isLimited = Number(limited) === 1;
+    }
+
+    let memberPerms: number = 0;
+    if (!isLimited) {
+      let member: RawGuildMember = null;
+      if (session?.id) {
+        const Member = await fetch(`${API_ENDPOINT}/guilds/${context.query.guildID}/members/${session.id}`, authHead);
+        const header = Object.fromEntries(Member.headers.entries());
+        if (header['x-ratelimit-remaining'] === '0') {
+          const waitTime = Math.floor(Math.random() * (5 - 3 + 1)) + 3;
+          redis.setex('limited?type=memberfetch', waitTime, 1).then(value => {
+            if (value === 'OK') console.log('Entered "ratelimit-remaining" of 0. ', `Set limted for member fetching true for ${waitTime} seconds`);
+            else console.log('OPPS!!! Faild to set a limiting mark for member fetching. ', value);
+          });
+        }
+        member = await Member.json();
+      }
+      // @ts-expect-error
+      if (member && (member.code || member.message)) return { props: { failed: true } };
+
+      memberPerms = member ? resolveGuildMemberPerms(guild, member) : 0;
+
+      if (session?.id) await redis.setex(`server:${context.query.guildID}:member:${session.id}`, 60 * 5, memberPerms);
+    } else if (session?.id) {
+      const perms = await redis.get(`server:${context.query.guildID}:member:${session.id}`);
+      memberPerms = Number(perms);
+    }
 
     const isManager = (memberPerms & 0x20) === 0x20;
 

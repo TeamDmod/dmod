@@ -77,7 +77,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
       guild = JSON.parse(guildCache);
     }
 
-    // TODO: Limit the request to fetch the member
+    // TODO: Limit the request to fetch the member ✔ (task completed)
     // option 1: Cache the member so when the "x-ratelimit-remaining" hits 1 it will use the cacheed member permissins to check if they are managers of this server.
     // On that 1 left set redis "limited" to 1(1=true|0=false) with a expreation of 3-5 seconds.
     // option 2: cache the member like the guilds object and set the expreation to 10-20 minutes.
@@ -85,18 +85,40 @@ export const getServerSideProps: GetServerSideProps = withSession(
     // https://discord.com/developers/docs/topics/rate-limits#rate-limits
     // "members:ID:permissions" => number
 
-    // Note: get and resolve member permissions
-    let member: RawGuildMember = null;
-    if (session?.id) {
-      const Member = await fetch(`${API_ENDPOINT}/guilds/${context.query.guildID}/members/${session.id}`, authHead);
-      // console.log(Member.headers);
-      member = await Member.json();
+    // Discord api limiting check
+    const limited = await redis.get('limited?type=memberfetch');
+    let isLimited: boolean;
+    if (!limited) {
+      isLimited = false;
+    } else {
+      isLimited = Number(limited) === 1;
     }
-    // @ts-expect-error
-    if (member && (member.code || member.message)) return { props: { failed: true } };
 
-    const memberPerms = member ? resolveGuildMemberPerms(guild, member) : 0;
-    // NoteEnd
+    let memberPerms: number = 0;
+    if (!isLimited) {
+      let member: RawGuildMember = null;
+      if (session?.id) {
+        const Member = await fetch(`${API_ENDPOINT}/guilds/${context.query.guildID}/members/${session.id}`, authHead);
+        const header = Object.fromEntries(Member.headers.entries());
+        if (header['x-ratelimit-remaining'] === '0') {
+          const waitTime = Math.floor(Math.random() * (5 - 3 + 1)) + 3;
+          redis.setex('limited?type=memberfetch', waitTime, 1).then(value => {
+            if (value === 'OK') console.log('Entered "ratelimit-remaining" of 0. ', `Set limted for member fetching true for ${waitTime} seconds`);
+            else console.log('OPPS!!! Faild to set a limiting mark for member fetching. ', value);
+          });
+        }
+        member = await Member.json();
+      }
+      // @ts-expect-error
+      if (member && (member.code || member.message)) return { props: { failed: true } };
+
+      memberPerms = member ? resolveGuildMemberPerms(guild, member) : 0;
+
+      if (session?.id) await redis.setex(`server:${context.query.guildID}:member:${session.id}`, 60 * 5, memberPerms);
+    } else if (session?.id) {
+      const perms = await redis.get(`server:${context.query.guildID}:member:${session.id}`);
+      memberPerms = Number(perms);
+    }
 
     const isManager = (memberPerms & 0x20) === 0x20;
 
