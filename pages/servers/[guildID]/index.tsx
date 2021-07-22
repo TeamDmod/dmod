@@ -77,8 +77,11 @@ export const getServerSideProps: GetServerSideProps = withSession(
       guild = JSON.parse(guildCache);
     }
 
-    // TODO: Cache the member so when the "x-ratelimit-remaining" hits 1 it will use the cacheed member permissins to check if they are managers of this server.
+    // TODO: Limit the request to fetch the member
+    // option 1: Cache the member so when the "x-ratelimit-remaining" hits 1 it will use the cacheed member permissins to check if they are managers of this server.
     // On that 1 left set redis "limited" to 1(1=true|0=false) with a expreation of 3-5 seconds.
+    // option 2: cache the member like the guilds object and set the expreation to 10-20 minutes.
+
     // https://discord.com/developers/docs/topics/rate-limits#rate-limits
     // "members:ID:permissions" => number
 
