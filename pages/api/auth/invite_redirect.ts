@@ -73,6 +73,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     });
 
     console.log(_);
-    return res.redirect(`/servers/${req.query.guild_id}`);
+    return res.redirect(`/servers/${req.query.guild_id}/settings`);
   }
 };

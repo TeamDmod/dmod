@@ -80,7 +80,7 @@ export default function Server({ user }: any) {
         )}
 
         <div className='space-y-3 text-xl'>
-          <h1 className='text-center'>Guilds Applications found.</h1>
+          <h1 className='text-center'>Guilds Not found.</h1>
           <div className='flex justify-center overflow-x-hidden'>
             <div className='flex flex-col sm:grid grid-cols-3 gap-3 w-full sm:w-2/3'>
               {userGuildData.excluded.map(guild => (

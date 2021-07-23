@@ -15,7 +15,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.query.id && typeof req.query.id === 'string') {
     const guild = await GuildModule.findOne({ _id: req.query.id as string });
     return guild && guild.completed
-      ? res.json(Object.fromEntries(Object.entries(guild.toObject()).filter(d => !['applyed', 'other_fields', '_access_key'].includes(d[0]))))
+      ? res.json(Object.fromEntries(Object.entries(guild.toObject()).filter(d => !['applyed', 'sections', '_access_key'].includes(d[0]))))
       : res.json({ code: 404, message: 'Guild not found' });
   }
   if (req.query.max && typeof req.query.max !== 'string' && !Number.isNaN(+req.query.max) && +req.query.max > MAX_RETURN)
