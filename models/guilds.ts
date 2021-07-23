@@ -45,7 +45,7 @@ const Guilds = new Schema({
     type: String,
     required: true,
   },
-  other_fields: [
+  sections: [
     {
       postition: {
         type: Number,
@@ -59,18 +59,34 @@ const Guilds = new Schema({
         type: String,
         default: null,
       },
-      type: {
-        type: Number,
-        default: 0,
-      },
-      length: {
-        type: Array,
-        default: null,
-      },
-      required: {
-        type: Boolean,
-        default: false,
-      },
+      fields: [
+        {
+          postition: {
+            type: Number,
+            required: true,
+          },
+          title: {
+            type: String,
+            required: true,
+          },
+          description: {
+            type: String,
+            default: null,
+          },
+          type: {
+            type: Number,
+            default: 0,
+          },
+          length: {
+            type: Array,
+            default: null,
+          },
+          required: {
+            type: Boolean,
+            default: false,
+          },
+        },
+      ],
     },
   ],
   _access_key: {
@@ -98,6 +114,13 @@ export interface FieldData {
    * If field is required
    */
   required: boolean;
+}
+
+export interface section {
+  postition: number;
+  title: string;
+  description: string;
+  fields: FieldData[];
 }
 
 export enum FieldTypes {
@@ -143,9 +166,9 @@ export interface GuildData {
    */
   tags: string[];
   /**
-   * Fields object array
+   * Form sections
    */
-  other_fields: FieldData[];
+  sections: section[];
   /**
    * Server invite
    */
