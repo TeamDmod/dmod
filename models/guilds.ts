@@ -92,6 +92,7 @@ const Guilds = new Schema({
   _access_key: {
     type: String,
     required: true,
+    unique: true,
   },
   // required_age: {
   //   type: []

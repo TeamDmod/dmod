@@ -40,7 +40,7 @@ export default withSession(async (req: withSessionRequest, res: NextApiResponse)
   }).then(json);
 
   // const access = await hasBetaAccess(user.id);
-  // if (!access) return res.redirect('/?a=0');
+  // if (!access) return res.redirect('/?_access=0');
 
   req.session.set('user', { id: user.id });
   await req.session.save();
@@ -48,16 +48,43 @@ export default withSession(async (req: withSessionRequest, res: NextApiResponse)
   const credentials_ = await credentials.findOne({ _id: user.id });
   const user_ = await users.findOne({ _id: user.id });
 
+  const gen = () => {
+    const length = Math.floor(Math.random() * (150 - 86 + 1)) + 86;
+    return customAlphabet(process.env.USER_SCRAMBLER, length)();
+  };
+  let token = gen();
+  let recursion = 0;
+  const check = async () => !!(await users.findOne({ updates_access: token }));
+
+  async function Enum() {
+    if (await check()) {
+      if (recursion <= 8) {
+        recursion += 1;
+        token = gen();
+        Enum();
+      } else {
+        return new Error('To many attempts');
+      }
+    } else {
+      return token;
+    }
+  }
+
   let vanityURL: string;
   if (!user_) {
-    const updatesAccessToken = customAlphabet(process.env.USER_SCRAMBLER, 86)();
+    const updates_access = await Enum();
+    if (typeof updates_access !== 'string') {
+      res.send('ERROR: To many attempts');
+      return;
+    }
+
     const _u = await users.create({
       _id: user.id,
       avatar: user.avatar,
       username: user.username,
       discriminator: user.discriminator,
       site_flags: DEFAULT_FLAGS,
-      updates_access: updatesAccessToken,
+      updates_access,
       vanity: `${user.id + user.discriminator}~`,
     });
     vanityURL = _u.vanity;
