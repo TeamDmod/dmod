@@ -1,6 +1,7 @@
 import connectToDatabase from 'lib/mongodb.connection';
+import redis from 'lib/redis';
 import GuildModule from 'models/guilds';
-import PreviewGuildModule from 'models/preview_guilds';
+import PreviewGuildModule, { PreviewGuildData } from 'models/preview_guilds';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 const MAX_RETURN = 20;
@@ -14,9 +15,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (req.query.id && typeof req.query.id === 'string') {
     const guild = await GuildModule.findOne({ _id: req.query.id as string });
-    return guild && guild.completed
-      ? res.json(Object.fromEntries(Object.entries(guild.toObject()).filter(d => !['applyed', 'sections', '_access_key'].includes(d[0]))))
-      : res.json({ code: 404, message: 'Guild not found' });
+    if (guild && guild.completed) {
+      const banner = await redis.get(`guild:${req.query.id}:banner`);
+      return res.json({
+        ...Object.fromEntries(Object.entries(guild.toObject()).filter(d => !['applyed', 'sections', '_access_key'].includes(d[0]))),
+        banner,
+      });
+    }
+    return res.json({ code: 404, message: 'Guild not found' });
   }
   if (req.query.max && typeof req.query.max !== 'string' && !Number.isNaN(+req.query.max) && +req.query.max > MAX_RETURN)
     return res.json({ code: 400, message: '"max" must be a valid number' });
@@ -42,5 +48,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     completed: true,
   }).limit(+req.query.max ?? MAX_RETURN);
 
-  res.json(guilds);
+  const results = await guilds.reduce(async (past, current) => {
+    return [
+      ...((past as unknown) as PreviewGuildData[]),
+      {
+        ...current.toObject(),
+        banner: await redis.get(`guild:${current._id}:banner`),
+      },
+    ];
+  }, ([] as unknown) as Promise<PreviewGuildData[]>);
+
+  res.json(results);
 };

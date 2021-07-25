@@ -66,13 +66,12 @@ export const getServerSideProps: GetServerSideProps = withSession(
       if (guild.code || guild.message) return { props: { failed: true } };
 
       await redis.setex(`guild:${context.query.guildID}`, TIME, JSON.stringify(guild));
-      // NOTE: Currently no need to save/cache the banner
-      // if (guild.banner)
-      //   await redis.setex(
-      //     `guild:${context.query.guildID}:banner`,
-      //     TIME,
-      //     `https://cdn.discordapp.com/banners/${guild.id}/${guild.banner}${guild.banner.startsWith('a_') ? '.gif' : '.png'}`
-      //   );
+
+      if (guild.banner)
+        await redis.set(
+          `guild:${context.query.guildID}:banner`,
+          `https://cdn.discordapp.com/banners/${guild.id}/${guild.banner}${guild.banner.startsWith('a_') ? '.gif' : '.png'}`
+        );
     } else {
       guild = JSON.parse(guildCache);
     }
