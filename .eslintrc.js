@@ -55,7 +55,7 @@ module.exports = {
       extends: ['airbnb-typescript', 'plugin:prettier/recommended'],
       parser: '@typescript-eslint/parser',
       parserOptions: {
-        project: ['./tsconfig.json'],
+        project: [require('path').join(__dirname, 'tsconfig.json')],
         ecmaFeatures: { jsx: true },
       },
       files: ['**/*.ts', '**/*.tsx'],
