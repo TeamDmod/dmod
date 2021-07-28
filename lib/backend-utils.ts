@@ -9,9 +9,8 @@ export async function hasBetaAccess(id: string): Promise<boolean> {
   const ACCESS_GRANT_ROLES = ['867846891185242152', '867846891185242152', '801746227712622593'];
 
   const Member = await fetch(`${API_ENDPOINT}/guilds/${DMOD_SERVER_ID}/members/${id}`, { headers: { Authorization: `Bot ${process.env.CLIENT_TOKEN}` } });
-  const header = Object.fromEntries(Member.headers.entries());
   // eslint-disable-next-line no-new
-  if (header['x-ratelimit-remaining'] === '0') {
+  if (Member.headers.get('x-ratelimit-remaining') === '0') {
     return new Promise(reslove =>
       setTimeout(async () => {
         reslove(await hasBetaAccess(id));

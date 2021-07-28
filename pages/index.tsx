@@ -1,3 +1,4 @@
+import AccessError from 'components/AccessError';
 import Footer from 'components/footer';
 import Layout from 'components/layout';
 import { clsx } from 'lib/constants';
@@ -48,6 +49,7 @@ export default function Home() {
           })}
         </div>
       </div>
+      <AccessError />
       <Footer />
       {/* TODO: allow rating to be updated, giveing correct data of people of 3.5 - 5 stars */}
       {/* <div className={home.home_main_content}>

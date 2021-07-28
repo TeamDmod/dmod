@@ -26,7 +26,7 @@ module.exports = {
         'react/no-unescaped-entities': [0],
         'consistent-return': 0,
         'no-return-assign': 0,
-        'no-console': 1,
+        'no-console': 0,
         'no-multi-assign': 0,
         'no-case-declarations': 0,
         'no-multi-spaces': 2,
