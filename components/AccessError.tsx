@@ -37,7 +37,7 @@ export default function AccessError() {
             </span>
             <b id='model-b8u'>
               <h1 id='model-91' className='text-red-600'>
-                Access dined
+                Access denied
               </h1>
               Oops looks like you don't have access to login. Make sure you're in{' '}
               <Link href='/discord'>
