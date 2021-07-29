@@ -78,6 +78,26 @@ footer ul span {
   color: #9ca3af;
 }
 
+// Access error animations
+
+.model-fhi {
+  animation: accessError 0.8s;
+  background-color: #432891;
+  transform: rotate(0turn) scale(100%);
+}
+
+@keyframes accessError {
+  100% {
+    transform: rotate(0turn) scale(100%);
+  }
+  50% {
+    transform: rotate(-0.006turn);
+  }
+  0% {
+    transform: rotate(0.006turn) scale(50%);
+  }
+}
+
 // Animated loader found from ; https://codepen.io/Siddharth11/pen/xbGrpG
 
 // loader

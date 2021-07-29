@@ -13,26 +13,33 @@ export default function AccessError() {
   }, [router.query._access]);
 
   return (
-    <div>
+    <div id='access_error-sdf'>
       <div
-        className={clsx('absolute inset-0 h-screen w-full transform duration-150', open ? 'visible scale-100' : 'invisible scale-50 opacity-5')}
+        className={clsx('absolute inset-0 h-screen w-full transform duration-300', open ? 'visible' : 'invisible opacity-5')}
         onClick={e => {
           const model = document.getElementById('model-8w');
           const modelBold = document.getElementById('model-b8u');
           const modelBetaText = document.getElementById('model-bet8u');
+          const close = document.getElementById('model-x7b');
+          const head = document.getElementById('model-91');
 
-          if (e.target !== model && e.target !== modelBold && e.target !== modelBetaText) {
+          if (e.target !== model && e.target !== modelBold && e.target !== modelBetaText && e.target !== close && e.target !== head) {
             e.preventDefault();
             setOpen(false);
             router.push({ query: { _access: null } });
           }
         }}
       >
-        <div className={clsx('flex flex-wrap h-full justify-center content-center bg-gray-900', open ? 'bg-opacity-80' : 'bg-opacity-0')}>
-          <div id='model-8w' className='bg-red-700 rounded px-3 py-5'>
-            <span className='mr-1 font-bold cursor-pointer text-gray-800'>X</span>
+        <div className={clsx('transform duration-100 flex flex-wrap h-full justify-center content-center bg-gray-900', open ? 'bg-opacity-80' : 'bg-opacity-0')}>
+          <div id='model-8w' className={clsx('rounded px-3 pb-5 pt-2 flex flex-col', open && 'model-fhi')}>
+            <span id='model-x7b' className='mr-1 font-bold text-gray-800 text-right'>
+              <span className='cursor-pointer'>X</span>
+            </span>
             <b id='model-b8u'>
-              Opps looks like you dont have access to login. Make sure your in{' '}
+              <h1 id='model-91' className='text-red-600'>
+                Access dined
+              </h1>
+              Oops looks like you don't have access to login. Make sure you're in{' '}
               <Link href='/discord'>
                 <span className='text-blue-400 cursor-pointer'>dmod.gg server</span>
               </Link>{' '}
@@ -48,3 +55,4 @@ export default function AccessError() {
     </div>
   );
 }
+// git add components/AccessError.tsx
