@@ -90,11 +90,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   const validatorData = { user_premium: user.premium, updater: uperUser?.toObject(), user: user.toObject() };
   let error = null;
-  Object.entries(objectedUpdateQuery).forEach(([key, value]) => {
+
+  for await (const [key, value] of Object.entries(objectedUpdateQuery)) {
     const validation = validators[key] ?? validators.DEFAULT;
-    const validated = validation({ value, ...validatorData });
+    const validated = await validation({ value, ...validatorData });
     if (validated.error) error = validated.message;
-  });
+  }
 
   if (error) return res.json({ message: error, success: false });
 
