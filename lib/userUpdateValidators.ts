@@ -1,3 +1,4 @@
+import list from 'lib/blackListwords.json';
 import type { userData } from 'models/users';
 
 import { isBannerResolvable, user_flags } from './constants';
@@ -8,7 +9,7 @@ export interface dataPassed {
   updater?: userData;
   user: userData;
 }
-type validatorFunctions = (args: dataPassed) => { error: boolean; message?: string };
+type validatorFunctions = (args: dataPassed) => Promise<{ error: boolean; message?: string }>;
 type Ivalidators = { [key: string]: validatorFunctions };
 
 export const DESCRIPTION_MAX_DATA = { PREMIUM: 4000, NORMAL: 2000 };
@@ -85,17 +86,22 @@ const validators: Ivalidators = {
       error: false,
     };
   },
-  vanity({ value }) {
+  async vanity({ value }) {
     const vanity = value as string;
     const allowedMatch = vanity.match(VANITY_ALLOWED_REGEXP);
     const fobidenMatch = vanity.match(VANITY_FOBIDEN_REGEXP);
 
     if ((fobidenMatch || []).length > 0) return { error: true, message: 'Forbiden character(s) in value.' };
-    if (!allowedMatch[0]) return { error: true, message: 'Value unmatched.' };
+    if (!allowedMatch?.[0]) return { error: true, message: 'Value unmatched.' };
 
     // const characters = vanity.match(VANITY_ALL_CHARACTER);
     const noneCharacters = vanity.match(VANITY_ALL_NONE_CHARACTER) || [];
     if (noneCharacters.length < VANITY_LENGTH_NONE_CHARACTER) return { error: true, message: 'Vanity must include minimum of 3 none specially allowed charterers.' };
+
+    if (list.some(item => vanity.toLowerCase().includes(item))) return { error: true, message: 'Vanity banned.' };
+
+    const data: any[] = await fetch(`${process.env.BASE_URL}/kei/search_u?vanity=${vanity}`).then(d => d.json());
+    if (data.length > 0) return { error: true, message: 'Vanity taken.' };
 
     return { error: false };
   },
