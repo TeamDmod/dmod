@@ -9,7 +9,7 @@
 <p align="center">Dmod reserves the right to all content found in this repository. The content is intellectual property and will remain as such indefinitely. If any one person decides to use, in whole or in part, the code, they agree to be bound by the rules stated herein by the author.</p>
 
 ---
-+ Dmods Discord: [Discord Link](https://discord.com/invite/VUTu3HyRpN)
++ Dmod's Discord: [Discord Link](https://discord.com/invite/VUTu3HyRpN)
 + Founder's Email: vagabonditbusiness@gmail.com
 ---
 
@@ -23,10 +23,10 @@
 ---
 ### Disallowed
 #### Users are forbidden...
-- ... from redistributing the code, edited or otherwise, in any platform that Dmod do not allow. (Contact to discuss exceptions.)
+- ... from redistributing the code, edited or otherwise, in any platform that Dmod does not allow. (Contact to discuss exceptions.)
 - ... from distributing a lightly edited version of the base code without credit or prior permission from the developer.
 - ... from copying large amounts of code from the source and using it without discussing it with us beforehand.
-- ... from using, modifiying or redistributing the source for non-dmod related purposes.
+- ... from using, modifiying or redistributing the source for non-Dmod related purposes.
 ---
 
 <h2 align="center">Dmod.gg reserve the right to request take down of any content that is found to be in violation of these terms.
@@ -34,7 +34,7 @@
 
 ### Approved hosting locations
 - [Dmod Github](https://github.com/dmod-gg)
-- [dmod.gg](https://dmod.gg)
+- [Dmod.gg](https://dmod.gg)
 - [Dmod Discord](https://discord.com/invite/VUTu3HyRpN)
 
 ---
