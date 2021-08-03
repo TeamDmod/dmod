@@ -76,7 +76,7 @@ export default function Settings({ user, settings }: props) {
         </button>
       </div>
       <Formik
-        initialValues={{ description: settings.description, active: settings.active, bannerData }}
+        initialValues={{ description: settings.description, active: settings.active, bannerData, vanity: settings.vanity }}
         validate={values => {
           const errors: any = {};
           const bannerflat = bannerFlatten(values.bannerData ?? { type: 'unknown', image: null, color: null });
@@ -84,11 +84,11 @@ export default function Settings({ user, settings }: props) {
           const validatorData = { user_premium: user.premium_type, user: { ...settings, ...values, banner: bannerflat } };
           let err = null;
           Object.entries({ ...values, banner: bannerflat })
-            .filter(([k]) => k !== 'bannerData')
-            .forEach(([key, value]) => {
+            .filter(([k]) => k !== 'bannerData' && k !== 'vanity')
+            .forEach(async ([key, value]) => {
               const validation = validators[key] ?? validators.DEFAULT;
 
-              const validated = validation({ value, ...validatorData });
+              const validated = await validation({ value, ...validatorData });
               if (validated.error) err = validated.message;
             });
           setError(err);
@@ -140,7 +140,7 @@ export default function Settings({ user, settings }: props) {
           <>
             <div
               className={clsx(
-                'transform transition duration-300 ease-in-out fixed z-40 inset-y-0 inset-x-0 h-screen w-full bg-gray-800 bg-opacity-90',
+                'transform transition duration-300 ease-in-out absolute z-40 inset-y-0 inset-x-0 h-full min-h-screen w-full bg-gray-800 bg-opacity-90',
                 previewOpen ? 'scale-100 opacity-100' : 'scale-50 opacity-0 visible pointer-events-none'
               )}
             >
@@ -214,6 +214,18 @@ export default function Settings({ user, settings }: props) {
                       />
                     </Switch>
                   </div>
+                </div>
+
+                <label>Vanity</label>
+                <div className='bg-gray-600 rounded w-1/6 min-w-max px-1 py-px'>
+                  https://dmod.gg/
+                  <input
+                    className='text-gray-100 bg-gray-600 focus:outline-none px-1 -ml-0.5 bg-opacity-0'
+                    value={values.vanity ?? ''}
+                    id='vanity'
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 <label>Banner ({values.bannerData.type})</label>
