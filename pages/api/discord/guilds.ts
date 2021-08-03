@@ -37,9 +37,7 @@ export default withSession(async (req: withSessionRequest, res: NextApiResponse)
   const data = await GuildModule.find({ $or: search });
   const guildIds = userGuilds.map(({ id }) => id);
 
-  for (const this_ of data)
-    if (guildIds.includes(this_._id))
-      included.push({ ...Object.fromEntries(Object.entries(this_.toObject()).filter(i => i[0] !== '_access_key')), ...userGuilds.find(g => g.id === this_._id) });
+  for (const this_ of data) if (guildIds.includes(this_._id)) included.push({ ...this_.toObject(), ...userGuilds.find(g => g.id === this_._id) });
 
   for (const id of guildIds) if (!included.map(({ _id }) => _id).includes(id)) excluded.push(userGuilds.find(g => g.id === id));
 

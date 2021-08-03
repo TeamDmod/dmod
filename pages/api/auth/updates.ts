@@ -1,8 +1,9 @@
 import { Embed, sendToWebhook } from 'lib/backend-utils';
 import { user_flags } from 'lib/constants';
 import connectToDatabase from 'lib/mongodb.connection';
-import { typeValidators, validators } from 'lib/userUpdateValidators';
-import userModule from 'models/users';
+import { typeValidators, validators } from 'lib/validators/userUpdateValidators';
+import tokenModule from 'models/token';
+import userModule, { userDataFound } from 'models/users';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -19,22 +20,29 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
    * NOTE API PROTECTION: Implement route protection // Shoud all work but still need to fix something small (note down)
    */
 
-  const [userId, updateToken, UperToken] = req.headers.authorization.split('=+');
+  const [userId, updateToken, uperID, UperToken] = req.headers.authorization.split('=+');
   if (!userId || !updateToken) return res.status(401).json({ message: 'Unauthorized', success: false });
 
   const userMutations = ['active', 'banner', 'description', 'pronouns', 'vanity'];
   const AllMutations = [...userMutations, 'site_flags', 'username', 'discriminator', 'avatar'];
   const modMutations = [...userMutations.filter(config => !['pronouns'].includes(config))];
 
-  const user = await userModule.findOne({ updates_access: updateToken });
+  const Token = await tokenModule.findOne({ token: updateToken, type: 'user', for: userId });
+  if (!Token) return res.status(401).json({ message: 'Unauthorized', success: false });
 
-  let uperUser;
-  if (UperToken) uperUser = await userModule.findOne({ updates_access: UperToken });
+  const user = await userModule.findOne({ _id: Token.for });
+
+  let uperUser: userDataFound;
+  if (UperToken && uperID) {
+    const uperUserToken = await tokenModule.findOne({ token: UperToken, type: 'user', for: uperID });
+    if (!uperUserToken) return res.status(401).json({ message: 'Unauthorized', success: false });
+    uperUser = await userModule.findOne({ _id: uperUserToken.for });
+  }
 
   if (uperUser === null) return res.status(404).json({ message: 'Unknow uper user', success: false });
   if (!user) return res.status(404).json({ message: 'Unknown user', success: false });
 
-  if (user._id !== userId) return res.status(401).json({ message: 'Unauthorized request', success: false });
+  if (user._id !== userId) return res.status(401).json({ message: 'Unauthorized', success: false });
 
   // update admin check
   if (
@@ -102,9 +110,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const updateData = await userModule.findOneAndUpdate({ _id: user._id }, objectedUpdateQuery, { new: true });
 
     return returnWithWebhook(
-      { message: Object.fromEntries(Object.entries(updateData.toObject()).filter(i => i[0] !== 'updates_access')), success: true },
+      { message: updateData.toObject(), success: true },
       {
         color: parseInt('#19e302'.replace('#', ''), 16),
+        description: `
+        From:
+        \`\`\`json\n${JSON.stringify(user.toObject(), null, 4)}\n\`\`\`
+        To:
+        \`\`\`json\n${JSON.stringify(updateData.toObject(), null, 4)}\n\`\`\`
+        `,
         fields: [
           {
             name: `${uperUser ? 'Uper user update' : 'User self update'} \`${user.tag}\` (${user._id})`,

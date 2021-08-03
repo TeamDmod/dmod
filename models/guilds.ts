@@ -89,11 +89,6 @@ const Guilds = new Schema({
       ],
     },
   ],
-  _access_key: {
-    type: String,
-    required: true,
-    unique: true,
-  },
   // required_age: {
   //   type: []
   // }
@@ -174,10 +169,6 @@ export interface GuildData {
    * Server invite
    */
   invite: string | null;
-  /**
-   * Key to update this guild application
-   */
-  _access_key: string;
 }
 
 export type GuildModleData = mongoose.Model<GuildData>;

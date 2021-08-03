@@ -62,6 +62,8 @@ module.exports = {
       rules: {
         'prettier/prettier': [0, { endOfLine: 'auto', printWidth: 110 }, { usePrettierrc: true }],
         '@typescript-eslint/explicit-function-return-type': 0,
+        '@typescript-eslint/lines-between-class-members': [0],
+        'no-restricted-globals': 0,
         'no-unused-expressions': 0,
         'jsx-a11y/no-static-element-interactions': [0],
         'jsx-a11y/click-events-have-key-events': 0,

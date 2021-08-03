@@ -78,6 +78,23 @@ footer ul span {
   color: #9ca3af;
 }
 
+// animated badge name pop up
+.badges-oujrf {
+  &:hover {
+    & .badge-name-fis {
+      opacity: 1;
+      transform: skew(0deg, 0deg);
+      bottom: 2.6rem;
+    }
+  }
+  .badge-name-fis {
+    transition: all 0.3s ease-in-out;
+    transform: skew(-3deg, -10deg);
+    opacity: 0;
+    bottom: 1.3rem;
+  }
+}
+
 // Access error animations
 
 .model-fhi {

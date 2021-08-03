@@ -1,23 +1,34 @@
-import GuildView from 'components/guildView';
+import GuildView from 'components/guild/guildView';
 import Layout from 'components/layout';
-import { resolveGuildMemberPerms } from 'lib/backend-utils';
-// import crypto from 'crypto-js';
+import crypto from 'crypto-js';
+import { genToken } from 'lib/backend-utils';
+import { isServer } from 'lib/isServer';
 import connectToDatabase from 'lib/mongodb.connection';
 import redis from 'lib/redis';
 import withSession from 'lib/session';
-// import credentials from 'models/credentials';
 import guilds, { GuildData } from 'models/guilds';
+import tokenModule from 'models/token';
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
-import React from 'react';
-import { RawGuild, RawGuildMember, withSessionGetServerSideProps } from 'typings/typings';
+import { useEffect, useState } from 'react';
+import { RawGuild, withSessionGetServerSideProps } from 'typings/typings';
+import type { DmodWebSocket } from 'websocket';
 
 interface props {
   failed: boolean;
-  isManager: boolean;
+  hash: string;
   guild: RawGuild & GuildData & { guild_description: string };
+  ws: DmodWebSocket;
 }
 
-export default function guildView({ failed, guild, isManager }: props) {
+function resolveType(str: string): string {
+  if (str.startsWith('a_')) return `${str}.gif`;
+  return `${str}.png`;
+}
+
+export default function guildView({ failed, guild: guild_, hash, ws }: props) {
+  const [guild, setGuild] = useState(guild_);
+  const [isManager, setIsManager] = useState(false);
+
   if (failed) {
     return (
       <Layout>
@@ -26,10 +37,40 @@ export default function guildView({ failed, guild, isManager }: props) {
     );
   }
 
-  function resolveType(str: string): string {
-    if (str.startsWith('a_')) return `${str}.gif`;
-    return `${str}.png`;
-  }
+  useEffect(() => {
+    if (!ws.ready || !ws._socket) {
+      console.log('socket connection not found');
+
+      setIsManager(false);
+      return;
+    }
+    function GuildConnectFn(data) {
+      if (!data) return;
+      const { guild: g, user } = data;
+
+      setGuild({ ...guild, ...g, description: guild.description });
+      setIsManager(((user ?? { permissions: 0 }).permissions & 0x20) === 0x20);
+    }
+    function MemberCount(data) {
+      if (data.guild_id !== guild.id) return;
+      setGuild({ ...guild, member_count: data.member_count });
+    }
+    console.log('guild connecting...');
+
+    if (!isServer) {
+      ws.requestConnect(guild.id, hash);
+      ws.on('CONNECT_GUILD', GuildConnectFn);
+      ws.on('GUILD_MEMBER_COUNT_CHANGE', MemberCount);
+    }
+
+    return () => {
+      ws.removeListener('GUILD_MEMBER_COUNT_CHANGE', MemberCount);
+      ws.removeListener('CONNECT_GUILD', GuildConnectFn);
+      if (!isServer) {
+        ws.requestDisconnect(guild.id);
+      }
+    };
+  }, [ws.ready]);
 
   const icon = guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${resolveType(guild.icon)}` : '/icon.png';
 
@@ -51,7 +92,7 @@ const json = (res: Response) => res.json();
 export const getServerSideProps: GetServerSideProps = withSession(
   async (context: withSessionGetServerSideProps): Promise<GetServerSidePropsResult<any>> => {
     await connectToDatabase();
-    const session = context.req.session.get('user');
+    // const session = context.req.session.get('user');
 
     const guildData = await guilds.findOne({ _id: context.query.guildID as string });
     if (!guildData) return { notFound: true };
@@ -76,61 +117,28 @@ export const getServerSideProps: GetServerSideProps = withSession(
       guild = JSON.parse(guildCache);
     }
 
-    // TODO: Limit the request to fetch the member ✔ (task completed)
-    // option 1: Cache the member so when the "x-ratelimit-remaining" hits 1 it will use the cacheed member permissins to check if they are managers of this server.
-    // On that 1 left set redis "limited" to 1(1=true|0=false) with a expreation of 3-5 seconds.
-    // option 2: cache the member like the guilds object and set the expreation to 10-20 minutes.
+    let tokenData = await tokenModule.findOne({ type: 'gatewayGuild', for: guild.id });
+    const genTokenModel = async () => {
+      const token = genToken();
+      const hash = crypto.SHA512(token).toString();
 
-    // https://discord.com/developers/docs/topics/rate-limits#rate-limits
-    // "members:ID:permissions" => number
-
-    // Discord api limiting check
-    const limited = await redis.get('limited?type=memberfetch');
-    let isLimited: boolean;
-    if (!limited) {
-      isLimited = false;
-    } else {
-      isLimited = Number(limited) === 1;
+      tokenData = await tokenModule.create({ type: 'gatewayGuild', for: guild.id, tokenHash: hash, token });
+    };
+    if (!tokenData) await genTokenModel();
+    if (tokenData.use > 6) {
+      await tokenData.deleteOne();
+      await genTokenModel();
     }
-
-    let memberPerms: number = 0;
-    if (!isLimited) {
-      let member: RawGuildMember = null;
-      if (session?.id) {
-        const Member = await fetch(`${API_ENDPOINT}/guilds/${context.query.guildID}/members/${session.id}`, authHead);
-        const header = Object.fromEntries(Member.headers.entries());
-        if (header['x-ratelimit-remaining'] === '0') {
-          const waitTime = Math.floor(Math.random() * (5 - 3 + 1)) + 3;
-          redis.setex('limited?type=memberfetch', waitTime, 1).then(value => {
-            if (value === 'OK') console.log('Entered "ratelimit-remaining" of 0. ', `Set limted for member fetching true for ${waitTime} seconds`);
-            else console.log('OPPS!!! Faild to set a limiting mark for member fetching. ', value);
-          });
-        }
-        member = await Member.json();
-      }
-      // @ts-expect-error
-      if (member && (member.code || member.message)) return { props: { failed: true } };
-
-      memberPerms = member ? resolveGuildMemberPerms(guild, member) : 0;
-
-      if (session?.id) await redis.setex(`server:${context.query.guildID}:member:${session.id}`, 60 * 5, memberPerms);
-    } else if (session?.id) {
-      const perms = await redis.get(`server:${context.query.guildID}:member:${session.id}`);
-      memberPerms = Number(perms);
-    }
-
-    const isManager = (memberPerms & 0x20) === 0x20;
-
-    if (!isManager && (!guildData.completed || !guildData.view)) return { notFound: true };
 
     return {
       props: {
-        isManager,
         failed: false,
+        hash: tokenData.tokenHash,
+        hasApp: false,
         guild: {
           ...guild,
           guild_description: guild.description,
-          ...Object.fromEntries(Object.entries(guildData.toObject()).filter(d => !['applyed', '_access_key'].includes(d[0]))),
+          ...Object.fromEntries(Object.entries(guildData.toObject()).filter(d => d[0] !== 'applyed')),
         },
       },
     };

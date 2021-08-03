@@ -1,8 +1,9 @@
 import btoa from 'btoa';
 import { sendToWebhook } from 'lib/backend-utils';
+import connectToDatabase from 'lib/mongodb.connection';
 import GuildModule from 'models/guilds';
 import PreviewGuildModule from 'models/preview_guilds';
-import { nanoid } from 'nanoid';
+import StateTokenModule from 'models/stateToken';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { RawGuild } from 'typings/typings';
 
@@ -10,7 +11,14 @@ const json = (res: Response) => res.json();
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.query.error) return res.redirect('/servers');
+  if (!req.query.state) return res.redirect('/servers');
   if (!req.query.code) return res.redirect(req.query.guild_id ? `/api/auth/invite?id=${req.query.guild_id}` : '/servers');
+  if (typeof req.query.state !== 'string' || typeof req.query.code !== 'string') return res.redirect('/');
+  await connectToDatabase();
+
+  const stateToken = await StateTokenModule.findOne({ token: req.query.state as string });
+  if (!stateToken || stateToken.token !== req.query.state) return res.redirect('/servers');
+  await stateToken.deleteOne();
 
   const params = new URLSearchParams();
   params.set('grant_type', 'authorization_code');
@@ -32,40 +40,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const short_description = 'Not much is known about this server.';
   const description_default = '~!~ Server description has not been edited, So not much is yet known about this server. ~!~';
 
-  const gen = () => {
-    const length = Math.floor(Math.random() * (300 - 156 + 1)) + 156;
-    return nanoid(length);
-  };
-  let _access_key = gen();
-  let acu = 1;
-  let recursion = 0;
-  const check = async () => !!(await GuildModule.findOne({ _access_key }));
-
-  async function Enum() {
-    if (await check()) {
-      acu += 1;
-      if (recursion <= 5) {
-        recursion += 1;
-        _access_key = gen();
-        Enum();
-      } else {
-        return new Error('To many attempts');
-      }
-    } else {
-      return _access_key;
-    }
-  }
-
   try {
-    const key = await Enum();
-    if (typeof key !== 'string') throw key;
-
     await GuildModule.create({
       _id: tokenGivenGuild.id,
       description: tokenGivenGuild.description ?? description_default,
       short_description,
       owner_id: tokenGivenGuild.owner_id,
-      _access_key: key,
     });
 
     const preview = await PreviewGuildModule.create({
@@ -87,10 +67,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           name: 'Region',
           value: tokenGivenGuild.region,
         },
-        {
-          name: 'Token generation',
-          value: `Attempts: ${acu}`,
-        },
       ],
     });
 
@@ -99,10 +75,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     await sendToWebhook({
       title: 'Error on invite.',
       description: `Message: ${_?.message ?? ''}\nFull: ${_}`,
-      fields: [{ name: 'Token generation', value: `Attempts: ${acu}` }],
     });
 
     console.log(_);
-    return res.redirect(`/servers${_?.message === 'To many attempts' ? '?e=atf' : '?e=gen'}`);
+    return res.redirect(`/servers/?e=gen`);
   }
 };

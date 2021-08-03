@@ -1,13 +1,13 @@
 import { Switch } from '@headlessui/react';
 import AnimatedLoader from 'components/AnimatedLoader';
 import Layout from 'components/layout';
-import Profile from 'components/profile';
+import Profile from 'components/user/profile';
 import { Formik } from 'formik';
 import { bannerFlatten, bannerResolver, bannerTypes, clsx } from 'lib/constants';
 import connectToDatabase from 'lib/mongodb.connection';
 import withSession from 'lib/session';
-import { validators } from 'lib/userUpdateValidators';
 import useUserGard from 'lib/useUserGard';
+import { validators } from 'lib/validators/userUpdateValidators';
 import userModule, { userData } from 'models/users';
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
 import React, { useEffect, useState } from 'react';
@@ -102,11 +102,17 @@ export default function Settings({ user, settings }: props) {
 
           const body = Object.assign(ValidValues, { ...(settings.banner === bannerflat ? {} : { banner: bannerflat }) });
 
+          let token: string;
+          try {
+            token = localStorage.getItem('@pup/token');
+            // eslint-disable-next-line no-empty
+          } catch {}
+
           const data = await fetch(`${window.origin}/api/auth/updates`, {
             method: 'PATCH',
             body: JSON.stringify(body),
             headers: {
-              authorization: `${settings._id}=+${settings.updates_access}`,
+              authorization: `${settings._id}=+${token}`,
             },
           }).then(d => d.json());
 

@@ -2,6 +2,7 @@ import { decryptToken } from 'lib/backend-utils';
 import connectToDatabase from 'lib/mongodb.connection';
 import withSession from 'lib/session';
 import credentialsData from 'models/credentials';
+import tokenModule from 'models/token';
 import userModule from 'models/users';
 import { NextApiResponse } from 'next';
 import { withSessionRequest } from 'typings/typings';
@@ -32,6 +33,20 @@ export default withSession(async (req: withSessionRequest, res: NextApiResponse)
   if (fetchedUser.code === 0) {
     try {
       results.delete();
+      const tokengFind = await tokenModule.find({ type: 'gatewayUser', for: user.id });
+      const tokenFind = await tokenModule.find({ type: 'user', for: user.id });
+
+      if (tokengFind.length > 0) {
+        await tokenModule.deleteMany({
+          $and: tokengFind.map(() => ({ for: user.id, type: 'gatewayUser' })),
+        });
+      }
+
+      if (tokenFind.length > 0) {
+        await tokenModule.deleteMany({
+          $and: tokenFind.map(() => ({ for: user.id, type: 'user' })),
+        });
+      }
       req.session.destroy();
       // eslint-disable-next-line no-empty
     } catch (_) {}

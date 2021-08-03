@@ -1,6 +1,6 @@
 import type { userData } from 'models/users';
 
-import { isBannerResolvable, user_flags } from './constants';
+import { isBannerResolvable, user_flags } from '../constants';
 
 export interface dataPassed {
   value: any;

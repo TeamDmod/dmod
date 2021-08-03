@@ -1,0 +1,10 @@
+export const OperationCodes = {
+  REQUEST_AUTH: 0,
+  AUTHENTICATION: 1,
+  AUTHENTICATION_PASS: 2,
+  HEART_BEAT: 3,
+  HEART_BEAT_BACK: 4,
+  EVENT: 5,
+  COMMAND: 6,
+  COMMAND_RESPONCE: 7,
+};

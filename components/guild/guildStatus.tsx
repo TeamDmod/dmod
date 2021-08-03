@@ -58,7 +58,7 @@ export default function GuildStatus({ guild, sticky }: props) {
         </span>
         <br />
         <span title='Approximate member count'>
-          <b>Member count</b>: {guild.approximate_member_count}
+          <b>Member count</b>: {guild?.member_count ?? guild.approximate_member_count}
         </span>
         <br />
         <span title='Server region'>

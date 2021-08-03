@@ -35,11 +35,6 @@ const Users = new Schema(
       type: String,
       required: true,
     },
-    updates_access: {
-      type: String,
-      required: true,
-      unique: true,
-    },
     vanity: {
       type: String,
       required: true,
@@ -128,10 +123,6 @@ export interface userData {
    */
   ratings: ratingData[];
   /**
-   * A token to update the users data
-   */
-  updates_access: string;
-  /**
    * The user's profile vanity
    */
   vanity: string;
@@ -144,6 +135,7 @@ export interface userData {
 }
 
 export type userModleData = mongoose.Model<userData>;
+export type userDataFound = userData & mongoose.Document<any, any>;
 
 let userModule: userModleData;
 try {

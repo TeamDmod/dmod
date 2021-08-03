@@ -1,27 +1,24 @@
 import { Switch } from '@headlessui/react';
-import GuildView from 'components/guildView';
+import GuildView from 'components/guild/guildView';
 import Layout from 'components/layout';
 import { Formik } from 'formik';
 import { resolveGuildMemberPerms } from 'lib/backend-utils';
 import { clsx } from 'lib/constants';
 import connectToDatabase from 'lib/mongodb.connection';
 import redis from 'lib/redis';
-import { DESCRIPTION_MAX_DATA, DESCRIPTION_MIN, SHORT_DESCRIPTION_MAX_DATA, SHORT_DESCRIPTION_MIN } from 'lib/serverUpdateValidators';
 import withSession from 'lib/session';
+import { DESCRIPTION_MAX_DATA, DESCRIPTION_MIN, SHORT_DESCRIPTION_MAX_DATA, SHORT_DESCRIPTION_MIN } from 'lib/validators/serverUpdateValidators';
 import guilds, { GuildData } from 'models/guilds';
-import userModule, { userData } from 'models/users';
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
-// import { useRouter } from 'next/dist/client/router';
 import React, { useEffect, useState } from 'react';
 import { RawGuild, RawGuildMember, withSessionGetServerSideProps } from 'typings/typings';
 
 interface props {
   guild: RawGuild & GuildData & { guild_description: string };
-  userProfile: userData;
+  uid: string;
 }
 
-export default function GuildSettings({ guild, userProfile }: props) {
-  // const router = useRouter();
+export default function GuildSettings({ guild, uid }: props) {
   const [previewOpen, setPreviewOpen] = useState(false);
 
   useEffect(() => {
@@ -77,13 +74,20 @@ export default function GuildSettings({ guild, userProfile }: props) {
           }}
           onSubmit={async (values, { setSubmitting, resetForm }) => {
             setSubmitting(true);
+
+            let token: string;
+            try {
+              token = localStorage.getItem('@pup/token');
+              // eslint-disable-next-line no-empty
+            } catch {}
+
             const body: any = Object.fromEntries(Object.entries(values).filter(([key, value]) => value !== guild[key] && value !== undefined));
 
             const data = await fetch(`${window.origin}/api/v1/servers/${guild.id}/settings`, {
               method: 'PATCH',
               body: JSON.stringify(body),
               headers: {
-                authorization: `${userProfile._id}=+${userProfile.updates_access}=+${guild._access_key}`,
+                authorization: `${uid}=+${token}`,
               },
             }).then(d => d.json());
             if (data.code || data.message) {
@@ -277,9 +281,9 @@ export const getServerSideProps: GetServerSideProps = withSession(
     const guildData = await guilds.findOne({ _id: context.query.guildID as string });
     if (!guildData) return { notFound: true };
 
-    const user = await userModule.findOne({ _id: session.id });
-    const objectUser = user.toObject();
-    if (!user) return { notFound: true };
+    // const user = await userModule.findOne({ _id: session.id });
+    // const objectUser = user.toObject();
+    // if (!user) return { notFound: true };
 
     const authHead = { headers: { Authorization: `Bot ${process.env.CLIENT_TOKEN}` } };
     const guildCache = await redis.get(`guild:${context.query.guildID}`);
@@ -334,7 +338,8 @@ export const getServerSideProps: GetServerSideProps = withSession(
 
     return {
       props: {
-        userProfile: objectUser,
+        uid: session.id,
+        // userProfile: objectUser,
         guild: {
           ...guild,
           guild_description: guild.description,

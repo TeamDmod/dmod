@@ -45,12 +45,16 @@ export default function CreateGuildApplicationModal({ closeModal, isOpen, guild 
             >
               <div className='inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-popupcard shadow-xl rounded-2xl'>
                 <Dialog.Title as='h3' className='text-lg font-medium leading-6 text-gray-200'>
-                  {guild.name}
+                  <u>
+                    <b>{guild.name}</b>
+                  </u>
                 </Dialog.Title>
 
                 <div className='mt-2 text-gray-50 text-sm '>
-                  <p>It looks like this guild is not in the database as a listed server applicable.</p>
-                  <p>Click create to confirm that you would like to create this guilds application</p>
+                  {/* <p>It looks like this guild is not in the database as a listed server applicable.</p> */}
+                  <p>Click invite to confirm that you would like to create this guilds application and invite Luminosity.</p>
+                  <br />
+                  <p>By inviting Luminosity you have agreed to allow Luminosity to track data for the gateway.</p>
                 </div>
 
                 <div className='mt-4'>

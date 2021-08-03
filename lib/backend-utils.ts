@@ -61,6 +61,11 @@ export function decryptToken(token: string, string: boolean = false) {
   return string ? decript.toString(crypto.enc.Utf8) : decript;
 }
 
+export function genToken() {
+  const gem = () => Math.random().toString(31).substr(2);
+  return `${gem()}.${gem() + gem()}`;
+}
+
 export function isSnowflake(str: string) {
   return !Number.isNaN(+str) && str.length >= 16 && /^([0-9]*)$/.test(str);
 }

@@ -1,5 +1,5 @@
 import Layout from 'components/layout';
-import Profile from 'components/profile';
+import Profile from 'components/user/profile';
 import connectToDatabase from 'lib/mongodb.connection';
 import withSession from 'lib/session';
 import users, { userData } from 'models/users';
@@ -31,8 +31,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
     if (user) {
       return {
         props: {
-          // Dont send the access key only on account route(s)
-          profile: Object.fromEntries(Object.entries(user.toObject()).filter(i => i[0] !== 'updates_access')),
+          profile: user.toObject(),
           isOwner: !!session && user.id === session.id,
         },
       };

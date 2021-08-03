@@ -2,10 +2,11 @@ import { clsx } from 'lib/constants';
 import MarkDown from 'lib/markdown';
 import { GuildData } from 'models/guilds';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RawGuild } from 'typings/typings';
 
 import GuildStatus from './guildStatus';
+import LinkChecker from './LinkChecker';
 
 interface props {
   guild: RawGuild & GuildData & { guild_description: string };
@@ -38,9 +39,26 @@ export default function GuildView({ guild, isManager, Inpreview }: props) {
   //   });
   // }
 
-  // useEffect(() => {
-  //   window.addEventListener('scroll', toggleVisible);
-  // }, []);
+  useEffect(() => {
+    const lig = [];
+
+    document.querySelectorAll('a[role="button"][data-to]').forEach(elm => {
+      const nvm = () => {
+        // @ts-expect-error
+        LinkChecker.create(elm?.dataset.to);
+      };
+      lig.push({ elm, nvm });
+      elm.addEventListener('click', nvm);
+    });
+
+    return () => {
+      LinkChecker.destroy();
+      lig.forEach(({ elm, nvm }) => {
+        elm.removeEventListener('click', nvm);
+      });
+    };
+    // window.addEventListener('scroll', toggleVisible);
+  }, [guild.description]);
 
   function resolveType(str: string): string {
     if (str.startsWith('a_')) return `${str}.gif`;

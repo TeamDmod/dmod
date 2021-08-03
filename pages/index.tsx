@@ -1,4 +1,4 @@
-import AccessError from 'components/AccessError';
+import AccessError from 'components/error/AccessError';
 import Footer from 'components/footer';
 import Layout from 'components/layout';
 import { clsx } from 'lib/constants';

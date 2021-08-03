@@ -5,6 +5,9 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      boxShadow: {
+        lgLight: '0 20px 25px -5px rgba(255, 255, 255, 0.05)',
+      },
       borderWidth: {
         DEFAULT: '1px',
         '0': '0',
@@ -14,7 +17,7 @@ module.exports = {
         '6': '6px',
         '8': '8px',
       },
-      backgroundColor: theme => ({
+      backgroundColor: () => ({
         mainbg: '#0c142c',
         buttonsbg: '#5700C6',
         dorpdown: '#181944',
@@ -37,7 +40,10 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      display: ['hover', 'focus', 'group-hover'],
+      inset: ['hover', 'focus', 'group-hover'],
+    },
   },
   plugins: [],
 };

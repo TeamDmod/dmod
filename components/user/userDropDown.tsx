@@ -1,11 +1,13 @@
 import { Menu, Transition } from '@headlessui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { ParsedUrlQuery } from 'querystring';
 import React, { Fragment } from 'react';
 import { ApiUser } from 'typings/typings';
 
 interface props {
   user: ApiUser;
+  fetcher: any;
 }
 
 function AccountSettingsIcon() {
@@ -50,8 +52,38 @@ function ProfileIcon() {
   );
 }
 
-export default function UserDropDown({ user }: props) {
+const toBack = [
+  {
+    from: /\/servers\/\d+\/settings\/?$/,
+    to: (query: ParsedUrlQuery) => `/servers/${query.guildID}`,
+  },
+  {
+    from: /\/account\/?.*/,
+    to: () => `/`,
+  },
+  {
+    from: /\/servers\/?/,
+    to: () => `/`,
+  },
+];
+
+export default function UserDropDown({ user, fetcher }: props) {
   const router = useRouter();
+
+  function LogoutSoft() {
+    localStorage.removeItem('@pup/token');
+    localStorage.removeItem('@pup/hash');
+    const toRedirect = toBack.find(reg => reg.from.test(router.asPath));
+
+    fetch(`${window.location.origin}/api/auth/logout`).then(async () => {
+      if (toRedirect) {
+        await router.push(toRedirect.to(router.query));
+        fetcher(true);
+      } else {
+        fetcher(true);
+      }
+    });
+  }
 
   function userAvatarUrl(): string | null {
     let base = `https://cdn.discordapp.com/avatars/${user.id}/`;
@@ -103,10 +135,7 @@ export default function UserDropDown({ user }: props) {
 
             <Menu.Item>
               {({ active }) => (
-                <div
-                  className={`${active && 'bg-red-700'} flex rounded-md items-center w-full p-1 text-sm cursor-pointer space-x-3`}
-                  onClick={() => router.push('/api/auth/logout')}
-                >
+                <div className={`${active && 'bg-red-700'} flex rounded-md items-center w-full p-1 text-sm cursor-pointer space-x-3`} onClick={LogoutSoft}>
                   <LogoutIcon />
                   <span>Logout</span>
                 </div>

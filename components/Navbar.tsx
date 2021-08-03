@@ -1,38 +1,9 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { ApiUser, sessionFetchedUser } from 'typings/typings';
+import { sessionFetchedUser } from 'typings/typings';
 
-import UserDropDown from './userDropDown';
-
-function UserLoader({ user }: { user: ApiUser }) {
-  const router = useRouter();
-
-  return (
-    <div>
-      <div className='flex flex-wrap content-center flex-row w-full h-full'>
-        {user && Object.prototype.hasOwnProperty.call(user, 'awaiting') && (
-          <div>
-            <div className='animate-pulse flex flex-wrap content-center space-x-3 h-full'>
-              <div className='bg-gray-600 rounded-full h-9 sm:h-11 w-9 sm:w-11' />
-              {/* <div className='hidden sm:flex flex-wrap content-center'>
-                <div className='bg-gray-600 w-20 h-6 rounded'></div>
-              </div> */}
-            </div>
-          </div>
-        )}
-
-        {user && !Object.prototype.hasOwnProperty.call(user, 'awaiting') && <UserDropDown user={user} />}
-
-        {!user && (
-          <button className='bg-red-500 px-4 py-2 rounded' onClick={() => router.push('/api/auth/login')}>
-            Login
-          </button>
-        )}
-      </div>
-    </div>
-  );
-}
+import UserLoader from './user/userLoader';
 
 function XmarkerIcon() {
   return (
@@ -53,9 +24,26 @@ function BergerMenuIcon() {
   );
 }
 
-function Navbar({ user }: { user: sessionFetchedUser }) {
+function Navbar({ user, fetcher }: { user: sessionFetchedUser; fetcher: any }) {
   const [open, setOpen] = useState(false);
+  const [winlogOpen, setWinlogOpen] = useState(false);
   const router = useRouter();
+
+  function openLoginWindo() {
+    if (winlogOpen) return;
+    const left = screen.width / 2 - 480 / 2;
+    const top = screen.height / 2 - 800 / 2;
+    const win = window.open(`${window.location.origin}/api/auth/login`, '', `width=480,height=800,resizable=no,top=${top},left=${left}`);
+    setWinlogOpen(true);
+
+    const close_inter = setInterval(async () => {
+      if (win.closed) {
+        setWinlogOpen(false);
+        fetcher(true);
+        clearInterval(close_inter);
+      }
+    }, 1000);
+  }
 
   const navbarLinks = [
     // {
@@ -116,7 +104,7 @@ function Navbar({ user }: { user: sessionFetchedUser }) {
           </div>
         )}
 
-        <UserLoader user={user} />
+        <UserLoader oplm={openLoginWindo} fetcher={fetcher} user={user} />
       </div>
 
       <div className='hidden w-full sm:flex'>
@@ -138,7 +126,7 @@ function Navbar({ user }: { user: sessionFetchedUser }) {
         </div>
 
         <div className='flex flex-wrap w-full justify-end'>
-          <UserLoader user={user} />
+          <UserLoader oplm={openLoginWindo} fetcher={fetcher} user={user} />
         </div>
       </div>
     </header>

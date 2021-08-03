@@ -1,5 +1,5 @@
 import AnimatedLoader from 'components/AnimatedLoader';
-import CreateGuildApplicationModal from 'components/CreateGuildApplicationModal';
+import CreateGuildApplicationModal from 'components/guild/CreateGuildApplicationModal';
 // import GuildCard from 'components/GuildCard';
 import Layout from 'components/layout';
 import { useRouter } from 'next/router';
