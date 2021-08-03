@@ -41,7 +41,10 @@ export class DmodWebSocket extends EventEmitter {
   }
 
   handelClose(credentals: credentals, { reason }) {
-    this.reconnect(credentals);
+    if (!['RAU'].includes(reason)) {
+      this.reconnect(credentals);
+    }
+
     this.emit('close', reason);
   }
 
