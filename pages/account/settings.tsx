@@ -37,9 +37,10 @@ function MiniEditor({ value, handleBlur, handleChange }: MiniEditorProps) {
 interface props {
   user: ApiUser;
   settings: userData;
+  __setUser: (d: any) => void;
 }
 
-export default function Settings({ user, settings }: props) {
+export default function Settings({ user, settings, __setUser }: props) {
   const { loading } = useUserGard(user);
   const [error, setError] = useState<string | null>(null);
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -123,6 +124,8 @@ export default function Settings({ user, settings }: props) {
           }
 
           const updateObjectMapping = Object.fromEntries(Object.entries(data.message).filter(([key]) => ValidValues[key]));
+
+          if (Object.prototype.hasOwnProperty.call(updateObjectMapping, 'vanity')) __setUser({ ...user, vanity: updateObjectMapping.vanity });
 
           /**
            * NOTE: settings value is reset / destructuerd as to update the new date

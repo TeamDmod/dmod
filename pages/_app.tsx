@@ -98,7 +98,7 @@ export default function App({ Component, pageProps }: any) {
         </span>
       )}
       <Navbar user={user} fetcher={setUfetch} />
-      <Component {...{ ...pageProps, user, ws: DmodWebSocket }} />
+      <Component {...{ ...pageProps, user, ws: DmodWebSocket, __setUser: setUser }} />
     </>
   );
 }
