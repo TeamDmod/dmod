@@ -3,9 +3,9 @@ import crypto from 'crypto-js';
 import { hasBetaAccess } from 'lib/backend-utils';
 import { DEFAULT_FLAGS } from 'lib/constants';
 import connectToDatabase from 'lib/mongodb.connection';
+import redis from 'lib/redis';
 import withSession from 'lib/session';
 import credentials from 'models/credentials';
-import StateTokenModule from 'models/stateToken';
 import tokenModule from 'models/token';
 import users from 'models/users';
 import { NextApiResponse } from 'next';
@@ -21,9 +21,9 @@ export default withSession(async (req: withSessionRequest, res: NextApiResponse)
   if (typeof req.query.state !== 'string' || typeof req.query.code !== 'string') return res.redirect('/');
   await connectToDatabase();
 
-  const stateToken = await StateTokenModule.findOne({ token: req.query.state as string });
-  if (!stateToken || stateToken.token !== req.query.state) return res.redirect('/api/auth/login');
-  await stateToken.deleteOne();
+  const stateToken = await redis.get(`STATE:TOKENS:${req.query.state}`);
+  if (!stateToken || stateToken !== req.query.state) return res.redirect('/api/auth/login');
+  await redis.del(`STATE:TOKENS:${req.query.state}`);
 
   const params = new URLSearchParams();
   params.set('grant_type', 'authorization_code');

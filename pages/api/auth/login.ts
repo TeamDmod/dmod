@@ -1,5 +1,5 @@
 import connectToDatabase from 'lib/mongodb.connection';
-import StateTokenModule from 'models/stateToken';
+import redis from 'lib/redis';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -9,7 +9,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const rand = () => Math.random().toString(36).substr(2);
     return rand() + rand();
   })();
-  await StateTokenModule.create({ token });
+  await redis.setex(`STATE:TOKENS:${token}`, 35, token);
 
   res.redirect(
     `https://discordapp.com/api/oauth2/authorize?client_id=${process.env.CLIENT_ID}&scope=${['identify', 'guilds'].join(

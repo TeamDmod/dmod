@@ -1,9 +1,9 @@
 import btoa from 'btoa';
 import { sendToWebhook } from 'lib/backend-utils';
 import connectToDatabase from 'lib/mongodb.connection';
+import redis from 'lib/redis';
 import GuildModule from 'models/guilds';
 import PreviewGuildModule from 'models/preview_guilds';
-import StateTokenModule from 'models/stateToken';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { RawGuild } from 'typings/typings';
 
@@ -16,9 +16,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (typeof req.query.state !== 'string' || typeof req.query.code !== 'string') return res.redirect('/');
   await connectToDatabase();
 
-  const stateToken = await StateTokenModule.findOne({ token: req.query.state as string });
-  if (!stateToken || stateToken.token !== req.query.state) return res.redirect('/servers');
-  await stateToken.deleteOne();
+  const stateToken = await redis.get(`STATE:TOKENS:${req.query.state}:INV`);
+  if (!stateToken || stateToken !== req.query.state) return res.redirect('/servers');
+  await redis.del(`STATE:TOKENS:${req.query.state}:INV`);
 
   const params = new URLSearchParams();
   params.set('grant_type', 'authorization_code');
