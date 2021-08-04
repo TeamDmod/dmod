@@ -6,6 +6,8 @@ export default {
       <div className='content-isahf'>
         <div
           className='main-content-sofd'
+          // @ts-expect-error
+          style={{ '--animation-hf': 'animatebgin' }}
           id='conetntogsdg'
           onClick={elm => {
             const holder = document.getElementById('conetntogsdg');
@@ -17,7 +19,8 @@ export default {
             }
           }}
         >
-          <div className='model-ujt'>
+          {/* @ts-expect-error */}
+          <div className='model-ujt' id='model-sdfh' style={{ '--animation-dp': 'animatedINmodle' }}>
             <div className='top-sfoj'>
               <h3>
                 <b>HOLD UP</b>
@@ -44,11 +47,17 @@ export default {
     );
   },
   create(link: string) {
-    document.getElementById('__jkicl').classList.add('__jksnv');
+    document.getElementById('__jkicl')?.classList?.add('__jksnv');
     ReactDOM.render(this.getElement(link), document.getElementById('__jkicl'));
   },
   destroy() {
-    document.getElementById('__jkicl').classList.remove('__jksnv');
-    ReactDOM.unmountComponentAtNode(document.getElementById('__jkicl'));
+    document.getElementById('conetntogsdg')?.style?.setProperty('--animation-hf', 'animatebgout');
+    document.getElementById('model-sdfh')?.style?.setProperty('--animation-dp', 'animatedOUTmodle');
+
+    // Give time for the out animation to play
+    setTimeout(() => {
+      document.getElementById('__jkicl')?.classList?.remove('__jksnv');
+      ReactDOM.unmountComponentAtNode(document.getElementById('__jkicl'));
+    }, 200);
   },
 };

@@ -1,4 +1,3 @@
-$bg-backdrop: #0c0c0cb0;
 $bg-bottons-section: #27282b;
 $bg-goto-button: #3c61f5;
 
@@ -18,6 +17,7 @@ $bg-goto-button: #3c61f5;
   .content-isahf {
     position: relative;
     .main-content-sofd {
+      animation: var(--animation-hf) 0.3s;
       z-index: 99999;
       left: 0;
       top: 0;
@@ -25,7 +25,7 @@ $bg-goto-button: #3c61f5;
       min-height: 100vh;
       height: 100%;
       width: 100%;
-      background: $bg-backdrop;
+      background: rgba(12, 12, 12, 0.69);
 
       display: flex;
       flex-wrap: wrap;
@@ -33,6 +33,7 @@ $bg-goto-button: #3c61f5;
       align-content: flex-start;
 
       .model-ujt {
+        animation: var(--animation-dp) 0.35s;
         left: 0;
         top: 45%;
         position: sticky;
@@ -62,5 +63,40 @@ $bg-goto-button: #3c61f5;
         }
       }
     }
+  }
+}
+
+@keyframes animatebgin {
+  100% {
+    background: rgba(12, 12, 12, 0.69);
+  }
+  0% {
+    background: rgba(12, 12, 12, 0);
+  }
+}
+
+@keyframes animatedINmodle {
+  100% {
+    transform: scale(100%);
+  }
+  0% {
+    transform: scale(10%);
+  }
+}
+
+@keyframes animatebgout {
+  100% {
+    background: rgba(12, 12, 12, 0);
+  }
+  0% {
+    background: rgba(12, 12, 12, 0.69);
+  }
+}
+@keyframes animatedOUTmodle {
+  100% {
+    transform: scale(10%);
+  }
+  0% {
+    transform: scale(100%);
   }
 }
