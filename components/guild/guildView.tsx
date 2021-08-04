@@ -165,7 +165,7 @@ export default function GuildView({ guild, isManager, Inpreview, hasApp, len }: 
         <div className='w-full'>
           <div>
             {/* eslint-disable-next-line react/no-danger */}
-            <div className='markdown-content-contaner m-3 text-lg' dangerouslySetInnerHTML={{ __html: new MarkDown(guild.description.repeat(100)).render() }} />
+            <div className='markdown-content-contaner m-3 text-lg' dangerouslySetInnerHTML={{ __html: new MarkDown(guild.description).render() }} />
           </div>
         </div>
         <div className='hidden md:block w-3/12'>

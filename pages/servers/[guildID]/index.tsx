@@ -2,6 +2,7 @@ import GuildView from 'components/guild/guildView';
 import Layout from 'components/layout';
 import crypto from 'crypto-js';
 import { genToken } from 'lib/backend-utils';
+import { resolveType } from 'lib/constants';
 import { isServer } from 'lib/isServer';
 import connectToDatabase from 'lib/mongodb.connection';
 import redis from 'lib/redis';
@@ -20,11 +21,6 @@ interface props {
   ws: DmodWebSocket;
   hasApp: boolean;
   len: number;
-}
-
-function resolveType(str: string): string {
-  if (str.startsWith('a_')) return `${str}.gif`;
-  return `${str}.png`;
 }
 
 export default function guildView({ failed, guild: guild_, hash, ws, hasApp, len }: props) {

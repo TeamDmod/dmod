@@ -310,6 +310,11 @@ export function bannerFlatten(banner: resolvedBanner): string {
   return `${banner.type}:${banner.type === 'img' ? banner.image : color}`;
 }
 
+export function resolveType(str: string): string {
+  if (str.startsWith('a_')) return `${str}.gif`;
+  return `${str}.png`;
+}
+
 export function NormilizeSearchQ(searchFlat: string): string {
   let search = `q=${searchFlat}`;
   const mu = (str: string) => str.replace(/\s+/g, '%20');
