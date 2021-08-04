@@ -1,5 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 
+import { ApplicationStatus } from './guilds';
+
 const previewGuild = new Schema({
   _id: {
     type: String,
@@ -21,6 +23,18 @@ const previewGuild = new Schema({
     type: Array,
     default: ['moderator'],
   },
+  application_status: {
+    type: Number,
+    default: 0,
+  },
+  application_status_data: {
+    type: Object,
+    default: {},
+  },
+  view: {
+    type: Boolean,
+    default: false,
+  },
   completed: {
     type: Boolean,
     default: false,
@@ -39,8 +53,11 @@ export interface PreviewGuildData {
   owner_id: string;
   name: string;
   short_description: string;
+  application_status: ApplicationStatus;
+  application_status_data: any;
   look_types: string[];
   completed: boolean;
+  view: boolean;
   tags: string[];
 }
 

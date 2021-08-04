@@ -16,9 +16,10 @@ import { RawGuild, RawGuildMember, withSessionGetServerSideProps } from 'typings
 interface props {
   guild: RawGuild & GuildData & { guild_description: string };
   uid: string;
+  len: number;
 }
 
-export default function GuildSettings({ guild, uid }: props) {
+export default function GuildSettings({ guild, uid, len }: props) {
   const [previewOpen, setPreviewOpen] = useState(false);
 
   useEffect(() => {
@@ -114,7 +115,7 @@ export default function GuildSettings({ guild, uid }: props) {
               >
                 <div className='px-10 sm:px-16 pt-5 rounded h-full flex'>
                   <div className='p-2 bg-dorpdown w-full h-full overflow-y-auto'>
-                    <GuildView guild={{ ...guild, ...values }} isManager Inpreview />
+                    <GuildView guild={{ ...guild, ...values }} isManager hasApp={false} len={len} Inpreview />
                   </div>
                   <div className='relative'>
                     <div className='ml-1 focus:outline-none absolute z-0 flex flex-col text-center space-y-1'>
@@ -340,6 +341,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
       props: {
         uid: session.id,
         // userProfile: objectUser,
+        len: guildData.applyed.length,
         guild: {
           ...guild,
           guild_description: guild.description,

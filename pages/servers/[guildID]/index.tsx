@@ -18,6 +18,8 @@ interface props {
   hash: string;
   guild: RawGuild & GuildData & { guild_description: string };
   ws: DmodWebSocket;
+  hasApp: boolean;
+  len: number;
 }
 
 function resolveType(str: string): string {
@@ -25,7 +27,7 @@ function resolveType(str: string): string {
   return `${str}.png`;
 }
 
-export default function guildView({ failed, guild: guild_, hash, ws }: props) {
+export default function guildView({ failed, guild: guild_, hash, ws, hasApp, len }: props) {
   const [guild, setGuild] = useState(guild_);
   const [isManager, setIsManager] = useState(false);
 
@@ -80,7 +82,7 @@ export default function guildView({ failed, guild: guild_, hash, ws }: props) {
       description={`${guild.name} - Server information`}
       image={guild.banner ? `https://cdn.discordapp.com/banners/${guild.id}/${resolveType(guild.banner)}` : icon}
     >
-      <GuildView guild={guild} isManager={isManager} Inpreview={false} />
+      <GuildView guild={guild} isManager={isManager} hasApp={hasApp} len={len} Inpreview={false} />
     </Layout>
   );
 }
@@ -92,7 +94,7 @@ const json = (res: Response) => res.json();
 export const getServerSideProps: GetServerSideProps = withSession(
   async (context: withSessionGetServerSideProps): Promise<GetServerSidePropsResult<any>> => {
     await connectToDatabase();
-    // const session = context.req.session.get('user');
+    const session = context.req.session.get('user');
 
     const guildData = await guilds.findOne({ _id: context.query.guildID as string });
     if (!guildData) return { notFound: true };
@@ -134,7 +136,8 @@ export const getServerSideProps: GetServerSideProps = withSession(
       props: {
         failed: false,
         hash: tokenData.tokenHash,
-        hasApp: false,
+        hasApp: session?.id ? guildData.applyed.includes(session.id) : false,
+        len: guildData.application_status_data ? guildData.applyed.length : 0,
         guild: {
           ...guild,
           guild_description: guild.description,

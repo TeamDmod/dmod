@@ -1,4 +1,4 @@
-import { clsx, PREMIUM_TIER, VERIFICATION_LEVEL } from 'lib/constants';
+import { PREMIUM_TIER, VERIFICATION_LEVEL } from 'lib/constants';
 import { GuildData } from 'models/guilds';
 import router from 'next/router';
 import React from 'react';
@@ -6,9 +6,10 @@ import { RawGuild } from 'typings/typings';
 
 interface props {
   guild: RawGuild & GuildData & { guild_description: string };
-  sticky?: boolean;
+  shadow?: boolean;
 }
-export default function GuildStatus({ guild, sticky }: props) {
+
+export default function GuildStatus({ guild, shadow }: props) {
   function toLinkTags(tags: string[]) {
     const children: React.ReactNode[] = [];
 
@@ -33,22 +34,20 @@ export default function GuildStatus({ guild, sticky }: props) {
     if (caps.length === 1) return `${caps[0]}s`;
     if (caps.length === 2)
       return caps.reduce((past, cerr, cerrIndex) => {
-        // eslint-disable-next-line no-param-reassign
-        return (past += `${cerr}s`.slice(cerrIndex === 0 ? 2 : 0));
+        return past.concat(`${cerr}s`.slice(cerrIndex === 0 ? 2 : 0));
       }, '');
 
     return caps.reduce((past, cerr, cerrIndex) => {
-      // eslint-disable-next-line no-param-reassign
-      return cerrIndex !== caps.length - 1 ? (past += `, ${cerr}s`.slice(cerrIndex === 0 ? 2 : 0)) : (past += `, and ${cerr}s`);
+      return cerrIndex !== caps.length - 1 ? past.concat(`, ${cerr}s`.slice(cerrIndex === 0 ? 2 : 0)) : past.concat(`, and ${cerr}s`);
     }, '');
   }
 
   return (
     <div
-      className={clsx(sticky ? 'sticky' : '', 'top-1 p-3 mt-3 mr-2 rounded space-y-3')}
+      className='p-3 mt-3 mr-2 rounded space-y-3'
       style={{
         background: '#1A274D',
-        boxShadow: sticky ? '-7px 0px 8px rgba(0, 0, 0, 0.25)' : '',
+        boxShadow: shadow ? '-7px 0px 8px rgba(0, 0, 0, 0.25)' : '',
       }}
     >
       <span className='block text-center underline text-xl font-bold'>{guild.name}</span>

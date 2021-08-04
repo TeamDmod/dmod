@@ -45,6 +45,14 @@ const Guilds = new Schema({
     type: String,
     required: true,
   },
+  application_status: {
+    type: Number,
+    default: 0,
+  },
+  application_status_data: {
+    type: Object,
+    default: {},
+  },
   sections: [
     {
       postition: {
@@ -126,6 +134,19 @@ export enum FieldTypes {
   CHECKS = 3,
 }
 
+export enum ApplicationStatus {
+  /** Applications are closed */
+  CLOSED = 0,
+  /** Applications are open */
+  OPEN = 1,
+  /** Applications are full */
+  FULL = 2,
+  /** Applications are opening at some time */
+  OPENING = 3,
+  /** Applications are open with a limit */
+  LIMIT = 4,
+}
+
 export interface GuildData {
   _id: string;
   /**
@@ -145,6 +166,14 @@ export interface GuildData {
    * User string id array
    */
   applyed: string[];
+  /**
+   * Data on the application status
+   */
+  application_status_data: any;
+  /**
+   * Status of the application
+   */
+  application_status: ApplicationStatus;
   /**
    * Array of available position this server is looking for
    */
