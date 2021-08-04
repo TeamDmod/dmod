@@ -48,7 +48,15 @@ export default withSession(async (req: withSessionRequest, res: NextApiResponse)
   }).then(json);
 
   const access = await hasBetaAccess(user.id);
-  if (!access) return res.redirect('/?_access=0');
+  const rejectScript = `
+  <script>
+  localStorage.setItem('reject', "true");
+  window.close();
+  </script>
+  `;
+
+  // if (!access) return res.redirect('/?_access=0');
+  if (!access) return res.send(rejectScript);
 
   req.session.set('user', { id: user.id });
   await req.session.save();

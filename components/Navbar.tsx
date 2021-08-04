@@ -39,7 +39,12 @@ function Navbar({ user, fetcher }: { user: sessionFetchedUser; fetcher: any }) {
     const close_inter = setInterval(async () => {
       if (win.closed) {
         setWinlogOpen(false);
-        fetcher(true);
+        if (!localStorage.getItem('reject')) {
+          fetcher(true);
+        } else {
+          localStorage.removeItem('reject');
+          router.push({ query: { _access: 0 } });
+        }
         clearInterval(close_inter);
       }
     }, 1000);
