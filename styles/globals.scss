@@ -74,10 +74,6 @@ html a {
   }
 }
 
-footer ul span {
-  color: #9ca3af;
-}
-
 // Access error animations
 
 .model-fhi {
@@ -168,4 +164,100 @@ $blue: rgba(15, 89, 226, 0.856);
 .loader,
 .loader * {
   will-change: transform;
+}
+
+footer {
+  display: flex;
+
+  #logo-copyright {
+    width: 400px;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    margin: 1rem;
+
+    img {
+      margin: auto;
+      cursor: pointer;
+    }
+  }
+
+  #divider {
+    width: 0.6rem;
+    border-radius: 0.4rem;
+    margin: 2rem;
+    background: grey;
+  }
+
+  li {
+    list-style: none;
+  }
+
+  a:is(:hover, :active, :focus) {
+    text-decoration: underline;
+  }
+
+  .links {
+    max-width: calc(100% - 2rem);
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    margin: 2rem 1rem;
+  }
+
+  h1 {
+    max-width: 18ch;
+  }
+
+  h2 {
+    font-size: 1.35rem;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  footer {
+    flex-direction: column-reverse;
+
+    .links {
+      display: grid;
+      column-count: 2;
+      row-gap: 2rem;
+    }
+
+    #divider {
+      height: 0.4rem;
+      width: calc(100% - 4rem);
+      border-radius: 0.4rem;
+      margin: 2rem;
+      background: grey;
+    }
+
+    h1 {
+      column-span: all;
+      grid-column: span 2;
+      margin: auto;
+      width: 100%;
+    }
+
+    #logo-copyright {
+      max-width: calc(100% - 2rem);
+      width: 100%;
+      display: grid;
+    }
+  }
+}
+
+.login {
+  background-color: #4f1cbb;
+  border-radius: 1rem;
+  place-content: center;
+  text-align: center;
+  padding: 0.6rem 1.2rem;
+  font-weight: bold;
+}
+
+.bio {
+  background-color: #0000002c;
+  border-radius: 1rem;
+  padding: 0.6rem;
 }

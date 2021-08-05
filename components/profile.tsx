@@ -37,19 +37,26 @@ export default function Profile({ profile }: props) {
         )}
         {bannerData.type === 'unknown' && (
           <div className='bg-red-600 h-full w-full rounded-b flex flex-wrap content-center'>
-            <h1 className='text-center w-full text-xl animate-floting'>ERROR! Unknow banner type!</h1>
+            <h1 className='text-center w-full text-xl animate-floting'>
+              ERROR! Unknow banner type!
+            </h1>
           </div>
         )}
       </div>
       <div className='flex flex-wrap md:flex-row flex-col -my-14 content-center ml-0 md:ml-9 md:space-x-3 space-y-3 lg:space-y-0'>
         <img
-          className={clsx('ml-3 sm:ml-0 rounded-full h-32 w-32 select-none border-3', profile.active ? 'border-green-600' : 'border-gray-500')}
+          className={clsx(
+            'ml-3 sm:ml-0 rounded-full h-32 w-32 select-none border-3',
+            profile.active ? 'border-green-600' : 'border-gray-500'
+          )}
           draggable={false}
           src={profile.avatarURL}
           alt='User avatar'
           onError={({ currentTarget }) => {
             // eslint-disable-next-line no-param-reassign
-            currentTarget.src = `https://cdn.discordapp.com/embed/avatars/${+profile.discriminator % 5}.png`;
+            currentTarget.src = `https://cdn.discordapp.com/embed/avatars/${
+              +profile.discriminator % 5
+            }.png`;
           }}
         />
         <span className='flex flex-wrap content-center text-xl'>
@@ -69,9 +76,13 @@ export default function Profile({ profile }: props) {
           )}
         </div>
       </div>{' '}
-      <div className='mt-16 mx-3'>
+      <div className='mt-16 mx-3 bio'>
         {/* eslint-disable-next-line react/no-danger */}
-        <div dangerouslySetInnerHTML={{ __html: new MarkDown(profile.description).render() }} />
+        <div
+          dangerouslySetInnerHTML={{
+            __html: new MarkDown(profile.description).render(),
+          }}
+        />
       </div>
     </div>
   );

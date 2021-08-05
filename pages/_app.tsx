@@ -18,7 +18,9 @@ Router.events.on('routeChangeComplete', () => NProgress.done());
 Router.events.on('routeChangeError', () => NProgress.done());
 
 export default function App({ Component, pageProps }: any) {
-  const [user, setUser] = useState<sessionFetchedUser>({ awaiting: true } as any);
+  const [user, setUser] = useState<sessionFetchedUser>({
+    awaiting: true,
+  } as any);
 
   useEffect(() => {
     user &&
