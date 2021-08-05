@@ -56,7 +56,7 @@ export class DmodWebSocket extends EventEmitter {
 
   reconnect(credentals: credentals) {
     if (this.trys < 5) {
-      this.connect(credentals);
+      setTimeout(() => this.connect(credentals), 2000);
     }
   }
 
