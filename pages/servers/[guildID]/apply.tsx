@@ -5,7 +5,6 @@ import redis from 'lib/redis';
 import withSession from 'lib/session';
 import guilds, { GuildData } from 'models/guilds';
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
-import { useRouter } from 'next/dist/client/router';
 import Link from 'next/link';
 import { RawGuild, withSessionGetServerSideProps } from 'typings/typings';
 
@@ -13,22 +12,36 @@ interface props {
   failed: boolean;
   guild: RawGuild & GuildData & { guild_description: string };
   // ws: DmodWebSocket;
-  hasApp: boolean;
+  // hasApp: boolean;
+  notLogedIn: boolean;
 }
 
-export default function Application({ guild, failed, hasApp }: props) {
-  const router = useRouter();
-  if (hasApp) return router.push(`/server/${guild.id}`);
+export default function Application({ guild, failed, notLogedIn }: props) {
+  // const [cantApply, setCantApply] = useState(false);
 
   if (failed) {
     return (
       <Layout>
-        <div>Something went wrong loading data! try again in a bit.</div>
+        <div className='text-center'>Something went wrong loading data! try again in a bit. 😔</div>
       </Layout>
     );
   }
 
   const icon = guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${resolveType(guild.icon)}` : '/icon.png';
+
+  if (notLogedIn) {
+    return (
+      <Layout
+        title={`${guild.name} - Application form`}
+        description={`${guild.name} Application form`}
+        image={guild.banner ? `https://cdn.discordapp.com/banners/${guild.id}/${resolveType(guild.banner)}` : icon}
+      >
+        <h1 className='text-center text-red-600 underline'>
+          <b>Unauthorized. Required login.</b>
+        </h1>
+      </Layout>
+    );
+  }
 
   return (
     <Layout
@@ -80,15 +93,25 @@ export const getServerSideProps: GetServerSideProps = withSession(
       guild = JSON.parse(guildCache);
     }
 
+    const guildObj = {
+      ...guild,
+      guild_description: guild.description,
+      ...Object.fromEntries(Object.entries(guildData.toObject()).filter(d => d[0] !== 'applyed')),
+    };
+
+    if (!session?.id)
+      return {
+        props: {
+          notLogedIn: true,
+          guild: guildObj,
+        },
+      };
+
     return {
       props: {
         failed: false,
-        hasApp: session?.id ? guildData.applyed.includes(session.id) : false,
-        guild: {
-          ...guild,
-          guild_description: guild.description,
-          ...Object.fromEntries(Object.entries(guildData.toObject()).filter(d => d[0] !== 'applyed')),
-        },
+        hasApp: guildData.applyed.includes(session.id),
+        guild: guildObj,
       },
     };
   }
