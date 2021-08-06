@@ -294,7 +294,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
       // @ts-expect-error
       if (guild.code || guild.message) return { notFound: true };
 
-      await redis.setex(`guild:${context.query.guildID}`, TIME, JSON.stringify(guild));
+      await redis.setex(`guild:${context.query.guildID}`, TIME, JSON.stringify(Object.fromEntries(Object.entries(guild).filter(([prop]) => prop !== 'roles'))));
     } else {
       guild = JSON.parse(guildCache);
     }

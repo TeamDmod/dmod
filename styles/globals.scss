@@ -77,6 +77,27 @@ html a {
 footer ul span {
   color: #9ca3af;
 }
+// guild card animation
+
+.gdc-sihf {
+  animation: fadeUpGCA var(--duration) ease-in-out;
+  transform: translateY(0);
+  opacity: 1;
+}
+
+@keyframes fadeUpGCA {
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  60% {
+    transform: translateY(-2px);
+  }
+  0% {
+    transform: translateY(40%);
+    opacity: 0.02;
+  }
+}
 
 // animated badge name pop up
 .badges-oujrf {
@@ -185,4 +206,10 @@ $blue: rgba(15, 89, 226, 0.856);
 .loader,
 .loader * {
   will-change: transform;
+}
+
+.bio {
+  background-color: #0000002c;
+  border-radius: 1rem;
+  padding: 0.6rem;
 }

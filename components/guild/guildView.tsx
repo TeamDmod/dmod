@@ -85,7 +85,9 @@ export default function GuildView({ guild, isManager, Inpreview, hasApp, len }: 
         <div
           className='guild-banner w-full h-52 bg-no-repeat'
           style={{
-            backgroundImage: guild.banner ? `url(https://cdn.discordapp.com/banners/${guild.id}/${resolveType(guild.banner)})` : 'url(https://wallpaper.dog/large/10775709.jpg)',
+            backgroundImage: guild.banner
+              ? `url(https://cdn.discordapp.com/banners/${guild.id}/${resolveType(guild.banner)})`
+              : 'url(https://cdn.discordapp.com/banners/791278367960858635/c149d4fa025bcfdd89c38b9fdfc34724.png?size=4096)',
             backgroundSize: '100%',
             minWidth: '600px',
             backgroundPosition: 'center center',

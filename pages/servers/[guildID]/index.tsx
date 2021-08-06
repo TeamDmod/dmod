@@ -104,13 +104,16 @@ export const getServerSideProps: GetServerSideProps = withSession(
       // @ts-expect-error
       if (guild.code || guild.message) return { props: { failed: true } };
 
-      await redis.setex(`guild:${context.query.guildID}`, TIME, JSON.stringify(guild));
+      await redis.setex(`guild:${context.query.guildID}`, TIME, JSON.stringify(Object.fromEntries(Object.entries(guild).filter(([prop]) => prop !== 'roles'))));
 
       if (guild.banner)
         await redis.set(
           `guild:${context.query.guildID}:banner`,
           `https://cdn.discordapp.com/banners/${guild.id}/${guild.banner}${guild.banner.startsWith('a_') ? '.gif' : '.png'}`
         );
+
+      if (guild.icon)
+        await redis.set(`guild:${context.query.guildID}:icon`, `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}${guild.icon.startsWith('a_') ? '.gif' : '.png'}`);
     } else {
       guild = JSON.parse(guildCache);
     }

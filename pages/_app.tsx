@@ -11,7 +11,7 @@ import Navbar from 'components/Navbar';
 import { isServer } from 'lib/isServer';
 import Router from 'next/router';
 import NProgress from 'nprogress';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { sessionFetchedUser } from 'typings/typings';
 import DmodWebSocket from 'websocket';
 
@@ -86,8 +86,6 @@ export default function App({ Component, pageProps }: any) {
       });
     }
   }, [user]);
-
-  // if (isServer) return null;
 
   return (
     <>

@@ -14,7 +14,7 @@ function XmarkerIcon() {
   );
 }
 
-function BergerMenuIcon() {
+function BurgerMenuIcon() {
   return (
     <svg width='26' height='15' viewBox='0 0 26 15' fill='none' xmlns='http://www.w3.org/2000/svg'>
       <rect width='26' height='3' rx='1.5' fill='#F9F9F9' />
@@ -70,7 +70,7 @@ function Navbar({ user, fetcher }: { user: sessionFetchedUser; fetcher: any }) {
       <div className='sm:hidden flex w-full justify-between'>
         <div className='flex flex-wrap content-center'>
           <div className='cursor-pointer' onClick={() => setOpen(!open)}>
-            <BergerMenuIcon />
+            <BurgerMenuIcon />
           </div>
         </div>
 
@@ -95,11 +95,10 @@ function Navbar({ user, fetcher }: { user: sessionFetchedUser; fetcher: any }) {
                 </div>
               </div>
 
-              <div className='flex flex-row ml-5 space-x-4 text-xl'>
-                {navbarLinks.map((link, i) => {
+              <div className='flex flex-col text-xl text-center'>
+                {navbarLinks.map(link => {
                   return (
-                    // eslint-disable-next-line react/no-array-index-key
-                    <Link key={i} href={link.link}>
+                    <Link key={link.name} href={link.link}>
                       {link.name}
                     </Link>
                   );
@@ -119,10 +118,9 @@ function Navbar({ user, fetcher }: { user: sessionFetchedUser; fetcher: any }) {
           </Link>
 
           <div className='flex flex-row w-full space-x-3 '>
-            {navbarLinks.map((link, i) => {
+            {navbarLinks.map(link => {
               return (
-                // eslint-disable-next-line react/no-array-index-key
-                <span key={i} className='flex flex-wrap content-center'>
+                <span key={link.name} className='flex flex-wrap content-center'>
                   <Link href={link.link}>{link.name}</Link>
                 </span>
               );

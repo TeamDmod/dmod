@@ -83,12 +83,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const Inew = await GuildModule.findOneAndUpdate({ _id: req.query.guildID }, body, { new: true });
     const { hasOwnProperty } = Object.prototype;
 
-    if (hasOwnProperty.call(body, 'short_description') || hasOwnProperty.call(body, 'completed')) {
+    if (hasOwnProperty.call(body, 'short_description') || hasOwnProperty.call(body, 'completed') || hasOwnProperty.call(body, 'view')) {
       await PreviewGuildModule.findOneAndUpdate(
         { _id: Inew._id },
         {
           ...(canUpdate.includes('completed') ? { completed: true } : {}),
           ...(Object.keys(body).includes('short_description') ? { short_description: body.short_description as string } : {}),
+          ...(Object.keys(body).includes('view') ? { view: body.view as boolean } : {}),
         }
       );
     }

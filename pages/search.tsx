@@ -1,9 +1,10 @@
 import Footer from 'components/footer';
+import GuildPreviewCard from 'components/guildPreviewCard';
 import Layout from 'components/layout';
 import { PreviewGuildData } from 'models/preview_guilds';
 import { userData } from 'models/users';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function Search() {
   const router = useRouter();
@@ -134,13 +135,14 @@ export default function Search() {
             )}
 
             <div className='w-full flex flex-wrap space-y-2'>
-              {guilds.map(guild => {
-                return (
-                  <div key={guild._id} className='bg-listingcard p-2 rounded cursor-pointer ml-3' onClick={() => router.push(`/servers/${guild._id}`)}>
-                    <h1 className='text-xl'>{guild.name}</h1>
-                    <span>{guild.short_description}</span>
-                  </div>
-                );
+              {guilds.map((guild, i) => {
+                const time = () => {
+                  const t = 0.2 * i + 1;
+                  if (t > 6) return Number(`${i / 4}`);
+                  return t;
+                };
+
+                return <GuildPreviewCard duration={time()} className='gdc-sihf' key={guild._id} guild={guild} />;
               })}
             </div>
           </div>

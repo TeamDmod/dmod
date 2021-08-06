@@ -47,7 +47,7 @@ export default withSession(async (req: withSessionRequest, res: NextApiResponse)
     headers: { Authorization: `Bearer ${userAccessData.access_token}` },
   }).then(json);
 
-  const access = await hasBetaAccess(user.id);
+  const access = process.env.NODE_ENV === 'production' ? await hasBetaAccess(user.id) : true;
   const rejectScript = `
   <script>
   localStorage.setItem('reject', "true");
@@ -55,7 +55,6 @@ export default withSession(async (req: withSessionRequest, res: NextApiResponse)
   </script>
   `;
 
-  // if (!access) return res.redirect('/?_access=0');
   if (!access) return res.send(rejectScript);
 
   req.session.set('user', { id: user.id });

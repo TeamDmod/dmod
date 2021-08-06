@@ -17,9 +17,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const guild = await GuildModule.findOne({ _id: req.query.id as string });
     if (guild && guild.completed) {
       const banner = await redis.get(`guild:${req.query.id}:banner`);
+      const icon = await redis.get(`guild:${req.query.id}:icon`);
       return res.json({
         ...Object.fromEntries(Object.entries(guild.toObject()).filter(d => !['applyed', 'sections', '_access_key'].includes(d[0]))),
         banner,
+        icon,
       });
     }
     return res.json({ code: 404, message: 'Guild not found' });
@@ -54,6 +56,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       {
         ...current.toObject(),
         banner: await redis.get(`guild:${current._id}:banner`),
+        icon: await redis.get(`guild:${current._id}:icon`),
       },
     ];
   }, ([] as unknown) as Promise<PreviewGuildData[]>);

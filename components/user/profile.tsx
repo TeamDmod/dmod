@@ -97,7 +97,7 @@ export default function Profile({ profile }: props) {
           </div>
         </div>
       </div>{' '}
-      <div className='mt-16 mx-3'>
+      <div className='mt-16 mx-3 bio'>
         {/* eslint-disable-next-line react/no-danger */}
         <div className='markdown-content-contaner' dangerouslySetInnerHTML={{ __html: new MarkDown(profile.description).render() }} />
       </div>
