@@ -51,3 +51,27 @@ h6 {
     @apply text-center;
   }
 }
+
+.footer_jfk .prl a {
+  color: #8667ff;
+}
+
+.footer_jfk .divider-sf {
+  border-color: rgba(134, 103, 255, 0.501961);
+}
+
+.footer_jfk .topic-main-sdf {
+  color: #8667ff;
+}
+
+@media (max-width: 922px) {
+  .footer-contaner-sdf {
+    @apply space-x-10;
+  }
+}
+
+@media (max-width: 370px) {
+  .footer-contaner-sdf {
+    @apply space-x-0;
+  }
+}

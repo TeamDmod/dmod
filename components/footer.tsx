@@ -1,40 +1,130 @@
 import { useRouter } from 'next/dist/client/router';
-import Image from 'next/image';
 import Link from 'next/link';
+
+function DmodSVGLogo() {
+  return (
+    <svg width='90' height='90' viewBox='0 0 644 498' fill='none' xmlns='http://www.w3.org/2000/svg'>
+      <path
+        d='M112.977 497.17C98.5805 497.508 86.635 486.115 86.2964 471.723C85.9578 457.331 97.355 445.39 111.752 445.051C156.363 443.912 189.305 440.046 217.55 430.388C244.804 421.068 268.628 405.761 295.862 381.482C306.644 371.886 323.168 372.849 332.767 383.628C342.367 394.406 341.403 410.924 330.621 420.52C298.132 449.485 268.89 468.029 234.317 479.851C200.741 491.335 163.101 495.897 112.977 497.17Z'
+        fill='white'
+      />
+      <path
+        d='M548.703 471.438C548.589 485.83 536.829 497.404 522.432 497.294C508.036 497.18 496.457 485.42 496.567 471.033L498.384 285.946L415.446 396.852C406.81 408.422 390.425 410.801 378.851 402.167C375.771 399.87 373.343 397.024 371.603 393.868C358.842 374.333 228.923 175.979 203.858 159.967C202.89 159.347 201.974 158.68 201.116 157.96C190.277 149.05 159.986 148.478 138.398 149.346V298.121C138.398 312.57 126.681 324.283 112.227 324.283C97.7733 324.283 86.0566 312.57 86.0566 298.121V125.01H86.1139C86.0948 111.819 96.0518 100.479 109.466 99.0532C109.724 99.0246 198.336 89.3712 233.562 117.197C263.238 139.106 354.569 273.809 395.794 335.815L504.283 190.738L504.345 190.786C509.142 184.374 516.82 180.246 525.441 180.313C539.838 180.427 551.417 192.187 551.307 206.574L548.708 471.433L548.703 471.438Z'
+        fill='white'
+      />
+      <path
+        d='M590.87 26.2759C590.87 11.827 602.587 0.114258 617.041 0.114258C631.495 0.114258 643.212 11.827 643.212 26.2759V471.172C643.212 485.621 631.495 497.334 617.041 497.334C602.587 497.334 590.87 485.621 590.87 471.172V26.2759Z'
+        fill='white'
+      />
+      <path
+        d='M52.7097 471.116C52.7097 485.565 40.9928 497.277 26.5388 497.277C12.0848 497.277 0.368164 485.565 0.368164 471.116V40.9353C0.368164 26.4864 12.0848 14.7737 26.5388 14.7737H184.989C205.661 14.7737 229.343 20.4417 250.912 28.8556C274.436 38.0322 296.305 50.9605 309.581 63.6791C332.967 86.0843 370.783 140.057 394.607 175.438L503.491 11.8133C511.45 -0.209225 527.654 -3.50327 539.681 4.45297C551.708 12.4092 555.003 28.6077 547.039 40.6303L416.625 236.619C414.645 239.765 411.961 242.535 408.627 244.675C396.486 252.46 380.335 248.937 372.543 236.805C372.347 236.504 304.993 131.562 273.391 101.286C264.941 93.192 249.462 84.3538 231.894 77.5036C215.962 71.2873 199.019 67.1018 184.984 67.1018H52.7048V471.121L52.7097 471.116Z'
+        fill='white'
+      />
+    </svg>
+  );
+}
+
+function MiniArrow() {
+  return (
+    <svg width='10' height='10' viewBox='0 0 58 57' fill='none' xmlns='http://www.w3.org/2000/svg'>
+      <path
+        d='M8.78462 55.4039C6.94867 57.2392 3.96823 57.2392 2.1275 55.4039C0.291547 53.5686 0.291547 50.5844 2.1275 48.7491L41.1547 9.73538H5.4563C2.85734 9.73538 0.749512 7.62834 0.749512 5.03029C0.749512 2.43224 2.85734 0.325195 5.4563 0.325195H52.5186H52.6331H52.6429L52.7477 0.329967H52.7668L52.8622 0.33951L52.9763 0.349054H53.0052L53.0862 0.358597L53.1198 0.363369L53.1957 0.372913L53.239 0.377626L53.3102 0.391941L53.4201 0.411028L53.4676 0.420572L53.5296 0.434887L53.6395 0.458687L53.6916 0.473002L53.7489 0.487318L53.8062 0.501574L53.8588 0.520661L53.9161 0.539748L53.9683 0.558777L54.0302 0.577864L54.0782 0.596951L54.1401 0.615979L54.1876 0.635066L54.25 0.658925L54.2975 0.677954L54.3595 0.701812L54.4023 0.720899L54.4596 0.749471L54.5071 0.768558L54.5644 0.79713L54.6077 0.820989L54.6645 0.849619L54.7125 0.87342L54.7646 0.90205L54.8126 0.925851L54.8647 0.954481L54.9127 0.983053L54.9602 1.01168L55.0128 1.04026L55.0557 1.06889L55.1083 1.10223L55.1465 1.13086L55.2415 1.19761L55.3039 1.24049L55.3369 1.26435L55.3989 1.31201L55.4278 1.33581L55.5991 1.47885L55.6709 1.54082L55.6806 1.55036L55.7617 1.62188L55.7663 1.62665L55.8474 1.70766L55.9284 1.78872L55.933 1.79349L56.0048 1.87449L56.0141 1.88404L56.076 1.95555L56.2194 2.12716L56.2432 2.15579L56.2907 2.21777L56.3144 2.25111L56.3578 2.31308L56.4243 2.4084L56.4528 2.44658L56.4863 2.49901L56.5152 2.54189L56.5436 2.59432L56.572 2.64198L56.6008 2.6897L56.6293 2.74213L56.653 2.78979L56.6819 2.84222L56.7056 2.88988L56.7345 2.94708L56.7583 2.99003L56.7867 3.04723L56.8058 3.09489L56.8346 3.15209L56.8537 3.19498L56.8775 3.25695L56.8966 3.30461L56.9203 3.36659L56.9394 3.4143L56.9585 3.47622L56.9776 3.52394L56.9967 3.58591L57.0158 3.63834L57.0349 3.69554L57.054 3.74798L57.0679 3.80518L57.0824 3.86238L57.0968 3.91481L57.1206 4.02444L57.135 4.08642L57.1443 4.13408L57.1634 4.24377L57.1778 4.31523L57.1825 4.35817L57.1923 4.43441L57.1969 4.46781L57.2063 4.54881V4.57744L57.216 4.69185L57.2253 4.78716V4.80625L57.2305 4.91111V4.92066V5.03506V52.0813C57.2305 54.6793 55.1226 56.7864 52.5237 56.7864C49.9247 56.7864 47.8169 54.6793 47.8169 52.0813V16.395L8.78975 55.4087L8.78462 55.4039Z'
+        fill='#8667FF'
+        fillOpacity='0.501961'
+      />
+    </svg>
+  );
+}
+
+function Links({ links }: { links: { href: string; name: string; target?: string }[] }) {
+  const router = useRouter();
+
+  return (
+    <div className='flex flex-wrap flex-col mt-1'>
+      {links.map(({ href, name, target }) => {
+        return (
+          <span key={name + href} className='flex space-x-2 group'>
+            {target ? (
+              <a href={href} target={target}>
+                {name}
+              </a>
+            ) : (
+              <Link href={href}>{name}</Link>
+            )}
+
+            <span
+              className='flex flex-wrap content-center group-hover:block cursor-pointer'
+              onClick={() => {
+                if (target) {
+                  window.open(href);
+                } else {
+                  router.push(href);
+                }
+              }}
+            >
+              <MiniArrow />
+            </span>
+          </span>
+        );
+      })}
+    </div>
+  );
+}
 
 export default function Footer() {
   const router = useRouter();
 
   return (
-    <footer className='bg-footer px-6 pt-1 pb-2 mt-2'>
-      <div className='flex flex-wrap justify-between'>
-        <div className='footer-left flex flex-wrap items-center justify-center'>
-          <div style={{ height: '50px', marginRight: '3px' }} className='cursor-pointer' onClick={() => router.push('/')}>
-            <Image src='/logo.png' width='50px' height='50px' />
-          </div>
-          <span style={{ color: '#A7A7A7' }} className='font-semibold'>
-            Discord Moderation at your fingertips!
+    <footer className='footer_jfk bg-footer sm:px-24 px-10'>
+      <div className='flex flex-wrap justify-center lg:space-x-36 md:space-x-28 space-x-10'>
+        <div>
+          <span className='cursor-pointer' onClick={() => router.push('/')}>
+            <DmodSVGLogo />
           </span>
-          <div className='ml-4 flex space-x-2'>
-            <p className='underline'>
-              <Link href='/terms-of-service'>Terms of Service</Link>
-            </p>
-            <p className='underline'>
-              <Link href='/privacy-policy'>Privacy Policy</Link>
-            </p>
+          <div className='prl space-x-4'>
+            <Link href='/terms-of-service'>Terms</Link>
+            <Link href='/privacy-policy'>Policy</Link>
           </div>
         </div>
 
-        <div className='footer-right text-base'>
-          <span className='fr-rights flex flex-col items-end'>
-            <p>Copyright (C) {new Date().getFullYear()} dmod.gg.</p>
-            <p>All rights reserved.</p>
-          </span>
-          <span className='fr-note'>
-            <p>dmod.gg is not affiliated with or in partnership with Discord Inc.</p>
-          </span>
+        <div className='footer-contaner-sdf flex flex-wrap sm:justify-evenly content-center lg:space-x-36 md:space-x-28 space-x-6'>
+          <div>
+            <h2 className='topic-main-sdf font-bold'>Company</h2>
+            <Links
+              links={[
+                { href: '/about', name: 'About' },
+                { href: '/', name: 'Newsroom' },
+                { href: '/team', name: 'Team' },
+              ]}
+            />
+          </div>
+
+          <div>
+            <h2 className='topic-main-sdf font-bold'>Connect</h2>
+            <Links
+              links={[
+                { name: 'Twitter', href: 'https://twitter.com/dmodgg', target: 'twitter' },
+                { name: 'Discord', href: '/discord', target: '_blank' },
+                { name: 'Reddit', href: 'https://www.reddit.com/r/DiscordModeration', target: 'reddit' },
+              ]}
+            />
+          </div>
+
+          <div>
+            <h2 className='topic-main-sdf font-bold'>Projects</h2>
+            <Links
+              links={[
+                { name: 'Github', href: 'https://github.com/dmod-gg', target: 'github' },
+                { name: 'Dispatch', href: '/' },
+                { name: 'Dmod Discord Bot', href: '/' },
+              ]}
+            />
+          </div>
         </div>
       </div>
+
+      <hr className='divider-sf my-5' />
+      <div className='text-center mb-5'>©Copyright by dmod.gg {new Date().getFullYear()} | All rights reserved | Not Affiliated with Discord</div>
     </footer>
   );
 }
