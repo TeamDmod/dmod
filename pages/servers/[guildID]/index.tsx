@@ -53,17 +53,24 @@ export default function guildView({ failed, guild: guild_, hash, ws, hasApp, len
       if (data.guild_id !== guild.id) return;
       setGuild({ ...guild, member_count: data.member_count });
     }
+    function Privilege(data) {
+      if (data.guild_id !== guild.id) return;
+      setIsManager((data.permissions & 0x20) === 0x20);
+    }
+
     console.log('guild connecting...');
 
     if (!isServer) {
       ws.requestConnect(guild.id, hash);
       ws.on('CONNECT_GUILD', GuildConnectFn);
       ws.on('GUILD_MEMBER_COUNT_CHANGE', MemberCount);
+      ws.on('GUILD_PRIVILEGE_UPDATE', Privilege);
     }
 
     return () => {
       ws.removeListener('GUILD_MEMBER_COUNT_CHANGE', MemberCount);
       ws.removeListener('CONNECT_GUILD', GuildConnectFn);
+      ws.removeListener('GUILD_PRIVILEGE_UPDATE', Privilege);
       if (!isServer) {
         ws.requestDisconnect(guild.id);
       }
@@ -104,7 +111,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
       // @ts-expect-error
       if (guild.code || guild.message) return { props: { failed: true } };
 
-      await redis.setex(`guild:${context.query.guildID}`, TIME, JSON.stringify(Object.fromEntries(Object.entries(guild).filter(([prop]) => prop !== 'roles'))));
+      await redis.setex(`guild:${context.query.guildID}`, TIME, JSON.stringify(guild));
 
       if (guild.banner)
         await redis.set(
@@ -138,7 +145,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
         hasApp: session?.id ? guildData.applyed.includes(session.id) : false,
         len: guildData.application_status_data ? guildData.applyed.length : 0,
         guild: {
-          ...guild,
+          ...Object.fromEntries(Object.entries(guild).filter(([prop]) => prop !== 'roles')),
           guild_description: guild.description,
           ...Object.fromEntries(Object.entries(guildData.toObject()).filter(d => d[0] !== 'applyed')),
         },

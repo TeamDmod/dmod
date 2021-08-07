@@ -294,7 +294,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
       // @ts-expect-error
       if (guild.code || guild.message) return { notFound: true };
 
-      await redis.setex(`guild:${context.query.guildID}`, TIME, JSON.stringify(Object.fromEntries(Object.entries(guild).filter(([prop]) => prop !== 'roles'))));
+      await redis.setex(`guild:${context.query.guildID}`, TIME, JSON.stringify(guild));
     } else {
       guild = JSON.parse(guildCache);
     }
@@ -343,7 +343,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
         // userProfile: objectUser,
         len: guildData.applyed.length,
         guild: {
-          ...guild,
+          ...Object.fromEntries(Object.entries(guild).filter(([prop]) => prop !== 'roles')),
           guild_description: guild.description,
           ...guildData.toObject(),
         },

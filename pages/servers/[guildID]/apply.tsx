@@ -82,7 +82,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
       // @ts-expect-error
       if (guild.code || guild.message) return { props: { failed: true } };
 
-      await redis.setex(`guild:${context.query.guildID}`, TIME, JSON.stringify(Object.fromEntries(Object.entries(guild).filter(([prop]) => prop !== 'roles'))));
+      await redis.setex(`guild:${context.query.guildID}`, TIME, JSON.stringify(guild));
 
       if (guild.banner)
         await redis.set(
@@ -97,7 +97,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
     }
 
     const guildObj = {
-      ...guild,
+      ...Object.fromEntries(Object.entries(guild).filter(([prop]) => prop !== 'roles')),
       guild_description: guild.description,
       ...Object.fromEntries(Object.entries(guildData.toObject()).filter(d => d[0] !== 'applyed')),
     };
