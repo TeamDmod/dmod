@@ -1,3 +1,4 @@
+import AccessError from 'components/error/AccessError';
 import Footer from 'components/footer';
 import GuildPreviewCard from 'components/guildPreviewCard';
 import Layout from 'components/layout';
@@ -51,6 +52,7 @@ export default function Home() {
         </div>
       </div>
       <Footer />
+      <AccessError />
       {/* TODO: allow rating to be updated, giveing correct data of people of 3.5 - 5 stars */}
       {/* <div className={home.home_main_content}>
         <div className={home.top_rated}>
