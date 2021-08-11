@@ -15,12 +15,12 @@ export default function Search() {
 
   function request(q: string) {
     Promise.all([
-      fetch(`${window.origin}/api/v1/kei/search_g?q=${q}`).then(async res => {
+      fetch(`${window.origin}/api/v1/kei/search_g?q=${encodeURIComponent(q)}`).then(async res => {
         const data = await res.json();
         if (data.code || data.message || !Array.isArray(data)) return;
         setGuilds(data);
       }),
-      fetch(`${window.origin}/api/v1/kei/search_u?q=${q}`).then(async res => {
+      fetch(`${window.origin}/api/v1/kei/search_u?q=${encodeURIComponent(q)}`).then(async res => {
         const data = await res.json();
         if (data.code || data.message || !Array.isArray(data)) return;
         setUsers(data);
@@ -54,6 +54,13 @@ export default function Search() {
     Get();
   }, [router.query.q]);
 
+  function searchRedirect() {
+    if (search.length <= 0) return;
+    setLoading(true);
+    Get();
+    router.push(`/search?q=${search}`);
+  }
+
   return (
     <Layout title='Search results'>
       <div style={{ minHeight: '78vh' }}>
@@ -64,16 +71,11 @@ export default function Search() {
               className='px-3 py-2 w-2/3 rounded-l max-w-3xl focus:outline-none text-black'
               value={search ?? ''}
               onChange={({ currentTarget }) => setSearch(currentTarget.value)}
-            />
-            <button
-              className='bg-purple-900 px-5 py-2 rounded-r'
-              onClick={() => {
-                if (search.length <= 0) return;
-                setLoading(true);
-                Get();
-                router.push(`/search?q=${search}`);
+              onKeyDown={ev => {
+                if (ev.key === 'Enter') searchRedirect();
               }}
-            >
+            />
+            <button className='bg-purple-900 px-5 py-2 rounded-r' onClick={searchRedirect}>
               Search.
             </button>
           </div>

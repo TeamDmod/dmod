@@ -32,7 +32,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.query.all && !['true', 'false'].includes(req.query.all as string)) return res.json({ code: 400, message: '"all" invalid' });
   const all = Boolean(req.query.all === 'true');
 
-  const str = req.query.q ? (req.query.q as string).replace(/%20/g, ' ').replace(/[^0-9a-zA-Z=\-_]*/g, '') : null;
+  const str = req.query.q ? decodeURIComponent(req.query.q as string).replace(/[^0-9a-zA-Z=\-_%'":; ]*/g, '') : null;
   const searchReg = str ? new RegExp(str, 'i') : null;
   const st = Boolean(str && (req.query.q as string));
 

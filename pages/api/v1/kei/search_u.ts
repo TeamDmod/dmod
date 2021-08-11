@@ -23,7 +23,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.query.q && typeof req.query.q !== 'string') return res.json({ code: 400, message: '"q" must be string' });
   if (req.query.vanity && typeof req.query.vanity !== 'string') return res.json({ code: 400, message: '"vanity" must be string' });
 
-  const str = req.query.q ? (req.query.q as string).replace(/%20/g, ' ').replace(/[^0-9a-zA-Z=\-_]*/g, '') : null;
+  const str = req.query.q ? decodeURIComponent(req.query.q as string).replace(/[^0-9a-zA-Z=\-_%'":; ]*/g, '') : null;
   const vanitySearch = req.query.vanity as string;
   const searchReg = str ? new RegExp(str, 'i') : vanitySearch ?? null;
 
