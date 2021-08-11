@@ -1,4 +1,4 @@
-import MetaTags from 'components/MetaTags;
+import MetaTags from 'components/MetaTags';
 import { useRouter } from 'next/router';
 import React from 'react';
 
