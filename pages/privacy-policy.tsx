@@ -1,10 +1,11 @@
 import Footer from 'components/footer';
-import Layout from 'components/layout';
+import MetaTags from 'components/MetaTags';
 import React from 'react';
 
 export default function Privacy() {
   return (
-    <Layout title='Dmod - Privacy Policy' description='Site Privacy Policy'>
+    <>
+      <MetaTags title='Dmod - Privacy Policy' description='Site Privacy Policy' />
       <div style={{ minHeight: '81.5vh' }}>
         <h1 className='text-center mt-3 mb-6 text-5xl'>Privacy Policy</h1>
         <div className='flex justify-center text-center'>
@@ -35,6 +36,6 @@ export default function Privacy() {
         </div>
       </div>
       <Footer />
-    </Layout>
+    </>
   );
 }
