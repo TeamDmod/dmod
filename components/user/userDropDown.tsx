@@ -116,29 +116,35 @@ export default function UserDropDown({ user, fetcher }: props) {
         <Menu.Items className='absolute z-50 right-0 w-40 mt-2 bg-dorpdown rounded-md shadow-lg divide-y-3 focus:outline-none text-white'>
           <div className='px-1 py-2'>
             <Menu.Item>
-              <Link href={`/${user.vanity}`}>
-                <span className='flex rounded-md items-center w-full p-1 text-sm cursor-pointer space-x-2'>
-                  <ProfileIcon />
-                  <span>Profile</span>
-                </span>
-              </Link>
+              <button>
+                <Link href={`/${user.vanity}`}>
+                  <span className='flex rounded-md items-center w-full p-1 text-sm cursor-pointer space-x-2'>
+                    <ProfileIcon />
+                    <span>Profile</span>
+                  </span>
+                </Link>
+              </button>
             </Menu.Item>
 
             <Menu.Item>
-              <Link href='/account/settings'>
-                <span className='flex rounded-md items-center w-full p-1 text-sm cursor-pointer space-x-2'>
-                  <AccountSettingsIcon />
-                  <span>Settings</span>
-                </span>
-              </Link>
+              <button>
+                <Link href='/account/settings'>
+                  <span className='flex rounded-md items-center w-full p-1 text-sm cursor-pointer space-x-2'>
+                    <AccountSettingsIcon />
+                    <span>Settings</span>
+                  </span>
+                </Link>
+              </button>
             </Menu.Item>
 
             <Menu.Item>
               {({ active }) => (
-                <div className={`${active && 'bg-red-700'} flex rounded-md items-center w-full p-1 text-sm cursor-pointer space-x-3`} onClick={LogoutSoft}>
-                  <LogoutIcon />
-                  <span>Logout</span>
-                </div>
+                <button>
+                  <div className={`${active && 'bg-red-700'} flex rounded-md items-center w-full p-1 text-sm cursor-pointer space-x-3`} onClick={LogoutSoft}>
+                    <LogoutIcon />
+                    <span>Logout</span>
+                  </div>
+                </button>
               )}
             </Menu.Item>
           </div>
