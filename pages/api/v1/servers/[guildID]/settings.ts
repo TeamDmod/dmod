@@ -66,8 +66,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     })
   );
 
-  if (typeError) return res.status(400).json({ message: 'Error invalid property type in body', code: 400 });
-  if (Object.keys(body).length <= 0) return res.status(400).json({ message: 'Body keys was left at length of 0', code: 400 });
+  if (typeError) return res.status(400).json({ message: 'Invalid property in body', code: 400 });
+  if (Object.keys(body).length <= 0) return res.status(400).json({ message: 'Body was validated to length of 0. Validation(s) failed', code: 400 });
 
   const validatorData = { user_premium: dbUser.premium, guildID: dbGuild._id };
   let e = null;

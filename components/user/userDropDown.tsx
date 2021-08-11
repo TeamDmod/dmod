@@ -139,11 +139,9 @@ export default function UserDropDown({ user, fetcher }: props) {
 
             <Menu.Item>
               {({ active }) => (
-                <button>
-                  <div className={`${active && 'bg-red-700'} flex rounded-md items-center w-full p-1 text-sm cursor-pointer space-x-3`} onClick={LogoutSoft}>
-                    <LogoutIcon />
-                    <span>Logout</span>
-                  </div>
+                <button className={`${active && 'bg-red-700'} flex rounded-md items-center w-full p-1 text-sm cursor-pointer space-x-3`} onClick={LogoutSoft}>
+                  <LogoutIcon />
+                  <span>Logout</span>
                 </button>
               )}
             </Menu.Item>

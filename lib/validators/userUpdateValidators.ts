@@ -17,7 +17,7 @@ export const DESCRIPTION_MIN = 30;
 
 const VANITY_ALLOWED = ['_', '.', '\\-'];
 const VANITY_FOBIDEN_REGEXP = new RegExp(`[^${VANITY_ALLOWED}a-z\\d]`, 'g');
-const VANITY_ALLOWED_REGEXP = new RegExp(`[${VANITY_ALLOWED}a-z\\d]{3,50}`);
+const VANITY_ALLOWED_REGEXP = new RegExp(`[${VANITY_ALLOWED}a-z\\d]{3,30}`);
 // const VANITY_ALL_CHARACTER = new RegExp(`[${VANITY_ALLOWED}]`, 'g');
 const VANITY_ALL_NONE_CHARACTER = new RegExp(`[a-z\\d]`, 'g');
 const VANITY_LENGTH_NONE_CHARACTER = 3;
@@ -43,9 +43,10 @@ const validators: Ivalidators = {
       };
     }
 
+    const lengthError = des.length < DESCRIPTION_MIN ? 'to short' : des.length > DESCRIPTION_MAX_DATA.NORMAL ? 'to long' : 'unknow (failed to read proper length)';
     return {
       error: true,
-      message: 'Description length unmet reslove.',
+      message: `Description length ${lengthError}`,
     };
   },
   banner({ value }) {
@@ -54,7 +55,7 @@ const validators: Ivalidators = {
 
     return {
       error: !resolvable,
-      ...(resolvable ? {} : { message: 'Banner unresolvable.' }),
+      ...(resolvable ? {} : { message: 'Banner structure unresolvable.' }),
     };
   },
   site_flags({ value, user }) {
@@ -92,16 +93,15 @@ const validators: Ivalidators = {
     const fobidenMatch = vanity.match(VANITY_FOBIDEN_REGEXP);
 
     if ((fobidenMatch || []).length > 0) return { error: true, message: 'Forbiden character(s) in value.' };
-    if (!allowedMatch?.[0]) return { error: true, message: 'Value unmatched.' };
+    if (!allowedMatch?.[0]) return { error: true, message: 'Vanity dose not fit reg.' };
 
-    // const characters = vanity.match(VANITY_ALL_CHARACTER);
     const noneCharacters = vanity.match(VANITY_ALL_NONE_CHARACTER) || [];
     if (noneCharacters.length < VANITY_LENGTH_NONE_CHARACTER) return { error: true, message: 'Vanity must include minimum of 3 none specially allowed charterers.' };
 
-    if (list.some(item => vanity.toLowerCase().includes(item))) return { error: true, message: 'Vanity banned.' };
+    if (list.some(item => vanity.toLowerCase().includes(item))) return { error: true, message: 'Vanity contains ban term.' };
 
     const data: any[] = await fetch(`${process.env.BASE_URL}/kei/search_u?vanity=${vanity}`).then(d => d.json());
-    if (data.length > 0) return { error: true, message: 'Vanity taken.' };
+    if (data.length > 0) return { error: true, message: 'Vanity has taken.' };
 
     return { error: false };
   },
