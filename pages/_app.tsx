@@ -7,8 +7,8 @@ import '../styles/calender.scss';
 import 'styles/link.scss';
 import 'nprogress/nprogress.css';
 
-import Navbar from 'components/Navbar';
 import MetaTags from 'components/MetaTags';
+import Navbar from 'components/Navbar';
 import { isServer } from 'lib/isServer';
 import Router from 'next/router';
 import NProgress from 'nprogress';

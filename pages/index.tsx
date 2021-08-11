@@ -1,7 +1,6 @@
 import AccessError from 'components/error/AccessError';
 import Footer from 'components/footer';
 import GuildPreviewCard from 'components/guildPreviewCard';
-import Layout from 'components/layout';
 import { clsx } from 'lib/constants';
 import { PreviewGuildData } from 'models/preview_guilds';
 import { useRouter } from 'next/router';
