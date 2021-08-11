@@ -1,4 +1,4 @@
-import Layout from 'components/layout';
+import MetaTags from 'components/MetaTags;
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -6,7 +6,8 @@ export default function Error() {
   const router = useRouter();
 
   return (
-    <Layout title='Dmod - 404 not found!' description='Page not found.'>
+    <>
+    <MetaTags title='Dmod - 404 not found!' description='Page not found.'>
       <div className='flex flex-row w-full px-5'>
         <div className='flex flex-wrap content-center text-center w-full'>
           <div className='flex flex-wrap flex-col content-center text-xl space-y-2 w-full'>
@@ -27,6 +28,6 @@ export default function Error() {
           <img className='select-none' draggable={false} src='/notfound_dud.svg' alt='Not Found.' />
         </div>
       </div>
-    </Layout>
+    </>
   );
 }
