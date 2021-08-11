@@ -38,6 +38,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     .limit(+req.query.max ?? MAX_RETURN);
 
   res.json(
-      Object.fromEntries(Object.entries(u.toObject()).filter(d => !['updates_access'].includes(d[0])));
+    users.map(u => {
+      return Object.fromEntries(Object.entries(u.toObject()).filter(d => !['updates_access'].includes(d[0])));
+    })
   );
 };
