@@ -82,8 +82,8 @@ export default function Footer() {
             <DmodSVGLogo />
           </span>
           <div className='prl space-x-4'>
-            <Link href='/terms-of-service'>Terms</Link>
-            <Link href='/privacy-policy'>Policy</Link>
+            <Link href='/terms'>Terms</Link>
+            <Link href='/privacy'>Policy</Link>
           </div>
         </div>
 
