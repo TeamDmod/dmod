@@ -93,8 +93,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     })
   );
 
-  if (typeError) return res.json({ message: 'Error invalid property type in body', success: false });
-  if (Object.keys(objectedUpdateQuery).length <= 0) return res.json({ message: 'Body keys was left at length of 0', success: false });
+  if (typeError) return res.json({ message: 'Invalid property in body', success: false });
+  if (Object.keys(objectedUpdateQuery).length <= 0) return res.json({ message: 'Body was validated to length of 0. Validation(s) failed', success: false });
 
   const validatorData = { user_premium: user.premium, updater: uperUser?.toObject(), user: user.toObject() };
   let error = null;
@@ -110,6 +110,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const updateData = await userModule.findOneAndUpdate({ _id: user._id }, objectedUpdateQuery, { new: true });
 
+    const updateQKeys = Object.keys(objectedUpdateQuery);
+    const updateJSON = updateQKeys.reduce((pas, cur, i) => {
+      const from = JSON.stringify({ [cur]: user.toJSON()[cur] });
+      const to = JSON.stringify({ [cur]: updateData.toJSON()[cur] });
+      return pas.concat(`${from} => ${to}`).concat(updateQKeys.length - 1 === i ? '' : '\n');
+    }, '');
+
     return returnWithWebhook(
       { message: updateData.toObject(), success: true },
       {
@@ -118,12 +125,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         From:
         \`\`\`json\n${JSON.stringify(user.toObject(), null, 4)}\n\`\`\`
         To:
-        \`\`\`json\n${JSON.stringify(updateData.toObject(), null, 4)}\n\`\`\`
+        \`\`\`json\n${JSON.stringify(updateData.toJSON(), null, 4)}\n\`\`\`
         `,
         fields: [
           {
+            name: 'Quick look',
+            value: `\`\`\`json\n${updateJSON}\n\`\`\``,
+          },
+          {
             name: `${uperUser ? 'Uper user update' : 'User self update'} \`${user.tag}\` (${user._id})`,
-            value: `Body update targets; \`${Object.keys(objectedUpdateQuery).join(', ')}\`
+            value: `Body update targets; \`${updateQKeys.join(', ')}\`
             (Admin: \`${isAdmin}\`) (Mod: \`${isMod}\`)`,
           },
         ],

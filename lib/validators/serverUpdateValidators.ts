@@ -21,17 +21,19 @@ const validators = {
   description({ value }) {
     if (value.length >= DESCRIPTION_MIN && value.length <= DESCRIPTION_MAX_DATA.NORMAL) return { error: false };
 
+    const lengthError = value.length < DESCRIPTION_MIN ? 'to short' : value.length > DESCRIPTION_MAX_DATA.NORMAL ? 'to long' : 'unknow (failed to read proper length)';
     return {
       error: true,
-      message: 'Description invalid length',
+      message: `Description length ${lengthError}`,
     };
   },
   short_description({ value }) {
     if (value.length >= SHORT_DESCRIPTION_MIN && value.length <= SHORT_DESCRIPTION_MAX_DATA.NORMAL) return { error: false };
 
+    const lengthError = value.length < SHORT_DESCRIPTION_MIN ? 'to short' : value.length > SHORT_DESCRIPTION_MAX_DATA.NORMAL ? 'to long' : 'unknow (failed to read proper length)';
     return {
       error: true,
-      message: 'Short description invalid length',
+      message: `Short description length ${lengthError}`,
     };
   },
   async invite({ value, guildID }) {

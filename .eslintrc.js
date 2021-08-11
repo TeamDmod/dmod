@@ -61,6 +61,7 @@ module.exports = {
       files: ['**/*.ts', '**/*.tsx'],
       rules: {
         'prettier/prettier': [0, { endOfLine: 'auto', printWidth: 110 }, { usePrettierrc: true }],
+        'no-nested-ternary': 0,
         '@typescript-eslint/explicit-function-return-type': 0,
         '@typescript-eslint/lines-between-class-members': [0],
         'no-restricted-globals': 0,
