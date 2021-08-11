@@ -1,4 +1,4 @@
-import Layout from 'components/layout';
+import MetaTags from 'components/MetaTags';
 import Profile from 'components/user/profile';
 import connectToDatabase from 'lib/mongodb.connection';
 import withSession from 'lib/session';
@@ -15,9 +15,10 @@ interface props {
 
 export default function userProfile({ profile }: props) {
   return (
-    <Layout title={`Dmod.gg - ${profile.username}`} description={`${profile.username} profile`} image={profile.avatarURL}>
+    <>
+      <MetaTags title={`Dmod.gg - ${profile.username}`} description={`${profile.username}'s profile`} image={profile.avatarURL} />
       <Profile profile={profile} />
-    </Layout>
+    </>
   );
 }
 
