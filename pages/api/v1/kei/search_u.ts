@@ -15,7 +15,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const user = await userModule.findOne({ _id: req.query.id as string });
     return user
       ? res.json(Object.fromEntries(Object.entries(user.toObject()).filter(d => !['updates_access'].includes(d[0]))))
-      : res.json({ code: 404, message: 'Guild not found' });
+      : res.json({ code: 404, message: 'User not found' });
   }
 
   if (req.query.max && typeof req.query.max !== 'string' && !Number.isNaN(+req.query.max) && +req.query.max > MAX_RETURN)
@@ -38,8 +38,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     .limit(+req.query.max ?? MAX_RETURN);
 
   res.json(
-    users.map(u => {
-      return Object.fromEntries(Object.entries(u.toObject()).filter(d => !['updates_access'].includes(d[0])));
-    })
+      Object.fromEntries(Object.entries(u.toObject()).filter(d => !['updates_access'].includes(d[0])));
   );
 };
