@@ -20,7 +20,7 @@ export default function Home() {
   }, []);
 
   return (
-    <Layout title='Welcome to Dmod.gg' description='The best place to hire moderators!' image='/logo.png'>
+    <Layout>
       <div style={{ minHeight: '82.8vh' }}>
         <div className={clsx('m-0 w-full text-center h-80 border-t-2 border-b-2')} style={{ backgroundColor: '#080e1f', borderColor: '#24114c' }}>
           <div>
