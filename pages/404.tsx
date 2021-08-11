@@ -7,7 +7,7 @@ export default function Error() {
 
   return (
     <>
-    <MetaTags title='Dmod - 404 not found!' description='Page not found.'>
+    <MetaTags title='Dmod - 404 not found!' description='Page not found.' />
       <div className='flex flex-row w-full px-5'>
         <div className='flex flex-wrap content-center text-center w-full'>
           <div className='flex flex-wrap flex-col content-center text-xl space-y-2 w-full'>
