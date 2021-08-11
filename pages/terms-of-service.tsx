@@ -1,10 +1,11 @@
 import Footer from 'components/footer';
-import Layout from 'components/layout';
+import MetaTags from 'components/MetaTags';
 import React from 'react';
 
 export default function TOS() {
   return (
-    <Layout title='Dmod - Terms of Service' description='Site Terms of Service'>
+    <>
+      <MetaTags title='Dmod - Terms of Service' description='Site Terms of Service'>
       <div className='text-center space-y-7 mt-7'>
         <div>
           <h1 className='font-bold text-3xl sm:text-5xl'>Discord Moderation Terms of Service</h1>
@@ -116,6 +117,6 @@ export default function TOS() {
         <small>Last Updated: 12/24/2020</small>
       </div>
       <Footer />
-    </Layout>
+    </>
   );
 }
