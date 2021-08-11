@@ -19,6 +19,10 @@ export default function Home() {
     });
   }, []);
 
+  function searchRedirect() {
+    search.length > 0 && router.push(`/search?q=${search}`);
+  }
+
   return (
     <>
       <div style={{ minHeight: '82.8vh' }}>
@@ -33,8 +37,11 @@ export default function Home() {
               className='px-3 py-2 w-2/3 rounded-l max-w-3xl focus:outline-none text-black'
               value={search}
               onChange={({ currentTarget }) => setSearch(currentTarget.value)}
+              onKeyDown={ev => {
+                if (ev.key === 'Enter') searchRedirect();
+              }}
             />
-            <button className='bg-purple-900 px-5 py-2 rounded-r' onClick={() => search.length > 0 && router.push(`/search?q=${search}`)}>
+            <button className='bg-purple-900 px-5 py-2 rounded-r' onClick={searchRedirect}>
               Search.
             </button>
           </div>
