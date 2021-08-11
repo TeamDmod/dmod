@@ -1,5 +1,5 @@
 import Footer from 'components/footer';
-import Layout from 'components/layout';
+import MetaTags from 'components/MetaTags';
 import React from 'react';
 
 export default function Privacy() {
