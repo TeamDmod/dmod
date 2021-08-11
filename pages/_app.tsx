@@ -8,6 +8,7 @@ import 'styles/link.scss';
 import 'nprogress/nprogress.css';
 
 import Navbar from 'components/Navbar';
+import MetaTags from 'components/MetaTags';
 import { isServer } from 'lib/isServer';
 import Router from 'next/router';
 import NProgress from 'nprogress';
@@ -95,6 +96,7 @@ export default function App({ Component, pageProps }: any) {
           {socketMessage ? `Socket Error: ${socketMessage}` : 'Connecting to gateway...'}
         </span>
       )}
+      <MetaTags />
       <Navbar user={user} fetcher={setUfetch} />
       <Component {...{ ...pageProps, user, ws: DmodWebSocket, __setUser: setUser }} />
     </>
