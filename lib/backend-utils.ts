@@ -6,7 +6,7 @@ const json = (res: Response) => res.json();
 
 export async function hasBetaAccess(id: string): Promise<boolean> {
   const DMOD_SERVER_ID = '791278367960858635';
-  const ACCESS_GRANT_ROLES = ['867846891185242152', '867846891185242152', '801746227712622593'];
+  const ACCESS_GRANT_ROLES = ['793593475316449301', '801746227712622593', '793858311815430166'];
 
   const Member = await fetch(`${API_ENDPOINT}/guilds/${DMOD_SERVER_ID}/members/${id}`, { headers: { Authorization: `Bot ${process.env.CLIENT_TOKEN}` } });
   // eslint-disable-next-line no-new
