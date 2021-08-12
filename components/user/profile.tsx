@@ -1,8 +1,8 @@
-import LinkChecker from 'components/guild/LinkChecker';
 import { bannerResolver, clsx, evalBadges, evalFlags } from 'lib/constants';
 import MarkDown from 'lib/markdown';
+import useAtagWatch from 'lib/useAtagWatch';
 import { userData } from 'models/users';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 interface props {
   profile: userData;
@@ -14,26 +14,7 @@ export default function Profile({ profile }: props) {
 
   const bannerData = bannerResolver(profile.banner);
 
-  useEffect(() => {
-    const lig = [];
-
-    document.querySelectorAll('a[role="button"][data-to]').forEach(elm => {
-      const nvm = () => {
-        // @ts-expect-error
-        LinkChecker.create(elm?.dataset.to);
-      };
-      lig.push({ elm, nvm });
-      elm.addEventListener('click', nvm);
-    });
-
-    return () => {
-      LinkChecker.destroy();
-      lig.forEach(({ elm, nvm }) => {
-        elm.removeEventListener('click', nvm);
-      });
-    };
-    // window.addEventListener('scroll', toggleVisible);
-  }, [profile.description]);
+  useAtagWatch(profile.description);
 
   return (
     <div>

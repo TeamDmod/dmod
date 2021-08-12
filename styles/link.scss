@@ -2,10 +2,15 @@ $bg-bottons-section: #27282b;
 $bg-goto-button: #3c61f5;
 
 .markdown-content-contaner a {
-  &:hover {
-    text-decoration: underline;
+  &[data-linking='true'] {
+    &:hover {
+      text-decoration: underline;
+    }
+    color: $bg-goto-button;
   }
-  color: $bg-goto-button;
+  &[data-linking='false'] {
+    cursor: default;
+  }
 }
 
 .__jksnv {
