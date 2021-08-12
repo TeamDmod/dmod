@@ -41,7 +41,7 @@ export default function Home() {
               }}
             />
             <button className='bg-purple-900 px-5 py-2 rounded-r' onClick={searchRedirect}>
-              Search.
+              Search
             </button>
           </div>
         </div>
