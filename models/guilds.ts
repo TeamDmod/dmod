@@ -53,53 +53,18 @@ const Guilds = new Schema({
     type: Object,
     default: {},
   },
-  sections: [
-    {
-      postition: {
-        type: Number,
-        required: true,
-      },
-      title: {
-        type: String,
-        required: true,
-      },
-      description: {
-        type: String,
-        default: null,
-      },
-      fields: [
-        {
-          postition: {
-            type: Number,
-            required: true,
-          },
-          title: {
-            type: String,
-            required: true,
-          },
-          description: {
-            type: String,
-            default: null,
-          },
-          type: {
-            type: Number,
-            default: 0,
-          },
-          length: {
-            type: Array,
-            default: null,
-          },
-          required: {
-            type: Boolean,
-            default: false,
-          },
-        },
-      ],
-    },
-  ],
-  // required_age: {
-  //   type: []
-  // }
+  sections: {
+    type: Array,
+    default: [],
+  },
+  _apps: {
+    type: String,
+    default: '',
+  },
+  apv: {
+    type: Number,
+    default: 1,
+  },
 });
 
 export interface FieldData {
@@ -166,6 +131,9 @@ export interface GuildData {
    * User string id array
    */
   applyed: string[];
+  /** Application version */
+  apv: number;
+  _apps: String;
   /**
    * Data on the application status
    */
