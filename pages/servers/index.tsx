@@ -1,10 +1,6 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import 'tailwindcss/tailwind.css';
-
 import AnimatedLoader from 'components/AnimatedLoader';
 import CreateGuildApplicationModal from 'components/guild/CreateGuildApplicationModal';
 // import GuildCard from 'components/GuildCard';
-import Layout from 'components/layout';
 import MetaTags from 'components/MetaTags';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -21,15 +17,14 @@ export default function Server({ user }: any) {
   const [IsModalOpen, setModalOpen] = useState(false);
   const [selectedGuildModalData, setGuildModleData] = useState(null);
 
-  const [userGuildData, setData] = useState<ApiUserGuildData>(
-    {} as ApiUserGuildData
-  );
+  const [userGuildData, setData] = useState<ApiUserGuildData>({} as ApiUserGuildData);
 
   const router = useRouter();
 
   useEffect(() => {
     if (!user) router.push('/');
     if (user && !user.awaiting) {
+      console.log('we bee featching');
       fetch(`${window.origin}/api/discord/guilds`)
         .then(_ => _.json())
         .then(data => {
@@ -57,9 +52,7 @@ export default function Server({ user }: any) {
       <main>
         <MetaTags title='dmod.gg - Servers ERROR' />
         <div className='text-center text-xl'>
-          <h1 className='text-red-600'>
-            An error has occored! Try again in a bit.
-          </h1>
+          <h1 className='text-red-600'>An error has occored! Try again in a bit.</h1>
         </div>
       </main>
     );

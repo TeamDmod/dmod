@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-// import 'tailwindcss/tailwind.css';
+import 'tailwindcss/tailwind.css';
 import '../styles/globals.scss';
 import 'nprogress/nprogress.css';
 
@@ -46,10 +46,7 @@ export default function App({ Component, pageProps }: any) {
   }
 
   useEffect(() => {
-    if (
-      (user && Object.prototype.hasOwnProperty.call(user, 'awaiting')) ||
-      shouldFetchU
-    ) {
+    if ((user && Object.prototype.hasOwnProperty.call(user, 'awaiting')) || shouldFetchU) {
       if (!shouldFetchU) return;
 
       gwr && DmodWebSocket.disconnect({ reason: 'RAU' });
@@ -65,17 +62,12 @@ export default function App({ Component, pageProps }: any) {
   }, [shouldFetchU]);
 
   useEffect(() => {
-    if (
-      (user && !Object.prototype.hasOwnProperty.call(user, 'awaiting')) ||
-      user === null
-    ) {
+    if ((user && !Object.prototype.hasOwnProperty.call(user, 'awaiting')) || user === null) {
       if (gwr) return;
       setGwr(true);
       const { gatewayHash } = getcc();
 
-      DmodWebSocket.connect(
-        !user ? undefined : { token: gatewayHash, uid: user.id }
-      ).then(() => {
+      DmodWebSocket.connect(!user ? undefined : { token: gatewayHash, uid: user.id }).then(() => {
         const qwe = () => {
           console.log('connected');
           setConnected(true);
@@ -104,9 +96,7 @@ export default function App({ Component, pageProps }: any) {
         </span>
       )} */}
       <Navbar user={user} fetcher={setUfetch} />
-      <Component
-        {...{ ...pageProps, user, ws: DmodWebSocket, __setUser: setUser }}
-      />
+      <Component {...{ ...pageProps, user, ws: DmodWebSocket, __setUser: setUser }} />
     </>
   );
 }

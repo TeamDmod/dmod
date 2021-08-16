@@ -1,18 +1,9 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import 'tailwindcss/tailwind.css';
-
 import { Switch } from '@headlessui/react';
 import AnimatedLoader from 'components/AnimatedLoader';
-import Layout from 'components/layout';
 import MetaTags from 'components/MetaTags';
 import Profile from 'components/user/profile';
 import { Formik } from 'formik';
-import {
-  bannerFlatten,
-  bannerResolver,
-  bannerTypes,
-  clsx,
-} from 'lib/constants';
+import { bannerFlatten, bannerResolver, bannerTypes, clsx } from 'lib/constants';
 import connectToDatabase from 'lib/mongodb.connection';
 import withSession from 'lib/session';
 import useUserGard from 'lib/useUserGard';
@@ -56,9 +47,7 @@ export default function Settings({ user, settings, __setUser }: props) {
 
   useEffect(() => {
     function _(evt) {
-      const is = document
-        .getElementById('preview_392sf')
-        .classList[0].split('pre-')[1];
+      const is = document.getElementById('preview_392sf').classList[0].split('pre-')[1];
       const isEscape = evt.key === 'Escape' || evt.key === 'Esc';
       if (is === 'open' && isEscape) setPreviewOpen(false);
     }
@@ -82,14 +71,8 @@ export default function Settings({ user, settings, __setUser }: props) {
 
   return (
     <main>
-      <MetaTags
-        title={`${user.username} - Settings`}
-        description='User settings'
-      />
-      <span
-        id='preview_392sf'
-        className={previewOpen ? 'pre-open' : 'pre-close'}
-      />
+      <MetaTags title={`${user.username} - Settings`} description='User settings' />
+      <span id='preview_392sf' className={previewOpen ? 'pre-open' : 'pre-close'} />
       <div className='text-center'>
         <button
           className='bg-green-700 rounded p-1 mb-3 focus:outline-none'
@@ -130,9 +113,7 @@ export default function Settings({ user, settings, __setUser }: props) {
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           setSubmitting(true);
           const ValidValues: any = Object.fromEntries(
-            Object.entries(values).filter(
-              ([key, value]) => value !== settings[key] && key !== 'bannerData'
-            )
+            Object.entries(values).filter(([key, value]) => value !== settings[key] && key !== 'bannerData')
           );
           const bannerflat = bannerFlatten(
             values.bannerData ?? { type: 'unknown', image: null, color: null }
@@ -166,9 +147,7 @@ export default function Settings({ user, settings, __setUser }: props) {
             Object.entries(data.message).filter(([key]) => ValidValues[key])
           );
 
-          if (
-            Object.prototype.hasOwnProperty.call(updateObjectMapping, 'vanity')
-          )
+          if (Object.prototype.hasOwnProperty.call(updateObjectMapping, 'vanity'))
             __setUser({ ...user, vanity: updateObjectMapping.vanity });
 
           /**
@@ -182,23 +161,12 @@ export default function Settings({ user, settings, __setUser }: props) {
 
           setSubmitting(false);
         }}>
-        {({
-          handleSubmit,
-          handleChange,
-          handleBlur,
-          values,
-          isSubmitting,
-          setValues,
-          dirty,
-          resetForm,
-        }) => (
+        {({ handleSubmit, handleChange, handleBlur, values, isSubmitting, setValues, dirty, resetForm }) => (
           <>
             <div
               className={clsx(
                 'transform transition duration-300 ease-in-out absolute z-40 inset-y-0 inset-x-0 h-full min-h-screen w-full bg-gray-800 bg-opacity-90',
-                previewOpen
-                  ? 'scale-100 opacity-100'
-                  : 'scale-50 opacity-0 visible pointer-events-none'
+                previewOpen ? 'scale-100 opacity-100' : 'scale-50 opacity-0 visible pointer-events-none'
               )}>
               <div className='px-10 sm:px-16 pt-5 rounded h-full flex'>
                 <div className='p-2 bg-dorpdown w-full h-full overflow-y-auto'>
@@ -232,14 +200,10 @@ export default function Settings({ user, settings, __setUser }: props) {
               <div
                 className={clsx(
                   'transition duration-500 ease-in-out transform absolute bottom-0 left-0 w-full min-w-max sm:w-4/12 p-3 overflow-y-hidden',
-                  dirty
-                    ? 'translate-y-0 opacity-1'
-                    : '-translate-y-6 opacity-0 pointer-events-none'
+                  dirty ? 'translate-y-0 opacity-1' : '-translate-y-6 opacity-0 pointer-events-none'
                 )}>
                 <div className='flex bg-popupcard rounded p-2 justify-between space-x-2'>
-                  <span className='inline-flex flex-wrap content-center'>
-                    Change detected!
-                  </span>
+                  <span className='inline-flex flex-wrap content-center'>Change detected!</span>
                   <div className='flex space-x-2'>
                     <button
                       className='px-2 py-1 bg-blue-800 rounded focus:outline-none'
@@ -267,22 +231,16 @@ export default function Settings({ user, settings, __setUser }: props) {
               <div
                 className={clsx(
                   'transition duration-500 ease-in-out transform absolute bottom-0 right-0 w-full min-w-max sm:w-4/12 p-3 overflow-y-hidden',
-                  error
-                    ? 'translate-y-0 opacity-1'
-                    : '-translate-y-6 opacity-0 pointer-events-none'
+                  error ? 'translate-y-0 opacity-1' : '-translate-y-6 opacity-0 pointer-events-none'
                 )}>
-                <div className='px-2 py-1 bg-red-600 rounded font-bold'>
-                  {error}
-                </div>
+                <div className='px-2 py-1 bg-red-600 rounded font-bold'>{error}</div>
               </div>
             </span>
 
             <form>
               <div className='flex flex-wrap flex-col sm:content-center space-y-2 overflow-x-hidden'>
                 <label>Description</label>
-                <MiniEditor
-                  {...{ handleBlur, handleChange, value: values.description }}
-                />
+                <MiniEditor {...{ handleBlur, handleChange, value: values.description }} />
 
                 <div className='flex flex-wrap justify-center space-x-3'>
                   <label>Active</label>
@@ -335,9 +293,7 @@ export default function Settings({ user, settings, __setUser }: props) {
                 </select>
 
                 <div className='pt-3'>
-                  {values.bannerData.type === 'color' && (
-                    <div>Color picker</div>
-                  )}
+                  {values.bannerData.type === 'color' && <div>Color picker</div>}
                   {values.bannerData.type === 'img' && (
                     <div>
                       <input
@@ -368,9 +324,7 @@ export default function Settings({ user, settings, __setUser }: props) {
 }
 
 export const getServerSideProps: GetServerSideProps = withSession(
-  async (
-    context: withSessionGetServerSideProps
-  ): Promise<GetServerSidePropsResult<any>> => {
+  async (context: withSessionGetServerSideProps): Promise<GetServerSidePropsResult<any>> => {
     await connectToDatabase();
     const session = context.req.session.get('user');
 
