@@ -1,10 +1,12 @@
 import Footer from 'components/footer';
 import GuildPreviewCard from 'components/guildPreviewCard';
 import Layout from 'components/layout';
+import MetaTags from 'components/MetaTags';
 import { PreviewGuildData } from 'models/preview_guilds';
 import { userData } from 'models/users';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import styles from 'styles/search.module.scss';
 
 export default function Search() {
   const router = useRouter();
@@ -62,95 +64,81 @@ export default function Search() {
   }
 
   return (
-    <Layout title='Search results'>
-      <div style={{ minHeight: '78vh' }}>
-        <div className='text-center'>
-          <div style={{ marginTop: '47.5px' }}>
-            <input
-              placeholder='Search dmod.'
-              className='px-3 py-2 w-2/3 rounded-l max-w-3xl focus:outline-none text-black'
-              value={search ?? ''}
-              onChange={({ currentTarget }) => setSearch(currentTarget.value)}
-              onKeyDown={ev => {
-                if (ev.key === 'Enter') searchRedirect();
-              }}
-            />
-            <button className='bg-purple-900 px-5 py-2 rounded-r' onClick={searchRedirect}>
-              Search.
-            </button>
+    <main>
+      <MetaTags title='Search results' />
+      <div className={styles.top}>
+        <h1>Search dmod</h1>
+        <div className={styles.search_bar}>
+          <input
+            placeholder='Search dmod...'
+            className={styles.search}
+            value={search}
+            onChange={({ currentTarget }) => setSearch(currentTarget.value)}
+            onKeyDown={ev => {
+              if (ev.key === 'Enter') searchRedirect();
+            }}
+          />
+          <button className={styles.search_button} onClick={searchRedirect}>
+            Search
+          </button>
+        </div>
+      </div>
+      {loading ? (
+        <div className='loader loader4' />
+      ) : (
+        <div className='mx-0 sm:mx-4 mt-16 flex flex-col space-x-0 sm:space-x-3 justify-center'>
+          <h2 className='mb-1 ml-2'>Users</h2>
+
+          {users.length <= 0 && (
+            <div className='text-center w-full mt-4'>
+              <span className='text-5xl font-bold'>Nothing found{' :('}</span>
+            </div>
+          )}
+
+          <div className='w-full flex flex-wrap space-y-2'>
+            {users.map(user => {
+              return (
+                <div
+                  key={user._id}
+                  className='bg-listingcard p-2 rounded cursor-pointer ml-3'
+                  style={{ maxWidth: '17.5rem' }}
+                  onClick={() => router.push(`/${user.vanity}`)}>
+                  <div className='flex space-x-1'>
+                    <img alt='user avatar' src={user.avatarURL} className='rounded-full h-7 w-7' />
+                    <p className='text-xl'>{user.username}</p>
+                  </div>
+                  <p>Active: {user.active ? 'Yes' : 'No'}</p>
+                  <p className='truncate'>{user.description.slice(0, 50)}</p>
+                </div>
+              );
+            })}
+          </div>
+
+          <span className='my-6' />
+          <h2 className='mb-1'>Servers</h2>
+
+          {guilds.length <= 0 && (
+            <div className='text-center w-full mt-4'>
+              <span className='text-5xl font-bold'>Nothing found{' :('}</span>
+            </div>
+          )}
+
+          <div className='w-full flex flex-wrap space-y-2'>
+            {guilds.map((guild, i) => {
+              const time = () => {
+                const t = 0.2 * i + 1;
+                if (t > 6) return Number(`${i / 4}`);
+                return t;
+              };
+
+              return (
+                <GuildPreviewCard duration={time()} className='gdc-sihf' key={guild._id} guild={guild} />
+              );
+            })}
           </div>
         </div>
-        {loading ? (
-          <div className='loader loader4'>
-            <div>
-              <div>
-                <div>
-                  <div>
-                    <div>
-                      <div>
-                        <div>
-                          <div>
-                            <div>
-                              <div />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className='mx-0 sm:mx-4 mt-16 flex flex-col space-x-0 sm:space-x-3 justify-center'>
-            <h2 className='mb-1 ml-2'>Users</h2>
-
-            {users.length <= 0 && (
-              <div className='text-center w-full mt-4'>
-                <span className='text-5xl font-bold'>Nothing found{' :('}</span>
-              </div>
-            )}
-
-            <div className='w-full flex flex-wrap space-y-2'>
-              {users.map(user => {
-                return (
-                  <div key={user._id} className='bg-listingcard p-2 rounded cursor-pointer ml-3' style={{ maxWidth: '17.5rem' }} onClick={() => router.push(`/${user.vanity}`)}>
-                    <div className='flex space-x-1'>
-                      <img alt='user avatar' src={user.avatarURL} className='rounded-full h-7 w-7' />
-                      <p className='text-xl'>{user.username}</p>
-                    </div>
-                    <p>Active: {user.active ? 'Yes' : 'No'}</p>
-                    <p className='truncate'>{user.description.slice(0, 50)}</p>
-                  </div>
-                );
-              })}
-            </div>
-
-            <span className='my-6' />
-            <h2 className='mb-1'>Servers</h2>
-
-            {guilds.length <= 0 && (
-              <div className='text-center w-full mt-4'>
-                <span className='text-5xl font-bold'>Nothing found{' :('}</span>
-              </div>
-            )}
-
-            <div className='w-full flex flex-wrap space-y-2'>
-              {guilds.map((guild, i) => {
-                const time = () => {
-                  const t = 0.2 * i + 1;
-                  if (t > 6) return Number(`${i / 4}`);
-                  return t;
-                };
-
-                return <GuildPreviewCard duration={time()} className='gdc-sihf' key={guild._id} guild={guild} />;
-              })}
-            </div>
-          </div>
-        )}
-      </div>
+      )}
       <Footer />
-    </Layout>
+    </main>
   );
 }

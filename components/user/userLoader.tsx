@@ -14,16 +14,7 @@ export default function UserLoader({
 }) {
   return (
     <>
-      {user && Object.prototype.hasOwnProperty.call(user, 'awaiting') && (
-        <div>
-          <div className='animate-pulse flex flex-wrap content-center space-x-3 h-full'>
-            <div className='bg-gray-600 rounded-full h-9 sm:h-11 w-9 sm:w-11' />
-            {/* <div className='hidden sm:flex flex-wrap content-center'>
-                <div className='bg-gray-600 w-20 h-6 rounded'></div>
-              </div> */}
-          </div>
-        </div>
-      )}
+      {user && Object.prototype.hasOwnProperty.call(user, 'awaiting') && <div className={styles.load} />}
 
       {user && !Object.prototype.hasOwnProperty.call(user, 'awaiting') && (
         <UserDropDown fetcher={fetcher} user={user} />

@@ -3,7 +3,7 @@
   display: flex;
   justify-content: space-between;
   align-content: center;
-  min-height: inherit;
+  min-height: 5rem;
   font-size: large;
 
   li,
@@ -16,6 +16,7 @@
     display: inherit;
     justify-content: space-around;
     list-style: none;
+    margin: auto 0;
     padding: 0;
   }
 
@@ -43,52 +44,6 @@
   cursor: pointer;
   margin-right: auto;
   height: 50px;
-}
-
-@media screen and (max-width: 768px) {
-  .navbar nav {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    font-size: x-large;
-    justify-items: center;
-
-    ul {
-      display: flex;
-      flex-direction: column;
-      grid-column: 1 / 4;
-    }
-
-    .logo,
-    .user_button {
-      grid-column: 2;
-    }
-
-    .login {
-      grid-column: 1;
-      grid-row: 1;
-    }
-
-    li {
-      padding: 1rem 0;
-    }
-
-    .menu {
-      background-color: transparent;
-      color: #edf0f1;
-      padding: 0;
-      border: none;
-      cursor: pointer;
-    }
-
-    img {
-      margin: 6px 0;
-      cursor: pointer;
-    }
-  }
-}
-
-.dropdown {
-  position: relative;
 }
 
 .dropdown_items {
@@ -136,4 +91,72 @@
   height: 50px;
   border-radius: 50%;
   margin: 0 !important;
+}
+
+// TODO: Loading icon/animation
+.load {
+  background-color: grey;
+  border-radius: 50%;
+}
+
+@media screen and (max-width: 768px) {
+  .navbar nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    font-size: x-large;
+    justify-items: center;
+
+    ul {
+      display: flex;
+      flex-direction: column;
+      grid-column: 1 / 4;
+    }
+
+    .logo {
+      grid-column: 2;
+    }
+
+    .login,
+    .load,
+    .user_button {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    li {
+      padding: 1rem 0;
+    }
+
+    .menu {
+      background-color: transparent;
+      color: #edf0f1;
+      padding: 0;
+      border: none;
+      cursor: pointer;
+    }
+
+    img {
+      margin: 6px 0;
+      cursor: pointer;
+    }
+  }
+
+  .dropdown_items {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    grid-column: 1 / 4;
+    top: unset;
+    width: 100%;
+    background: none;
+    align-items: center;
+    padding: 0;
+
+    button {
+      padding: 1rem;
+      margin: auto 0;
+      font-size: 100%;
+      font-weight: normal;
+    }
+  }
 }
