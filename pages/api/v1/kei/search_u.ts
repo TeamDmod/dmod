@@ -14,16 +14,27 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.query.id && typeof req.query.id === 'string') {
     const user = await userModule.findOne({ _id: req.query.id as string });
     return user
-      ? res.json(Object.fromEntries(Object.entries(user.toObject()).filter(d => !['updates_access'].includes(d[0]))))
+      ? res.json(
+          Object.fromEntries(Object.entries(user.toObject()).filter(d => !['updates_access'].includes(d[0])))
+        )
       : res.json({ code: 404, message: 'User not found' });
   }
 
-  if (req.query.max && typeof req.query.max !== 'string' && !Number.isNaN(+req.query.max) && +req.query.max > MAX_RETURN)
+  if (
+    req.query.max &&
+    typeof req.query.max !== 'string' &&
+    !Number.isNaN(+req.query.max) &&
+    +req.query.max > MAX_RETURN
+  )
     return res.json({ code: 400, message: '"max" must be a valid number' });
-  if (req.query.q && typeof req.query.q !== 'string') return res.json({ code: 400, message: '"q" must be string' });
-  if (req.query.vanity && typeof req.query.vanity !== 'string') return res.json({ code: 400, message: '"vanity" must be string' });
+  if (req.query.q && typeof req.query.q !== 'string')
+    return res.json({ code: 400, message: '"q" must be string' });
+  if (req.query.vanity && typeof req.query.vanity !== 'string')
+    return res.json({ code: 400, message: '"vanity" must be string' });
 
-  const str = req.query.q ? decodeURIComponent(req.query.q as string).replace(/[^0-9a-zA-Z=\-_%'":; ]*/g, '') : null;
+  const str = req.query.q
+    ? decodeURIComponent(req.query.q as string).replace(/[^0-9a-zA-Z=\-_%'":; ]*/g, '')
+    : null;
   const vanitySearch = req.query.vanity as string;
   const searchReg = str ? new RegExp(str, 'i') : vanitySearch ?? null;
 
