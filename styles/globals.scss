@@ -3,8 +3,8 @@ body {
   padding: 0;
   margin: 0;
   width: 100%;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: -apple-system, Inter, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
+    Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 a {
@@ -18,12 +18,12 @@ a {
 
 header {
   background-color: #061021;
-  max-height: 5.5rem;
+  min-height: 5rem;
 }
 
 main {
   background: linear-gradient(180deg, #061021 0%, #0b2041 100%);
-  min-height: calc(100vh - 5.5rem);
+  min-height: calc(100vh - (50px + 2rem));
 
   display: grid;
 }
