@@ -3,6 +3,7 @@ import MarkDown from 'lib/markdown';
 import useAtagWatch from 'lib/useAtagWatch';
 import { userData } from 'models/users';
 import React from 'react';
+import styles from 'styles/profile.module.scss';
 
 interface props {
   profile: userData;
@@ -11,77 +12,83 @@ interface props {
 export default function Profile({ profile }: props) {
   const evaledFlags = evalFlags(profile.site_flags);
   const badges = evalBadges(evaledFlags);
+  const [user, tag] = profile.tag.split('#');
 
   const bannerData = bannerResolver(profile.banner);
 
   useAtagWatch(profile.description);
 
   return (
-    <div>
-      <div className='h-80 md:h-60 overflow-x-hidden'>
-        {bannerData.type === 'img' && (
-          <div
-            className='h-full w-full rounded-b max-h-screen bg-no-repeat'
-            style={{
-              backgroundImage: `url(${bannerData.image})`,
-              backgroundSize: '100% ',
-              minWidth: '600px',
-              backgroundPosition: 'center center',
-            }}
-          />
-        )}
-        {bannerData.type === 'color' && (
-          <div
-            style={{
-              backgroundColor: bannerData.color,
-            }}
-            className='h-full w-full rounded-b'
-          />
-        )}
-        {bannerData.type === 'unknown' && (
-          <div className='bg-red-600 h-full w-full rounded-b flex flex-wrap content-center'>
-            <h1 className='text-center w-full text-xl animate-floting'>ERROR! Unknow banner type!</h1>
-          </div>
-        )}
-      </div>
-      <div className='flex flex-wrap md:flex-row flex-col -my-14 content-center ml-0 md:ml-9 md:space-x-3 space-y-3 lg:space-y-0'>
-        <div className='md:w-max w-full flex flex-wrap justify-center'>
-          <img
-            className={clsx('rounded-full h-32 w-32 select-none border-3', profile.active ? 'border-green-600' : 'border-gray-500')}
-            draggable={false}
-            src={profile.avatarURL}
-            alt='User avatar'
-            onError={({ currentTarget }) => {
-              // eslint-disable-next-line no-param-reassign
-              currentTarget.src = `https://cdn.discordapp.com/embed/avatars/${+profile.discriminator % 5}.png`;
-            }}
-          />
+    <main className={styles.container}>
+      <div className={styles.inner}>
+        <div>
+          {bannerData.type === 'img' && (
+            <div
+              className={styles.banner}
+              style={{
+                backgroundImage: `url(${bannerData.image})`,
+                backgroundSize: '100% ',
+                minWidth: '600px',
+                backgroundPosition: 'center center',
+              }}
+            />
+          )}
+          {bannerData.type === 'color' && (
+            <div
+              className={styles.banner}
+              style={{
+                backgroundColor: bannerData.color,
+              }}
+            />
+          )}
+          {bannerData.type === 'unknown' && (
+            <div className={styles.banner}>
+              <h1>ERROR! Unknow banner type!</h1>
+            </div>
+          )}
         </div>
+        <img
+          className={styles.pfp}
+          draggable={false}
+          src={profile.avatarURL}
+          alt='User avatar'
+          onError={({ currentTarget }) => {
+            // eslint-disable-next-line no-param-reassign
+            currentTarget.src = `https://cdn.discordapp.com/embed/avatars/${
+              +profile.discriminator % 5
+            }.png`;
+          }}
+        />
+        <div className={styles.profile}>
+          <h2>
+            {user}
+            <span className={styles.tag}>#{tag}</span>
+          </h2>
 
-        <div className='flex flex-wrap md:flex-row flex-col md:space-x-3 space-y-3 lg:space-y-0 md:mt-52 mt-0'>
-          <span className='flex flex-wrap sm:content-center justify-center text-xl'>
-            <span>{profile.tag}</span>
-          </span>
-
-          <div className='badges-container-shdf flex flex-wrap content-center justify-center space-x-2 my-0 md:mb-3'>
+          <div className={styles.badges}>
             {/* Reverse as on pass in of the profile data the order is reversed */}
             {badges.reverse().map(
               ([badge, displayName], i) =>
                 badge !== null && (
                   // eslint-disable-next-line react/no-array-index-key
-                  <span key={`badges${i}`} className='badges-oujrf relative'>
-                    <span className='badge-name-fis absolute text-white w-max text-center bg-gray-400 rounded-md bg-opacity-60 px-3'>{displayName}</span>
+                  <span key={`badges${i}`}>
+                    <span>{displayName}</span>
                     {badge}
                   </span>
                 )
             )}
           </div>
+          <div className={styles.bio}>
+            <h3>🖋 About</h3>
+            <div
+              /* eslint-disable-next-line react/no-danger */
+              dangerouslySetInnerHTML={{
+                __html: new MarkDown(profile.description).render(),
+              }}
+            />
+          </div>
         </div>
-      </div>{' '}
-      <div className='mt-16 mx-3 bio'>
-        {/* eslint-disable-next-line react/no-danger */}
-        <div className='markdown-content-contaner' dangerouslySetInnerHTML={{ __html: new MarkDown(profile.description).render() }} />
       </div>
-    </div>
+    </main>
   );
 }

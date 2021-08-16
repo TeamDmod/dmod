@@ -1,9 +1,15 @@
 import { useRouter } from 'next/dist/client/router';
 import Link from 'next/link';
+import styles from 'styles/footer.module.scss';
 
 function DmodSVGLogo() {
   return (
-    <svg width='90' height='90' viewBox='0 0 644 498' fill='none' xmlns='http://www.w3.org/2000/svg'>
+    <svg
+      width='90'
+      height='90'
+      viewBox='0 0 644 498'
+      fill='none'
+      xmlns='http://www.w3.org/2000/svg'>
       <path
         d='M112.977 497.17C98.5805 497.508 86.635 486.115 86.2964 471.723C85.9578 457.331 97.355 445.39 111.752 445.051C156.363 443.912 189.305 440.046 217.55 430.388C244.804 421.068 268.628 405.761 295.862 381.482C306.644 371.886 323.168 372.849 332.767 383.628C342.367 394.406 341.403 410.924 330.621 420.52C298.132 449.485 268.89 468.029 234.317 479.851C200.741 491.335 163.101 495.897 112.977 497.17Z'
         fill='white'
@@ -26,7 +32,12 @@ function DmodSVGLogo() {
 
 function MiniArrow() {
   return (
-    <svg width='10' height='10' viewBox='0 0 58 57' fill='none' xmlns='http://www.w3.org/2000/svg'>
+    <svg
+      width='10'
+      height='10'
+      viewBox='0 0 58 57'
+      fill='none'
+      xmlns='http://www.w3.org/2000/svg'>
       <path
         d='M8.78462 55.4039C6.94867 57.2392 3.96823 57.2392 2.1275 55.4039C0.291547 53.5686 0.291547 50.5844 2.1275 48.7491L41.1547 9.73538H5.4563C2.85734 9.73538 0.749512 7.62834 0.749512 5.03029C0.749512 2.43224 2.85734 0.325195 5.4563 0.325195H52.5186H52.6331H52.6429L52.7477 0.329967H52.7668L52.8622 0.33951L52.9763 0.349054H53.0052L53.0862 0.358597L53.1198 0.363369L53.1957 0.372913L53.239 0.377626L53.3102 0.391941L53.4201 0.411028L53.4676 0.420572L53.5296 0.434887L53.6395 0.458687L53.6916 0.473002L53.7489 0.487318L53.8062 0.501574L53.8588 0.520661L53.9161 0.539748L53.9683 0.558777L54.0302 0.577864L54.0782 0.596951L54.1401 0.615979L54.1876 0.635066L54.25 0.658925L54.2975 0.677954L54.3595 0.701812L54.4023 0.720899L54.4596 0.749471L54.5071 0.768558L54.5644 0.79713L54.6077 0.820989L54.6645 0.849619L54.7125 0.87342L54.7646 0.90205L54.8126 0.925851L54.8647 0.954481L54.9127 0.983053L54.9602 1.01168L55.0128 1.04026L55.0557 1.06889L55.1083 1.10223L55.1465 1.13086L55.2415 1.19761L55.3039 1.24049L55.3369 1.26435L55.3989 1.31201L55.4278 1.33581L55.5991 1.47885L55.6709 1.54082L55.6806 1.55036L55.7617 1.62188L55.7663 1.62665L55.8474 1.70766L55.9284 1.78872L55.933 1.79349L56.0048 1.87449L56.0141 1.88404L56.076 1.95555L56.2194 2.12716L56.2432 2.15579L56.2907 2.21777L56.3144 2.25111L56.3578 2.31308L56.4243 2.4084L56.4528 2.44658L56.4863 2.49901L56.5152 2.54189L56.5436 2.59432L56.572 2.64198L56.6008 2.6897L56.6293 2.74213L56.653 2.78979L56.6819 2.84222L56.7056 2.88988L56.7345 2.94708L56.7583 2.99003L56.7867 3.04723L56.8058 3.09489L56.8346 3.15209L56.8537 3.19498L56.8775 3.25695L56.8966 3.30461L56.9203 3.36659L56.9394 3.4143L56.9585 3.47622L56.9776 3.52394L56.9967 3.58591L57.0158 3.63834L57.0349 3.69554L57.054 3.74798L57.0679 3.80518L57.0824 3.86238L57.0968 3.91481L57.1206 4.02444L57.135 4.08642L57.1443 4.13408L57.1634 4.24377L57.1778 4.31523L57.1825 4.35817L57.1923 4.43441L57.1969 4.46781L57.2063 4.54881V4.57744L57.216 4.69185L57.2253 4.78716V4.80625L57.2305 4.91111V4.92066V5.03506V52.0813C57.2305 54.6793 55.1226 56.7864 52.5237 56.7864C49.9247 56.7864 47.8169 54.6793 47.8169 52.0813V16.395L8.78975 55.4087L8.78462 55.4039Z'
         fill='#8667FF'
@@ -36,95 +47,121 @@ function MiniArrow() {
   );
 }
 
-function Links({ links }: { links: { href: string; name: string; target?: string }[] }) {
-  const router = useRouter();
-
+function Links({
+  links,
+}: {
+  links: { href: string; name: string; target?: string; external?: boolean }[];
+}) {
   return (
-    <div className='flex flex-wrap flex-col mt-1'>
-      {links.map(({ href, name, target }) => {
+    <>
+      {links.map(({ href, name, target, external }) => {
         return (
-          <span key={name + href} className='flex space-x-2 group'>
+          <span key={name + href}>
             {target ? (
               <a href={href} target={target}>
                 {name}
+                {external && (
+                  <span className={styles.arrow}>
+                    <MiniArrow />
+                  </span>
+                )}
               </a>
             ) : (
-              <Link href={href}>{name}</Link>
+              <Link href={href}>
+                <a>
+                  {name}
+                  {external && (
+                    <span className={styles.arrow}>
+                      <MiniArrow />
+                    </span>
+                  )}
+                </a>
+              </Link>
             )}
-
-            <span
-              className='flex flex-wrap content-center group-hover:block cursor-pointer'
-              onClick={() => {
-                if (target) {
-                  window.open(href);
-                } else {
-                  router.push(href);
-                }
-              }}
-            >
-              <MiniArrow />
-            </span>
           </span>
         );
       })}
-    </div>
+    </>
   );
 }
+
+// I hate tailwind (:
 
 export default function Footer() {
   const router = useRouter();
 
   return (
-    <footer className='footer_jfk bg-footer sm:px-24 px-10'>
-      <div className='flex flex-wrap justify-center lg:space-x-36 md:space-x-28 space-x-10'>
-        <div>
-          <span className='cursor-pointer' onClick={() => router.push('/')}>
+    <footer className={styles.container}>
+      <div className={styles.footer}>
+        <div className={styles.logo}>
+          <span className='pointer' onClick={() => router.push('/')}>
             <DmodSVGLogo />
           </span>
-          <div className='prl space-x-4'>
-            <Link href='/terms-of-service'>Terms</Link>
-            <Link href='/privacy-policy'>Policy</Link>
-          </div>
         </div>
 
-        <div className='footer-contaner-sdf flex flex-wrap sm:justify-evenly content-center lg:space-x-36 md:space-x-28 space-x-6'>
-          <div>
-            <h2 className='topic-main-sdf font-bold'>Company</h2>
-            <Links
-              links={[
-                { href: '/about', name: 'About' },
-                { href: '/', name: 'Newsroom' },
-                { href: '/team', name: 'Team' },
-              ]}
-            />
-          </div>
+        <div className={styles.links}>
+          <h2>Company</h2>
+          <Links
+            links={[
+              { href: '/about', name: 'About' },
+              { href: '/', name: 'Newsroom' },
+              { href: '/team', name: 'Team' },
+            ]}
+          />
+        </div>
 
-          <div>
-            <h2 className='topic-main-sdf font-bold'>Connect</h2>
-            <Links
-              links={[
-                { name: 'Twitter', href: 'https://twitter.com/dmodgg', target: 'twitter' },
-                { name: 'Discord', href: '/discord', target: '_blank' },
-                { name: 'Reddit', href: 'https://www.reddit.com/r/DiscordModeration', target: 'reddit' },
-              ]}
-            />
-          </div>
+        <div className={styles.links}>
+          <h2>Connect</h2>
+          <Links
+            links={[
+              {
+                name: 'Twitter',
+                href: 'https://twitter.com/dmodgg',
+                target: '_blank',
+                external: true,
+              },
+              {
+                name: 'Discord',
+                href: '/discord',
+                target: '_blank',
+                external: true,
+              },
+              {
+                name: 'Reddit',
+                href: 'https://www.reddit.com/r/DiscordModeration',
+                target: '_blank',
+                external: true,
+              },
+            ]}
+          />
+        </div>
 
-          <div>
-            <h2 className='topic-main-sdf font-bold'>Projects</h2>
-            <Links
-              links={[
-                { name: 'Github', href: 'https://github.com/dmod-gg', target: 'github' },
-                { name: 'Dispatch', href: '/' },
-                { name: 'Dmod Discord Bot', href: '/' },
-              ]}
-            />
-          </div>
+        <div className={styles.links}>
+          <h2>Projects</h2>
+          <Links
+            links={[
+              {
+                name: 'Github',
+                href: 'https://github.com/dmod-gg',
+                target: '_blank',
+                external: true,
+              },
+              { name: 'Dispatch', href: '/' },
+              { name: 'Dmod Discord Bot', href: '/' },
+            ]}
+          />
         </div>
       </div>
 
-      <hr className='divider-sf my-5' />
-      <div className='text-center mb-5'>©Copyright by dmod.gg {new Date().getFullYear()} | All rights reserved | Not Affiliated with Discord</div>
+      <hr className={styles.divider} />
+      <div className={styles.bottom}>
+        <div>
+          <Link href='/terms-of-service'>Terms</Link>
+          <Link href='/privacy-policy'>Policy</Link>
+        </div>
+        <p className={styles.affiliate}>Not Affiliated with Discord</p>
+        <p className={styles.copyright}>© dmod.gg {new Date().getFullYear()}</p>
+      </div>
     </footer>
   );
 }

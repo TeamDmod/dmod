@@ -1,13 +1,17 @@
 import AccessError from 'components/error/AccessError';
 import Footer from 'components/footer';
 import GuildPreviewCard from 'components/guildPreviewCard';
+import MetaTags from 'components/MetaTags';
 import { clsx } from 'lib/constants';
 import { PreviewGuildData } from 'models/preview_guilds';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import styles from 'styles/home.module.scss';
 
 export default function Home() {
-  const [list, setList] = useState<(PreviewGuildData & { banner?: string; icon?: string })[]>([]);
+  const [list, setList] = useState<
+    (PreviewGuildData & { banner?: string; icon?: string })[]
+  >([]);
   const [search, setSearch] = useState('');
 
   const router = useRouter();
@@ -24,24 +28,25 @@ export default function Home() {
 
   return (
     <>
-      <div style={{ minHeight: '82.8vh' }}>
-        <div className={clsx('m-0 w-full text-center h-80 border-t-2 border-b-2')} style={{ backgroundColor: '#080e1f', borderColor: '#24114c' }}>
+      <MetaTags />
+      <main>
+        <div className={styles.top}>
           <div>
-            <h1 className='text-6xl sm:text-7xl font-bold pt-20'>Welcome to dmod.</h1>
+            <h1>Welcome to dmod.</h1>
             {/* <p className='-mt-2'>Discords most advanced moderator searching application.</p> */}
           </div>
-          <div className='mt-5'>
+          <div className={styles.search_bar}>
             <input
-              placeholder='Search dmod.'
-              className='px-3 py-2 w-2/3 rounded-l max-w-3xl focus:outline-none text-black'
+              placeholder='Search dmod...'
+              className={styles.search}
               value={search}
               onChange={({ currentTarget }) => setSearch(currentTarget.value)}
               onKeyDown={ev => {
                 if (ev.key === 'Enter') searchRedirect();
               }}
             />
-            <button className='bg-purple-900 px-5 py-2 rounded-r' onClick={searchRedirect}>
-              Search.
+            <button className={styles.search_button} onClick={searchRedirect}>
+              Search
             </button>
           </div>
         </div>
@@ -53,11 +58,18 @@ export default function Home() {
               return t;
             };
 
-            return <GuildPreviewCard duration={time()} className='gdc-sihf' key={guild._id} guild={guild} />;
+            return (
+              <GuildPreviewCard
+                duration={time()}
+                className='gdc-sihf'
+                key={guild._id}
+                guild={guild}
+              />
+            );
           })}
         </div>
-      </div>
-      <Footer />
+        <Footer />
+      </main>
       <AccessError />
       {/* TODO: allow rating to be updated, giveing correct data of people of 3.5 - 5 stars */}
       {/* <div className={home.home_main_content}>
