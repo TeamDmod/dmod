@@ -1,13 +1,8 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import 'tailwindcss/tailwind.css';
+// import 'tailwindcss/tailwind.css';
 import '../styles/globals.scss';
-import '../styles/global.css';
-import '../styles/navbar.scss';
-import '../styles/calender.scss';
-import 'styles/link.scss';
 import 'nprogress/nprogress.css';
 
-import MetaTags from 'components/MetaTags';
 import Navbar from 'components/Navbar';
 import { isServer } from 'lib/isServer';
 import Router from 'next/router';
@@ -24,7 +19,9 @@ const accessTokenKey = '@pup/token';
 const gatewayHashKey = '@pup/hash';
 
 export default function App({ Component, pageProps }: any) {
-  const [user, setUser] = useState<sessionFetchedUser>({ awaiting: true } as any);
+  const [user, setUser] = useState<sessionFetchedUser>({
+    awaiting: true,
+  } as any);
   const [shouldFetchU, setUfetch] = useState(true);
   const [gwr, setGwr] = useState(false);
   const [socketConnected, setConnected] = useState(false);
@@ -49,7 +46,10 @@ export default function App({ Component, pageProps }: any) {
   }
 
   useEffect(() => {
-    if ((user && Object.prototype.hasOwnProperty.call(user, 'awaiting')) || shouldFetchU) {
+    if (
+      (user && Object.prototype.hasOwnProperty.call(user, 'awaiting')) ||
+      shouldFetchU
+    ) {
       if (!shouldFetchU) return;
 
       gwr && DmodWebSocket.disconnect({ reason: 'RAU' });
@@ -65,12 +65,17 @@ export default function App({ Component, pageProps }: any) {
   }, [shouldFetchU]);
 
   useEffect(() => {
-    if ((user && !Object.prototype.hasOwnProperty.call(user, 'awaiting')) || user === null) {
+    if (
+      (user && !Object.prototype.hasOwnProperty.call(user, 'awaiting')) ||
+      user === null
+    ) {
       if (gwr) return;
       setGwr(true);
       const { gatewayHash } = getcc();
 
-      DmodWebSocket.connect(!user ? undefined : { token: gatewayHash, uid: user.id }).then(() => {
+      DmodWebSocket.connect(
+        !user ? undefined : { token: gatewayHash, uid: user.id }
+      ).then(() => {
         const qwe = () => {
           console.log('connected');
           setConnected(true);
@@ -91,14 +96,17 @@ export default function App({ Component, pageProps }: any) {
   return (
     <>
       <div id='__jkicl' />
-      {!socketConnected && (
+      {/* {!socketConnected && (
         <span className='absolute right-1/2 top-1 w-max bg-gray-500 rounded px-1 bg-opacity-40'>
-          {socketMessage ? `Socket Error: ${socketMessage}` : 'Connecting to gateway...'}
+          {socketMessage
+            ? `Socket Error: ${socketMessage}`
+            : 'Connecting to gateway...'}
         </span>
-      )}
-      <MetaTags />
+      )} */}
       <Navbar user={user} fetcher={setUfetch} />
-      <Component {...{ ...pageProps, user, ws: DmodWebSocket, __setUser: setUser }} />
+      <Component
+        {...{ ...pageProps, user, ws: DmodWebSocket, __setUser: setUser }}
+      />
     </>
   );
 }

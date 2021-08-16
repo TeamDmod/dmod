@@ -1,9 +1,18 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import 'tailwindcss/tailwind.css';
+
 import { Switch } from '@headlessui/react';
 import AnimatedLoader from 'components/AnimatedLoader';
 import Layout from 'components/layout';
+import MetaTags from 'components/MetaTags';
 import Profile from 'components/user/profile';
 import { Formik } from 'formik';
-import { bannerFlatten, bannerResolver, bannerTypes, clsx } from 'lib/constants';
+import {
+  bannerFlatten,
+  bannerResolver,
+  bannerTypes,
+  clsx,
+} from 'lib/constants';
 import connectToDatabase from 'lib/mongodb.connection';
 import withSession from 'lib/session';
 import useUserGard from 'lib/useUserGard';
@@ -47,7 +56,9 @@ export default function Settings({ user, settings, __setUser }: props) {
 
   useEffect(() => {
     function _(evt) {
-      const is = document.getElementById('preview_392sf').classList[0].split('pre-')[1];
+      const is = document
+        .getElementById('preview_392sf')
+        .classList[0].split('pre-')[1];
       const isEscape = evt.key === 'Escape' || evt.key === 'Esc';
       if (is === 'open' && isEscape) setPreviewOpen(false);
     }
@@ -61,28 +72,48 @@ export default function Settings({ user, settings, __setUser }: props) {
 
   if (loading)
     return (
-      <Layout title='Loading...'>
+      <main>
+        <MetaTags title='Loading...' />
         <AnimatedLoader />
-      </Layout>
+      </main>
     );
 
   const bannerData = bannerResolver(settings.banner);
 
   return (
-    <Layout title={`${user.username} - Settings`} description='User settings'>
-      <span id='preview_392sf' className={previewOpen ? 'pre-open' : 'pre-close'} />
+    <main>
+      <MetaTags
+        title={`${user.username} - Settings`}
+        description='User settings'
+      />
+      <span
+        id='preview_392sf'
+        className={previewOpen ? 'pre-open' : 'pre-close'}
+      />
       <div className='text-center'>
-        <button className='bg-green-700 rounded p-1 mb-3 focus:outline-none' onClick={() => setPreviewOpen(!previewOpen)}>
+        <button
+          className='bg-green-700 rounded p-1 mb-3 focus:outline-none'
+          onClick={() => setPreviewOpen(!previewOpen)}>
           Preview changes
         </button>
       </div>
       <Formik
-        initialValues={{ description: settings.description, active: settings.active, bannerData, vanity: settings.vanity }}
+        initialValues={{
+          description: settings.description,
+          active: settings.active,
+          bannerData,
+          vanity: settings.vanity,
+        }}
         validate={values => {
           const errors: any = {};
-          const bannerflat = bannerFlatten(values.bannerData ?? { type: 'unknown', image: null, color: null });
+          const bannerflat = bannerFlatten(
+            values.bannerData ?? { type: 'unknown', image: null, color: null }
+          );
 
-          const validatorData = { user_premium: user.premium_type, user: { ...settings, ...values, banner: bannerflat } };
+          const validatorData = {
+            user_premium: user.premium_type,
+            user: { ...settings, ...values, banner: bannerflat },
+          };
           let err = null;
           Object.entries({ ...values, banner: bannerflat })
             .filter(([k]) => k !== 'bannerData' && k !== 'vanity')
@@ -98,10 +129,18 @@ export default function Settings({ user, settings, __setUser }: props) {
         }}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           setSubmitting(true);
-          const ValidValues: any = Object.fromEntries(Object.entries(values).filter(([key, value]) => value !== settings[key] && key !== 'bannerData'));
-          const bannerflat = bannerFlatten(values.bannerData ?? { type: 'unknown', image: null, color: null });
+          const ValidValues: any = Object.fromEntries(
+            Object.entries(values).filter(
+              ([key, value]) => value !== settings[key] && key !== 'bannerData'
+            )
+          );
+          const bannerflat = bannerFlatten(
+            values.bannerData ?? { type: 'unknown', image: null, color: null }
+          );
 
-          const body = Object.assign(ValidValues, { ...(settings.banner === bannerflat ? {} : { banner: bannerflat }) });
+          const body = Object.assign(ValidValues, {
+            ...(settings.banner === bannerflat ? {} : { banner: bannerflat }),
+          });
 
           let token: string;
           try {
@@ -123,9 +162,14 @@ export default function Settings({ user, settings, __setUser }: props) {
             return;
           }
 
-          const updateObjectMapping = Object.fromEntries(Object.entries(data.message).filter(([key]) => ValidValues[key]));
+          const updateObjectMapping = Object.fromEntries(
+            Object.entries(data.message).filter(([key]) => ValidValues[key])
+          );
 
-          if (Object.prototype.hasOwnProperty.call(updateObjectMapping, 'vanity')) __setUser({ ...user, vanity: updateObjectMapping.vanity });
+          if (
+            Object.prototype.hasOwnProperty.call(updateObjectMapping, 'vanity')
+          )
+            __setUser({ ...user, vanity: updateObjectMapping.vanity });
 
           /**
            * NOTE: settings value is reset / destructuerd as to update the new date
@@ -137,19 +181,40 @@ export default function Settings({ user, settings, __setUser }: props) {
           resetForm({ values: { ...values, ...updateObjectMapping } });
 
           setSubmitting(false);
-        }}
-      >
-        {({ handleSubmit, handleChange, handleBlur, values, isSubmitting, setValues, dirty, resetForm }) => (
+        }}>
+        {({
+          handleSubmit,
+          handleChange,
+          handleBlur,
+          values,
+          isSubmitting,
+          setValues,
+          dirty,
+          resetForm,
+        }) => (
           <>
             <div
               className={clsx(
                 'transform transition duration-300 ease-in-out absolute z-40 inset-y-0 inset-x-0 h-full min-h-screen w-full bg-gray-800 bg-opacity-90',
-                previewOpen ? 'scale-100 opacity-100' : 'scale-50 opacity-0 visible pointer-events-none'
-              )}
-            >
+                previewOpen
+                  ? 'scale-100 opacity-100'
+                  : 'scale-50 opacity-0 visible pointer-events-none'
+              )}>
               <div className='px-10 sm:px-16 pt-5 rounded h-full flex'>
                 <div className='p-2 bg-dorpdown w-full h-full overflow-y-auto'>
-                  <Profile profile={{ ...settings, ...values, banner: bannerFlatten(values.bannerData ?? { type: 'unknown', image: null, color: null }) }} />
+                  <Profile
+                    profile={{
+                      ...settings,
+                      ...values,
+                      banner: bannerFlatten(
+                        values.bannerData ?? {
+                          type: 'unknown',
+                          image: null,
+                          color: null,
+                        }
+                      ),
+                    }}
+                  />
                 </div>
                 <div className='relative'>
                   <div className='ml-1 focus:outline-none absolute flex flex-col text-center space-y-1'>
@@ -166,18 +231,33 @@ export default function Settings({ user, settings, __setUser }: props) {
             <span>
               <div
                 className={clsx(
-                  'transition duration-500 ease-in-out transform absolute z-0 -bottom-16 left-0 w-full min-w-max sm:w-4/12 p-3 overflow-y-hidden',
-                  dirty ? 'translate-y-0 opacity-1' : '-translate-y-6 opacity-0 pointer-events-none'
-                )}
-              >
+                  'transition duration-500 ease-in-out transform absolute bottom-0 left-0 w-full min-w-max sm:w-4/12 p-3 overflow-y-hidden',
+                  dirty
+                    ? 'translate-y-0 opacity-1'
+                    : '-translate-y-6 opacity-0 pointer-events-none'
+                )}>
                 <div className='flex bg-popupcard rounded p-2 justify-between space-x-2'>
-                  <span className='inline-flex flex-wrap content-center'>Change detected!</span>
+                  <span className='inline-flex flex-wrap content-center'>
+                    Change detected!
+                  </span>
                   <div className='flex space-x-2'>
-                    <button className='px-2 py-1 bg-blue-800 rounded focus:outline-none' type='button' onClick={() => resetForm()}>
+                    <button
+                      className='px-2 py-1 bg-blue-800 rounded focus:outline-none'
+                      type='button'
+                      onClick={() => resetForm()}>
                       Cancel
                     </button>
-                    <button className='px-2 py-1 bg-blue-800 rounded focus:outline-none space-x-2' type='submit' disabled={isSubmitting} onClick={() => handleSubmit()}>
-                      {isSubmitting && <span title='Saving data...' className='relative inline-flex rounded-full h-3 w-3 bg-red-500' />}
+                    <button
+                      className='px-2 py-1 bg-blue-800 rounded focus:outline-none space-x-2'
+                      type='submit'
+                      disabled={isSubmitting}
+                      onClick={() => handleSubmit()}>
+                      {isSubmitting && (
+                        <span
+                          title='Saving data...'
+                          className='relative inline-flex rounded-full h-3 w-3 bg-red-500'
+                        />
+                      )}
                       <span>Save</span>
                     </button>
                   </div>
@@ -186,18 +266,23 @@ export default function Settings({ user, settings, __setUser }: props) {
 
               <div
                 className={clsx(
-                  'transition duration-500 ease-in-out transform absolute z-0 sm:-bottom-16 -bottom-24 right-0 w-full min-w-max sm:w-4/12 p-3 overflow-y-hidden',
-                  error ? 'translate-y-0 opacity-1' : '-translate-y-6 opacity-0 pointer-events-none'
-                )}
-              >
-                <div className='px-2 py-1 bg-red-600 rounded font-bold'>{error}</div>
+                  'transition duration-500 ease-in-out transform absolute bottom-0 right-0 w-full min-w-max sm:w-4/12 p-3 overflow-y-hidden',
+                  error
+                    ? 'translate-y-0 opacity-1'
+                    : '-translate-y-6 opacity-0 pointer-events-none'
+                )}>
+                <div className='px-2 py-1 bg-red-600 rounded font-bold'>
+                  {error}
+                </div>
               </div>
             </span>
 
             <form>
               <div className='flex flex-wrap flex-col sm:content-center space-y-2 overflow-x-hidden'>
                 <label>Description</label>
-                <MiniEditor {...{ handleBlur, handleChange, value: values.description }} />
+                <MiniEditor
+                  {...{ handleBlur, handleChange, value: values.description }}
+                />
 
                 <div className='flex flex-wrap justify-center space-x-3'>
                   <label>Active</label>
@@ -207,8 +292,7 @@ export default function Settings({ user, settings, __setUser }: props) {
                       onChange={active => setValues({ ...values, active })}
                       className={`transition duration-300 ease-in-out transform  ${
                         values.active ? 'bg-blue-600' : 'bg-gray-300'
-                      } relative inline-flex items-center h-6 rounded-full w-11 focus:outline-none`}
-                    >
+                      } relative inline-flex items-center h-6 rounded-full w-11 focus:outline-none`}>
                       <span className='sr-only'>Active</span>
                       <span
                         className={`transition duration-300 ease-in-out transform  ${
@@ -236,15 +320,24 @@ export default function Settings({ user, settings, __setUser }: props) {
                   name='banner type'
                   id='banner_type'
                   className='text-gray-700 rounded focus:outline-none'
-                  onChange={e => setValues({ ...values, bannerData: { ...values.bannerData, type: e.currentTarget.value as bannerTypes } })}
-                  value={values.bannerData.type}
-                >
+                  onChange={e =>
+                    setValues({
+                      ...values,
+                      bannerData: {
+                        ...values.bannerData,
+                        type: e.currentTarget.value as bannerTypes,
+                      },
+                    })
+                  }
+                  value={values.bannerData.type}>
                   <option value='color'>Solid color background</option>
                   <option value='img'>Url background image (test)</option>
                 </select>
 
                 <div className='pt-3'>
-                  {values.bannerData.type === 'color' && <div>Color picker</div>}
+                  {values.bannerData.type === 'color' && (
+                    <div>Color picker</div>
+                  )}
                   {values.bannerData.type === 'img' && (
                     <div>
                       <input
@@ -252,7 +345,15 @@ export default function Settings({ user, settings, __setUser }: props) {
                         placeholder='Image url'
                         value={values.bannerData.image}
                         className='rounded px-2 py-1 focus:outline-none text-black'
-                        onChange={e => setValues({ ...values, bannerData: { ...values.bannerData, image: e.currentTarget.value } })}
+                        onChange={e =>
+                          setValues({
+                            ...values,
+                            bannerData: {
+                              ...values.bannerData,
+                              image: e.currentTarget.value,
+                            },
+                          })
+                        }
                       />
                     </div>
                   )}
@@ -262,12 +363,14 @@ export default function Settings({ user, settings, __setUser }: props) {
           </>
         )}
       </Formik>
-    </Layout>
+    </main>
   );
 }
 
 export const getServerSideProps: GetServerSideProps = withSession(
-  async (context: withSessionGetServerSideProps): Promise<GetServerSidePropsResult<any>> => {
+  async (
+    context: withSessionGetServerSideProps
+  ): Promise<GetServerSidePropsResult<any>> => {
     await connectToDatabase();
     const session = context.req.session.get('user');
 

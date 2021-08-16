@@ -1,7 +1,11 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import 'tailwindcss/tailwind.css';
+
 import AnimatedLoader from 'components/AnimatedLoader';
 import CreateGuildApplicationModal from 'components/guild/CreateGuildApplicationModal';
 // import GuildCard from 'components/GuildCard';
 import Layout from 'components/layout';
+import MetaTags from 'components/MetaTags';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { RawUserGivenGuild, RawUserGuildIs } from 'typings/typings';
@@ -17,7 +21,9 @@ export default function Server({ user }: any) {
   const [IsModalOpen, setModalOpen] = useState(false);
   const [selectedGuildModalData, setGuildModleData] = useState(null);
 
-  const [userGuildData, setData] = useState<ApiUserGuildData>({} as ApiUserGuildData);
+  const [userGuildData, setData] = useState<ApiUserGuildData>(
+    {} as ApiUserGuildData
+  );
 
   const router = useRouter();
 
@@ -39,39 +45,53 @@ export default function Server({ user }: any) {
 
   if (loading) {
     return (
-      <Layout title='• Servers'>
+      <main>
+        <MetaTags title='dmod.gg - Servers Loading' />
         <AnimatedLoader />
-      </Layout>
+      </main>
     );
   }
 
   if (IsError) {
     return (
-      <Layout title='• Servers'>
+      <main>
+        <MetaTags title='dmod.gg - Servers ERROR' />
         <div className='text-center text-xl'>
-          <h1 className='text-red-600'>An error has occored! Try again in a bit.</h1>
+          <h1 className='text-red-600'>
+            An error has occored! Try again in a bit.
+          </h1>
         </div>
-      </Layout>
+      </main>
     );
   }
 
   return (
-    <Layout title='Servers' description='User Server list'>
-      <div className='space-y-6 w-screen'>
+    <main>
+      <MetaTags title='dmod.gg - Servers' description='dmod.gg servers list' />
+      <div className='space-y-6'>
         {userGuildData.included.length > 0 && (
           <div className='space-y-3 text-xl'>
             <h1 className='text-center'>Guilds Applications found.</h1>
             <div className='flex justify-center overflow-x-hidden'>
               <div className='flex flex-col sm:grid grid-cols-3 gap-3 w-full sm:w-2/3'>
                 {userGuildData.included.map(guild => (
-                  <div key={guild.id} className='flex rounded-md bg-servercard py-2 px-4 cursor-pointer space-x-2 max-w-2xl' onClick={() => router.push(`/servers/${guild.id}`)}>
+                  <div
+                    key={guild.id}
+                    className='flex rounded-md bg-servercard py-2 px-4 cursor-pointer space-x-2 max-w-2xl'
+                    onClick={() => router.push(`/servers/${guild.id}`)}>
                     <img
                       draggable={false}
                       className='rounded-full w-14 h-14 md:w-20 md:h-20'
-                      src={guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=128` : `/logo.png`}
+                      src={
+                        guild.icon
+                          ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=128`
+                          : `/logo.png`
+                      }
                       alt='guild icon'
                     />
-                    <span className='inline-flex flex-wrap content-center text-xl md:text-2xl overflow-x-hidden'>{guild.name}</span>
+                    <span className='inline-flex flex-wrap content-center text-xl md:text-2xl overflow-x-hidden'>
+                      {guild.name}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -90,22 +110,31 @@ export default function Server({ user }: any) {
                   onClick={() => {
                     setGuildModleData(guild);
                     setModalOpen(true);
-                  }}
-                >
+                  }}>
                   <img
                     draggable={false}
                     className='rounded-full w-14 h-14 md:w-20 md:h-20'
-                    src={guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=128` : `/logo.png`}
+                    src={
+                      guild.icon
+                        ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=128`
+                        : `/logo.png`
+                    }
                     alt='guild icon'
                   />
-                  <span className='inline-flex flex-wrap content-center text-xl md:text-2xl overflow-x-hidden'>{guild.name}</span>
+                  <span className='inline-flex flex-wrap content-center text-xl md:text-2xl overflow-x-hidden'>
+                    {guild.name}
+                  </span>
                 </div>
               ))}
             </div>
           </div>
         </div>
       </div>
-      <CreateGuildApplicationModal guild={selectedGuildModalData} closeModal={() => setModalOpen(false)} isOpen={IsModalOpen} />
-    </Layout>
+      <CreateGuildApplicationModal
+        guild={selectedGuildModalData}
+        closeModal={() => setModalOpen(false)}
+        isOpen={IsModalOpen}
+      />
+    </main>
   );
 }

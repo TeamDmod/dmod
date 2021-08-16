@@ -1,70 +1,92 @@
-.main_header {
+.top {
   background-color: #080e1f;
-  // height: 350px;
-  margin: 0;
   width: 100%;
-  border-top: 2px solid #24114c;
-  border-bottom: 2px solid #24114c;
-  // text-align: center;
+  box-shadow: inset 0 0 1px 2px #24114c;
+  padding: 200px 10%;
+}
 
-  .search_container {
-    margin-top: 30px;
+.search {
+  height: 3rem;
+  width: 40%;
+  background-color: white;
+  border-radius: 16px 0px 0px 16px;
+  border: none;
+  padding-left: 1rem;
+  font-size: 1.2rem;
 
-    .search_bar {
-      padding: 5px 10px;
-      font-family: 'San Francisco', sans-serif;
-      border: none;
-      font-size: 0.9rem;
-      border-top-left-radius: 7px;
-      border-bottom-left-radius: 7px;
-      width: 500px;
-      height: 35px;
-    }
-
-    .search_button {
-      height: 45px;
-      padding: 5px 10px;
-      font-family: 'San Francisco', sans-serif;
-      border: none;
-      border-top-right-radius: 7px;
-      border-bottom-right-radius: 7px;
-      color: white;
-      background-color: #432891;
-    }
+  &::placeholder {
+    font-size: 1.2rem;
   }
 
-  .text_headings {
-    margin-top: 75px;
-    h1 {
-      font-weight: 700;
-      font-size: 46px;
-    }
-
-    P {
-      font-size: 16px;
-      color: grey;
-      margin-top: -20px;
-    }
+  &:focus {
+    outline: none;
   }
 }
 
-.home_wave {
-  margin-top: -150px;
+@media screen and (max-width: 768px) {
+  .search {
+    width: 100%;
+  }
 }
 
-.home_main_content {
-  min-height: 100px;
+.search_button {
+  height: 3rem;
+  border-radius: 0px 16px 16px 0px;
 }
 
-.top_rated {
-  padding: 40px 10%;
+.search_bar {
+  height: 3rem;
+  display: flex;
+}
 
-  .heading {
-    text-align: center;
+.error {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  place-content: center;
+  background-color: rgba(255, 255, 255, 0.233);
 
-    p {
-      color: rgb(173, 173, 173);
-      margin-top: -10px;
+  .content {
+    position: relative;
+    background: #414141;
+    padding: 2rem;
+    border-radius: 1rem;
+  }
+
+  h1 {
+    margin: 1rem 0;
+    color: #eb4545;
+  }
+
+  a {
+    color: #929292;
+    cursor: pointer;
+    transition: color 200ms ease 0s;
+
+    &:hover {
+      color: #ffffff;
+    }
+  }
+
+  .cross {
+    position: absolute;
+    right: 1.2rem;
+    top: 1.2rem;
+
+    svg {
+      width: 32px;
+      height: 32px;
+      fill: #929292;
+      stroke: #929292;
+      transition: color 200ms ease 0s;
+
+      &:hover {
+        fill: white;
+        stroke: white;
+      }
     }
   }
 }

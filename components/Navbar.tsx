@@ -1,39 +1,71 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { useMediaQuery } from 'react-responsive';
+import styles from 'styles/navbar.module.scss';
 import { sessionFetchedUser } from 'typings/typings';
 
 import UserLoader from './user/userLoader';
 
-function XmarkerIcon() {
+function BurgerIcon() {
   return (
-    <svg width='19' height='21' viewBox='0 0 19 21' fill='none' xmlns='http://www.w3.org/2000/svg'>
-      <rect y='18.6446' width='24.3388' height='2.80832' rx='1' transform='rotate(-50 0 18.6446)' fill='#FBFBFB' />
-      <rect x='2.62433' y='0.395752' width='24.3388' height='2.80832' rx='1' transform='rotate(50 2.62433 0.395752)' fill='#FBFBFB' />
+    <svg
+      width={48}
+      height={48}
+      fill='none'
+      stroke='currentColor'
+      viewBox='0 0 24 24'
+      xmlns='http://www.w3.org/2000/svg'>
+      <path
+        strokeLinecap='round'
+        strokeLinejoin='round'
+        strokeWidth={2}
+        d='M4 6h16M4 12h16M4 18h16'
+      />
     </svg>
   );
 }
 
-function BurgerMenuIcon() {
+function CrossIcon() {
   return (
-    <svg width='26' height='15' viewBox='0 0 26 15' fill='none' xmlns='http://www.w3.org/2000/svg'>
-      <rect width='26' height='3' rx='1.5' fill='#F9F9F9' />
-      <rect y='6' width='26' height='3' rx='1.5' fill='#F9F9F9' />
-      <rect y='12' width='26' height='3' rx='1.5' fill='#F9F9F9' />
+    <svg
+      width={48}
+      height={48}
+      fill='none'
+      stroke='currentColor'
+      viewBox='0 0 24 24'
+      xmlns='http://www.w3.org/2000/svg'>
+      <path
+        strokeLinecap='round'
+        strokeLinejoin='round'
+        strokeWidth={2}
+        d='M4 4L18 18M18 4L4 18'
+      />
     </svg>
   );
 }
 
-function Navbar({ user, fetcher }: { user: sessionFetchedUser; fetcher: any }) {
-  const [open, setOpen] = useState(false);
+export default function Navbar({
+  user,
+  fetcher,
+}: {
+  user: sessionFetchedUser;
+  fetcher: any;
+}) {
+  const isMobile = useMediaQuery({ maxWidth: 768 });
+  const [active, setActive] = useState(false);
   const [winlogOpen, setWinlogOpen] = useState(false);
   const router = useRouter();
 
-  function openLoginWindo() {
+  function openLoginWindow() {
     if (winlogOpen) return;
     const left = screen.width / 2 - 480 / 2;
     const top = screen.height / 2 - 800 / 2;
-    const win = window.open(`${window.location.origin}/api/auth/login`, '', `width=480,height=800,resizable=no,top=${top},left=${left}`);
+    const win = window.open(
+      `${window.location.origin}/api/auth/login`,
+      '',
+      `width=480,height=800,resizable=no,top=${top},left=${left}`
+    );
     setWinlogOpen(true);
 
     const close_inter = setInterval(async () => {
@@ -50,7 +82,7 @@ function Navbar({ user, fetcher }: { user: sessionFetchedUser; fetcher: any }) {
     }, 1000);
   }
 
-  const navbarLinks = [
+  const links = [
     // {
     //   name: 'Listings',
     //   link: '/listings',
@@ -60,80 +92,61 @@ function Navbar({ user, fetcher }: { user: sessionFetchedUser; fetcher: any }) {
       link: '/servers',
     },
     {
+      name: 'Moderators',
+      link: '/moderators',
+    },
+    {
       name: 'Discord',
       link: '/discord',
     },
   ];
 
+  // <UserLoader oplm={openLoginWindow} fetcher={fetcher} user={user} />
+
   return (
-    <header className='px-10 py-3'>
-      <div className='sm:hidden flex w-full justify-between'>
-        <div className='flex flex-wrap content-center'>
-          <div className='cursor-pointer' onClick={() => setOpen(!open)}>
-            <BurgerMenuIcon />
-          </div>
-        </div>
-
-        <div>
-          <Link href='/'>
-            <img className='logo select-none' draggable={false} src='/logo.png' alt='dmod.gg logo' />
-          </Link>
-        </div>
-
-        {open && (
-          <div className='absolute top-0 left-0 w-full text-white px-4 py-1 md:px-24 lg:px-8 z-50'>
-            <div className='p-5 bg-dorpdown rounded shadow-sm'>
-              <div className='flex items-center justify-between'>
-                <div className='flex space-x-1'>
-                  <img className='logo select-none' src='/logo.png' draggable={false} alt='dmod.gg logo' onClick={() => router.push('/')} />
-                  <span className='flex flex-wrap content-center text-xl font-medium cursor-pointer' onClick={() => router.push('/')}>
-                    Dmod
-                  </span>
-                </div>
-                <div onClick={() => setOpen(!open)} className='hover:bg-gray-700 rounded p-2 cursor-pointer'>
-                  <XmarkerIcon />
-                </div>
-              </div>
-
-              <div className='flex flex-col text-xl text-center'>
-                {navbarLinks.map(link => {
-                  return (
-                    <Link key={link.name} href={link.link}>
-                      {link.name}
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        )}
-
-        <UserLoader oplm={openLoginWindo} fetcher={fetcher} user={user} />
-      </div>
-
-      <div className='hidden w-full sm:flex'>
-        <div className='w-full flex space-x-3'>
-          <Link href='/'>
-            <img className='logo select-none' draggable={false} src='/logo.png' alt='dmod.gg logo' />
-          </Link>
-
-          <div className='flex flex-row w-full space-x-3 '>
-            {navbarLinks.map(link => {
+    <header className={styles.navbar}>
+      <nav>
+        <Link href='/'>
+          <img
+            src='/logo.png'
+            alt='dmod.gg logo'
+            width={48}
+            height={48}
+            className='pointer'
+          />
+        </Link>
+        {isMobile &&
+          ((!active && (
+            <button
+              onClick={() => setActive(!active)}
+              name='menu'
+              className={styles.menu}>
+              <BurgerIcon />
+            </button>
+          )) ||
+            (active && (
+              <button
+                onClick={() => setActive(!active)}
+                name='menu'
+                className={styles.menu}>
+                <CrossIcon />
+              </button>
+            )))}
+        {(!isMobile || active) && (
+          <ul>
+            {links.map(link => {
               return (
-                <span key={link.name} className='flex flex-wrap content-center'>
-                  <Link href={link.link}>{link.name}</Link>
-                </span>
+                <li>
+                  <Link key={link.name} href={link.link}>
+                    {link.name}
+                  </Link>
+                </li>
               );
             })}
-          </div>
-        </div>
-
-        <div className='flex flex-wrap w-full justify-end'>
-          <UserLoader oplm={openLoginWindo} fetcher={fetcher} user={user} />
-        </div>
-      </div>
+          </ul>
+        )}
+        <UserLoader oplm={openLoginWindow} fetcher={fetcher} user={user} />
+      </nav>
     </header>
   );
 }
-
-export default Navbar;
