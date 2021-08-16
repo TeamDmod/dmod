@@ -45,7 +45,6 @@ export default function Home() {
                 if (ev.key === 'Enter') searchRedirect();
               }}
             />
-            <button className={styles.search_button} onClick={searchRedirect}>
               Search
             </button>
           </div>
