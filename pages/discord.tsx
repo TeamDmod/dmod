@@ -1,27 +1,25 @@
-import Head from 'next/head';
+import MetaTags from 'components/MetaTags';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
-const DiscordRedirect = () => {
-	return (
-		<Head>
-			<title>Dmod Discord</title>
-			<meta property="og:type" content="website" />
-			<meta property="og:title" content="dmod.gg" />
-			<meta
-				property="og:description"
-				content="Innovating the Moderation Community. Moderator & Server Profiles, Built-in Applications for Owners, Moderator Listings, Resources, and so much more!"
-			/>
-			<meta property="og:image" content="https://dmod.gg/logo.png" />
-			<meta name="theme-color" content="#432891" />
-			<meta name="twitter:card" content="summary" />
-			<meta name="twitter:title" content="dmod.gg" />
-			<meta
-				name="twitter:description"
-				content="Innovating the Moderation Community. Moderator & Server Profiles, Built-in Applications for Owners, Moderator Listings, Resources, and so much more!"
-			/>
-			<meta name="twitter:image" content="https://dmod.gg/logo.png" />
-			<meta httpEquiv="refresh" content="0;url=https://discord.com/invite/429zwpugYf" />
-		</Head>
-	);
-};
+export default function Discord() {
+  const router = useRouter();
 
-export default DiscordRedirect;
+  useEffect(() => {
+    router.replace('https://discord.com/invite/429zwpugYf');
+  }, []);
+
+  return (
+    <>
+      <MetaTags
+        title='Dmod Discord'
+        description='The official dmod.gg Discord server! Join us to learn how we are innovating the Moderation Community.'
+      />
+      <main>
+        <h1>
+          <small>Redirecting...</small>
+        </h1>
+      </main>
+    </>
+  );
+}
