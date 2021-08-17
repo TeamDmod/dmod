@@ -50,7 +50,7 @@
   position: absolute;
   width: 10rem;
   top: 6rem;
-  right: 0;
+  right: 12.5%;
   display: grid;
   grid-template-rows: repeat(3, 1fr);
   padding: 0.5rem;
@@ -147,6 +147,7 @@
     flex-direction: column;
     grid-column: 1 / 4;
     top: unset;
+    right: unset;
     width: 100%;
     background: none;
     align-items: center;
