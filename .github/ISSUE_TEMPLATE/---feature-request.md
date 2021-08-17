@@ -1,7 +1,7 @@
 ---
 name: "💡 Feature Request"
 about: Request a feature to be added to beta.dmod.gg.
-title: ""
+title: "Feature request:"
 labels: enhancement
 assignees: ""
 ---
