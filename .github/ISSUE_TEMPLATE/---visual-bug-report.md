@@ -1,7 +1,7 @@
 ---
 name: "👀 Visual Bug Report"
 about: Report a visual bug you found on beta.dmod.gg.
-title: ""
+title: "Visual Bug:"
 labels: bug, visual
 assignees: ""
 ---
