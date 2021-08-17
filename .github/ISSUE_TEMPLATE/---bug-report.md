@@ -1,7 +1,7 @@
 ---
 name: "👾 Bug Report"
 about: Report a bug you found on beta.dmod.gg.
-title: ""
+title: "Bug:"
 labels: bug
 assignees: ""
 ---
