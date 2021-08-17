@@ -47,7 +47,8 @@
     "react-redux": "^7.2.3",
     "react-responsive": "^9.0.0-beta.3",
     "redux": "^4.0.5",
-    "sanitize-html": "^2.4.0"
+    "sanitize-html": "^2.4.0",
+    "tailwindcss": "^2.1.2"
   },
   "devDependencies": {
     "@types/btoa": "^1.2.3",
@@ -75,7 +76,6 @@
     "postcss": "^8.3.0",
     "prettier": "^2.2.1",
     "sass": "^1.32.13",
-    "tailwindcss": "^2.1.2",
     "typescript": "^4.2.4"
   }
 }

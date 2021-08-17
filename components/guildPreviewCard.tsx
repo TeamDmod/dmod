@@ -1,6 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-// import 'tailwindcss/tailwind.css';
-
 import { PreviewGuildData } from 'models/preview_guilds';
 import { useRouter } from 'next/router';
 import styles from 'styles/preview.module.scss';

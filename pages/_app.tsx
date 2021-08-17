@@ -1,5 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-// import 'tailwindcss/tailwind.css';
 import '../styles/globals.scss';
 import 'nprogress/nprogress.css';
 
