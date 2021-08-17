@@ -1,13 +1,22 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import 'tailwindcss/tailwind.css';
+
 import { Switch } from '@headlessui/react';
 import GuildView from 'components/guild/guildView';
 import Layout from 'components/layout';
+import Metatags from 'components/MetaTags';
 import { Formik } from 'formik';
 import { resolveGuildMemberPerms } from 'lib/backend-utils';
 import { clsx } from 'lib/constants';
 import connectToDatabase from 'lib/mongodb.connection';
 import redis from 'lib/redis';
 import withSession from 'lib/session';
-import { DESCRIPTION_MAX_DATA, DESCRIPTION_MIN, SHORT_DESCRIPTION_MAX_DATA, SHORT_DESCRIPTION_MIN } from 'lib/validators/serverUpdateValidators';
+import {
+  DESCRIPTION_MAX_DATA,
+  DESCRIPTION_MIN,
+  SHORT_DESCRIPTION_MAX_DATA,
+  SHORT_DESCRIPTION_MIN,
+} from 'lib/validators/serverUpdateValidators';
 import guilds, { GuildData } from 'models/guilds';
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
 import React, { useEffect, useState } from 'react';
@@ -37,7 +46,8 @@ export default function GuildSettings({ guild, uid, len }: props) {
   }, []);
 
   return (
-    <Layout title={`${guild.name} - dmod.gg`} description='Server settings'>
+    <main>
+      <Metatags title={`${guild.name} - dmod.gg`} description='Server settings' />
       <span id='preview_392sf' className={previewOpen ? 'pre-open' : 'pre-close'} />
       <>
         {/* <div className='ml-2'>
@@ -46,7 +56,9 @@ export default function GuildSettings({ guild, uid, len }: props) {
           </button>
         </div> */}
         <div className='mx-4 my-2 text-center'>
-          <button className='bg-red-600 rounded focus:outline-none px-3 py-2' onClick={() => setPreviewOpen(!previewOpen)}>
+          <button
+            className='bg-red-600 rounded focus:outline-none px-3 py-2'
+            onClick={() => setPreviewOpen(!previewOpen)}>
             Preview
           </button>
           {/* <div className='absolute'>Test</div> */}
@@ -63,13 +75,20 @@ export default function GuildSettings({ guild, uid, len }: props) {
           validate={values => {
             const errors: any = {};
 
-            if (values.description.length < DESCRIPTION_MIN || values.description.length > DESCRIPTION_MAX_DATA.NORMAL)
+            if (
+              values.description.length < DESCRIPTION_MIN ||
+              values.description.length > DESCRIPTION_MAX_DATA.NORMAL
+            )
               errors.description = `Description length to long or short. max: ${DESCRIPTION_MAX_DATA.NORMAL} min: ${DESCRIPTION_MIN}`;
 
-            if (values.short_description.length < SHORT_DESCRIPTION_MIN || values.short_description.length > SHORT_DESCRIPTION_MAX_DATA.NORMAL)
+            if (
+              values.short_description.length < SHORT_DESCRIPTION_MIN ||
+              values.short_description.length > SHORT_DESCRIPTION_MAX_DATA.NORMAL
+            )
               errors.description = `Short description length to long or short. max: ${SHORT_DESCRIPTION_MAX_DATA.NORMAL} min: ${SHORT_DESCRIPTION_MIN}`;
 
-            if (!/[a-zA-Z0-9\\-]{2,32}/.test(values.invite) || (values.invite && values.invite.includes(' '))) errors.invite = 'Invalid invite';
+            if (!/[a-zA-Z0-9\\-]{2,32}/.test(values.invite) || (values.invite && values.invite.includes(' ')))
+              errors.invite = 'Invalid invite';
 
             return errors;
           }}
@@ -82,7 +101,9 @@ export default function GuildSettings({ guild, uid, len }: props) {
               // eslint-disable-next-line no-empty
             } catch {}
 
-            const body: any = Object.fromEntries(Object.entries(values).filter(([key, value]) => value !== guild[key] && value !== undefined));
+            const body: any = Object.fromEntries(
+              Object.entries(values).filter(([key, value]) => value !== guild[key] && value !== undefined)
+            );
 
             const data = await fetch(`${window.origin}/api/v1/servers/${guild.id}/settings`, {
               method: 'PATCH',
@@ -103,16 +124,24 @@ export default function GuildSettings({ guild, uid, len }: props) {
             resetForm({ values: { ...values, ...updateObjectMapping } });
 
             setSubmitting(false);
-          }}
-        >
-          {({ handleSubmit, handleChange, handleBlur, values, isSubmitting, dirty, resetForm, setValues, errors }) => (
+          }}>
+          {({
+            handleSubmit,
+            handleChange,
+            handleBlur,
+            values,
+            isSubmitting,
+            dirty,
+            resetForm,
+            setValues,
+            errors,
+          }) => (
             <>
               <div
                 className={clsx(
                   'transform transition duration-300 ease-in-out absolute z-40 inset-y-0 inset-x-0 min-h-screen h-full w-full bg-gray-800 bg-opacity-90',
                   previewOpen ? 'scale-100 opacity-100' : 'scale-50 opacity-0 visible pointer-events-none'
-                )}
-              >
+                )}>
                 <div className='px-10 sm:px-16 pt-5 rounded h-full flex'>
                   <div className='p-2 bg-dorpdown w-full h-full overflow-y-auto'>
                     <GuildView guild={{ ...guild, ...values }} isManager hasApp={false} len={len} Inpreview />
@@ -132,18 +161,29 @@ export default function GuildSettings({ guild, uid, len }: props) {
               <span>
                 <div
                   className={clsx(
-                    'transition duration-500 ease-in-out transform z-0 absolute -bottom-16 left-0 w-full min-w-max sm:w-4/12 p-3 overflow-y-hidden',
+                    'transition duration-500 ease-in-out transform z-0 absolute bottom-0 left-0 w-full min-w-max sm:w-4/12 p-3 overflow-y-hidden',
                     dirty ? 'translate-y-0 opacity-1' : '-translate-y-6 opacity-0 pointer-events-none'
-                  )}
-                >
+                  )}>
                   <div className='flex bg-popupcard rounded p-2 justify-between space-x-2'>
                     <span className='inline-flex flex-wrap content-center'>Change detected!</span>
                     <div className='flex space-x-2'>
-                      <button className='px-2 py-1 bg-blue-800 rounded focus:outline-none' type='button' onClick={() => resetForm()}>
+                      <button
+                        className='px-2 py-1 bg-blue-800 rounded focus:outline-none'
+                        type='button'
+                        onClick={() => resetForm()}>
                         Cancel
                       </button>
-                      <button className='px-2 py-1 bg-blue-800 rounded focus:outline-none space-x-2' type='submit' disabled={isSubmitting} onClick={() => handleSubmit()}>
-                        {isSubmitting && <span title='Saving data...' className='relative inline-flex rounded-full h-3 w-3 bg-red-500' />}
+                      <button
+                        className='px-2 py-1 bg-blue-800 rounded focus:outline-none space-x-2'
+                        type='submit'
+                        disabled={isSubmitting}
+                        onClick={() => handleSubmit()}>
+                        {isSubmitting && (
+                          <span
+                            title='Saving data...'
+                            className='relative inline-flex rounded-full h-3 w-3 bg-red-500'
+                          />
+                        )}
                         <span>Save</span>
                       </button>
                     </div>
@@ -225,8 +265,7 @@ export default function GuildSettings({ guild, uid, len }: props) {
                         onChange={view => setValues({ ...values, view })}
                         className={`transition duration-300 ease-in-out transform  ${
                           values.view ? 'bg-blue-600' : 'bg-gray-300'
-                        } relative inline-flex items-center h-6 rounded-full w-11 focus:outline-none`}
-                      >
+                        } relative inline-flex items-center h-6 rounded-full w-11 focus:outline-none`}>
                         <span className='sr-only'>Active</span>
                         <span
                           className={`transition duration-300 ease-in-out transform  ${
@@ -244,11 +283,12 @@ export default function GuildSettings({ guild, uid, len }: props) {
                       <div>
                         <Switch
                           checked={values.completed}
-                          onChange={completed => setValues({ ...values, completed, view: !values.completed && !values.view })}
+                          onChange={completed =>
+                            setValues({ ...values, completed, view: !values.completed && !values.view })
+                          }
                           className={`transition duration-300 ease-in-out transform  ${
                             values.completed ? 'bg-blue-600' : 'bg-gray-300'
-                          } relative inline-flex items-center h-6 rounded-full w-11 focus:outline-none`}
-                        >
+                          } relative inline-flex items-center h-6 rounded-full w-11 focus:outline-none`}>
                           <span className='sr-only'>Active</span>
                           <span
                             className={`transition duration-300 ease-in-out transform  ${
@@ -265,7 +305,7 @@ export default function GuildSettings({ guild, uid, len }: props) {
           )}
         </Formik>
       </>
-    </Layout>
+    </main>
   );
 }
 
@@ -290,7 +330,9 @@ export const getServerSideProps: GetServerSideProps = withSession(
     const guildCache = await redis.get(`guild:${context.query.guildID}`);
     let guild: RawGuild;
     if (!guildCache) {
-      guild = await fetch(`${API_ENDPOINT}/guilds/${context.query.guildID}?with_counts=true`, authHead).then(json);
+      guild = await fetch(`${API_ENDPOINT}/guilds/${context.query.guildID}?with_counts=true`, authHead).then(
+        json
+      );
       // @ts-expect-error
       if (guild.code || guild.message) return { notFound: true };
 
@@ -311,12 +353,19 @@ export const getServerSideProps: GetServerSideProps = withSession(
     if (!isLimited) {
       let member: RawGuildMember = null;
       if (session?.id) {
-        const Member = await fetch(`${API_ENDPOINT}/guilds/${context.query.guildID}/members/${session.id}`, authHead);
+        const Member = await fetch(
+          `${API_ENDPOINT}/guilds/${context.query.guildID}/members/${session.id}`,
+          authHead
+        );
         const header = Object.fromEntries(Member.headers.entries());
         if (header['x-ratelimit-remaining'] === '0') {
           const waitTime = Math.floor(Math.random() * (5 - 3 + 1)) + 3;
           redis.setex('limited?type=memberfetch', waitTime, 1).then(value => {
-            if (value === 'OK') console.log('Entered "ratelimit-remaining" of 0. ', `Set limted for member fetching true for ${waitTime} seconds`);
+            if (value === 'OK')
+              console.log(
+                'Entered "ratelimit-remaining" of 0. ',
+                `Set limted for member fetching true for ${waitTime} seconds`
+              );
             else console.log('OPPS!!! Faild to set a limiting mark for member fetching. ', value);
           });
         }
@@ -327,7 +376,8 @@ export const getServerSideProps: GetServerSideProps = withSession(
 
       memberPerms = member ? resolveGuildMemberPerms(guild, member) : 0;
 
-      if (session?.id) await redis.setex(`server:${context.query.guildID}:member:${session.id}`, 60 * 5, memberPerms);
+      if (session?.id)
+        await redis.setex(`server:${context.query.guildID}:member:${session.id}`, 60 * 5, memberPerms);
     } else if (session?.id) {
       const perms = await redis.get(`server:${context.query.guildID}:member:${session.id}`);
       memberPerms = Number(perms);

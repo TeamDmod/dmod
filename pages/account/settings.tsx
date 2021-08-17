@@ -1,3 +1,6 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import 'tailwindcss/tailwind.css';
+
 import { Switch } from '@headlessui/react';
 import AnimatedLoader from 'components/AnimatedLoader';
 import MetaTags from 'components/MetaTags';

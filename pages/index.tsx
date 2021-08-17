@@ -9,9 +9,7 @@ import React, { useEffect, useState } from 'react';
 import styles from 'styles/home.module.scss';
 
 export default function Home() {
-  const [list, setList] = useState<
-    (PreviewGuildData & { banner?: string; icon?: string })[]
-  >([]);
+  const [list, setList] = useState<(PreviewGuildData & { banner?: string; icon?: string })[]>([]);
   const [search, setSearch] = useState('');
 
   const router = useRouter();
@@ -50,7 +48,7 @@ export default function Home() {
             </button>
           </div>
         </div>
-        <div className='mx-4 mt-2 flex flex-wrap space-y-2'>
+        <div className={styles.guild_list}>
           {list.map((guild, i) => {
             const time = () => {
               const t = 0.2 * i + 1;
@@ -58,14 +56,7 @@ export default function Home() {
               return t;
             };
 
-            return (
-              <GuildPreviewCard
-                duration={time()}
-                className='gdc-sihf'
-                key={guild._id}
-                guild={guild}
-              />
-            );
+            return <GuildPreviewCard duration={time()} key={guild._id} guild={guild} />;
           })}
         </div>
         <Footer />

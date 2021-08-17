@@ -71,3 +71,13 @@ button {
 .invisible {
   display: none;
 }
+
+.error {
+  color: #eb4545;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

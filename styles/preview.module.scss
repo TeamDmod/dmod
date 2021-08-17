@@ -1,10 +1,43 @@
 .card {
   display: flex;
+  flex-wrap: wrap;
   border-radius: 0.4rem;
   cursor: pointer;
   overflow-x: hidden;
   background-color: #142045;
   padding: 0.5rem 1rem;
+
+  h3 {
+    text-align: center;
+  }
+
+  p {
+    max-height: 60px;
+    margin-top: 0;
+  }
+}
+
+.title {
+  margin: auto 0 auto 10px;
+}
+
+.banner {
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  height: 6rem;
+}
+
+.icon_container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  height: 2rem;
+
+  .icon {
+    position: absolute;
+    bottom: 0;
+  }
 }
 
 .icon {
@@ -14,6 +47,7 @@
   border-radius: 50%;
   background-position: center center;
   background-size: 110%;
+  box-shadow: 0px 6px 9px rgba(0, 0, 0, 0.25);
 }
 
 .card_container {

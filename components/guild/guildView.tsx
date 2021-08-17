@@ -1,3 +1,6 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import 'tailwindcss/tailwind.css';
+
 import { clsx } from 'lib/constants';
 import MarkDown from 'lib/markdown';
 import useAtagWatch from 'lib/useAtagWatch';
@@ -16,8 +19,20 @@ interface props {
   len: number;
 }
 
-const appSatus = ['Applications Closed', 'Applications Open', 'Applications Full', 'Applications opining {time}', 'Applications open with {slots}'];
-const appColorStaus = ['rgb(191, 42, 29)', 'rgb(20, 184, 110)', 'rgb(76, 29, 149)', 'rgb(14, 53, 194)', 'rgb(196, 12, 55)'];
+const appSatus = [
+  'Applications Closed',
+  'Applications Open',
+  'Applications Full',
+  'Applications opining {time}',
+  'Applications open with {slots}',
+];
+const appColorStaus = [
+  'rgb(191, 42, 29)',
+  'rgb(20, 184, 110)',
+  'rgb(76, 29, 149)',
+  'rgb(14, 53, 194)',
+  'rgb(196, 12, 55)',
+];
 
 function DropDownIcon() {
   return (
@@ -95,8 +110,7 @@ export default function GuildView({ guild, isManager, Inpreview, hasApp, len }: 
             style={{ zIndex: 60 }}
             onClick={() => {
               if (isManager && !Inpreview) router.push(`/servers/${guild.id}/settings`);
-            }}
-          >
+            }}>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               style={{
@@ -107,11 +121,17 @@ export default function GuildView({ guild, isManager, Inpreview, hasApp, len }: 
               width='110px'
               height='130px'
               viewBox='0 0 100 100'
-              preserveAspectRatio='xMidYMid'
-            >
+              preserveAspectRatio='xMidYMid'>
               <g transform='translate(50 50) scale(1.5)'>
                 <g>
-                  <animateTransform attributeName='transform' type='rotate' values='0;40' keyTimes='0;1' dur='0.3076923076923077s' repeatCount='indefinite' />
+                  <animateTransform
+                    attributeName='transform'
+                    type='rotate'
+                    values='0;40'
+                    keyTimes='0;1'
+                    dur='0.3076923076923077s'
+                    repeatCount='indefinite'
+                  />
                   <DropDownIcon />
                 </g>
               </g>
@@ -125,8 +145,7 @@ export default function GuildView({ guild, isManager, Inpreview, hasApp, len }: 
           style={{
             background: '#1A274D',
             boxShadow: '-7px 0px 8px rgba(0, 0, 0, 0.25)',
-          }}
-        >
+          }}>
           {open ? (
             <div>
               <div onClick={() => setOpen(!open)} className='py-1 px-2 rounded bg-indigo-600 cursor-pointer'>
@@ -137,8 +156,14 @@ export default function GuildView({ guild, isManager, Inpreview, hasApp, len }: 
           ) : (
             <div className='flex justify-center cursor-pointer' onClick={() => setOpen(!open)}>
               <svg width='36' height='39' viewBox='0 0 36 39' fill='none' xmlns='http://www.w3.org/2000/svg'>
-                <path d='M17.6569 38.1041L0.0152298 20.4624L2.21662 18.2305L17.6569 32.9064L33.036 18.2305L35.2985 20.4624L17.6569 38.1041Z' fill='#C8D2DC' />
-                <path d='M17.6569 29.2985L0.0152298 11.6569L2.21662 9.42497L17.6569 24.1009L33.036 9.42497L35.2985 11.6569L17.6569 29.2985Z' fill='#C8D2DC' />
+                <path
+                  d='M17.6569 38.1041L0.0152298 20.4624L2.21662 18.2305L17.6569 32.9064L33.036 18.2305L35.2985 20.4624L17.6569 38.1041Z'
+                  fill='#C8D2DC'
+                />
+                <path
+                  d='M17.6569 29.2985L0.0152298 11.6569L2.21662 9.42497L17.6569 24.1009L33.036 9.42497L35.2985 11.6569L17.6569 29.2985Z'
+                  fill='#C8D2DC'
+                />
               </svg>
             </div>
           )}
@@ -148,7 +173,10 @@ export default function GuildView({ guild, isManager, Inpreview, hasApp, len }: 
         <div className='w-full'>
           <div>
             {/* eslint-disable-next-line react/no-danger */}
-            <div className='markdown-content-contaner m-3 text-lg' dangerouslySetInnerHTML={{ __html: new MarkDown(guild.description).render() }} />
+            <div
+              className='markdown-content-contaner m-3 text-lg'
+              dangerouslySetInnerHTML={{ __html: new MarkDown(guild.description).render() }}
+            />
           </div>
         </div>
         <div className='hidden md:block w-3/12'>
@@ -162,11 +190,13 @@ export default function GuildView({ guild, isManager, Inpreview, hasApp, len }: 
                 onClick={() => {
                   if (hasApp) return;
                   router.push(`/servers/${guild.id}/apply`);
-                }}
-              >
+                }}>
                 {appSatus[guild.application_status]
                   .replace('{time}', new Date(guild.application_status_data?.date).toDateString())
-                  .replace('{slots}', guild.application_status_data ? `${len}/${guild.application_status_data.max}` : 'Unknown')}
+                  .replace(
+                    '{slots}',
+                    guild.application_status_data ? `${len}/${guild.application_status_data.max}` : 'Unknown'
+                  )}
               </div>
             </div>
           </div>

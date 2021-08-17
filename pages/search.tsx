@@ -6,6 +6,7 @@ import { PreviewGuildData } from 'models/preview_guilds';
 import { userData } from 'models/users';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import preview from 'styles/preview.module.scss';
 import styles from 'styles/search.module.scss';
 
 export default function Search() {
@@ -86,56 +87,45 @@ export default function Search() {
       {loading ? (
         <div className='loader loader4' />
       ) : (
-        <div className='mx-0 sm:mx-4 mt-16 flex flex-col space-x-0 sm:space-x-3 justify-center'>
-          <h2 className='mb-1 ml-2'>Users</h2>
+        <div>
+          {users.length > 0 && (
+            <>
+              <h2 className={preview.heading}>Users</h2>
 
-          {users.length <= 0 && (
-            <div className='text-center w-full mt-4'>
-              <span className='text-5xl font-bold'>Nothing found{' :('}</span>
-            </div>
+              <div className={preview.card_container}>
+                {users.map(user => {
+                  return (
+                    <div
+                      key={user._id}
+                      className={preview.card}
+                      onClick={() => router.push(`/${user.vanity}`)}>
+                      <img alt='user avatar' src={user.avatarURL} className={preview.icon} />
+                      <h3 className={preview.title}>{user.username}</h3>
+                      <p>{user.description.slice(0, 50)}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            </>
           )}
 
-          <div className='w-full flex flex-wrap space-y-2'>
-            {users.map(user => {
-              return (
-                <div
-                  key={user._id}
-                  className='bg-listingcard p-2 rounded cursor-pointer ml-3'
-                  style={{ maxWidth: '17.5rem' }}
-                  onClick={() => router.push(`/${user.vanity}`)}>
-                  <div className='flex space-x-1'>
-                    <img alt='user avatar' src={user.avatarURL} className='rounded-full h-7 w-7' />
-                    <p className='text-xl'>{user.username}</p>
-                  </div>
-                  <p>Active: {user.active ? 'Yes' : 'No'}</p>
-                  <p className='truncate'>{user.description.slice(0, 50)}</p>
-                </div>
-              );
-            })}
-          </div>
+          {guilds.length > 0 && (
+            <>
+              <h2 className={preview.heading}>Servers</h2>
 
-          <span className='my-6' />
-          <h2 className='mb-1'>Servers</h2>
+              <div className={preview.card_container}>
+                {guilds.map((guild, i) => {
+                  const time = () => {
+                    const t = 0.2 * i + 1;
+                    if (t > 6) return Number(`${i / 4}`);
+                    return t;
+                  };
 
-          {guilds.length <= 0 && (
-            <div className='text-center w-full mt-4'>
-              <span className='text-5xl font-bold'>Nothing found{' :('}</span>
-            </div>
+                  return <GuildPreviewCard duration={time()} key={guild._id} guild={guild} />;
+                })}
+              </div>
+            </>
           )}
-
-          <div className='w-full flex flex-wrap space-y-2'>
-            {guilds.map((guild, i) => {
-              const time = () => {
-                const t = 0.2 * i + 1;
-                if (t > 6) return Number(`${i / 4}`);
-                return t;
-              };
-
-              return (
-                <GuildPreviewCard duration={time()} className='gdc-sihf' key={guild._id} guild={guild} />
-              );
-            })}
-          </div>
         </div>
       )}
       <Footer />

@@ -90,3 +90,23 @@
     }
   }
 }
+
+.guild_list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2rem;
+  margin: 1rem 4rem;
+}
+
+@media screen and (min-width: 1024px) {
+  .guild_list {
+    grid-template-columns: repeat(3, minmax(240px, 1fr));
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .guild_list {
+    gap: 1rem;
+    margin: 1rem;
+  }
+}

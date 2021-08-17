@@ -1,5 +1,6 @@
 import GuildView from 'components/guild/guildView';
 import Layout from 'components/layout';
+import Metatags from 'components/MetaTags';
 import crypto from 'crypto-js';
 import { genToken } from 'lib/backend-utils';
 import { resolveType } from 'lib/constants';
@@ -11,6 +12,7 @@ import guilds, { GuildData } from 'models/guilds';
 import tokenModule from 'models/token';
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
 import { useEffect, useState } from 'react';
+import error from 'styles/error.module.scss';
 import { RawGuild, withSessionGetServerSideProps } from 'typings/typings';
 import type { DmodWebSocket } from 'websocket';
 
@@ -29,9 +31,11 @@ export default function guildView({ failed, guild: guild_, hash, ws, hasApp, len
 
   if (failed) {
     return (
-      <Layout>
-        <div>Something went wrong loading data! try again in a bit.</div>
-      </Layout>
+      <main>
+        <div className={error.content}>
+          <h3 className='error'>Something went wrong loading data! try again in a bit... 😔</h3>
+        </div>
+      </main>
     );
   }
 
@@ -77,16 +81,21 @@ export default function guildView({ failed, guild: guild_, hash, ws, hasApp, len
     };
   }, [ws.ready]);
 
-  const icon = guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${resolveType(guild.icon)}` : '/icon.png';
+  const icon = guild.icon
+    ? `https://cdn.discordapp.com/icons/${guild.id}/${resolveType(guild.icon)}`
+    : '/icon.png';
 
   return (
-    <Layout
-      title={`${guild.name} - dmod.gg`}
-      description={`${guild.name} - Server information`}
-      image={guild.banner ? `https://cdn.discordapp.com/banners/${guild.id}/${resolveType(guild.banner)}` : icon}
-    >
+    <main>
+      <Metatags
+        title={`${guild.name} - dmod.gg`}
+        description={`${guild.name} - Server information`}
+        image={
+          guild.banner ? `https://cdn.discordapp.com/banners/${guild.id}/${resolveType(guild.banner)}` : icon
+        }
+      />
       <GuildView guild={guild} isManager={isManager} hasApp={hasApp} len={len} Inpreview={false} />
-    </Layout>
+    </main>
   );
 }
 
@@ -107,7 +116,9 @@ export const getServerSideProps: GetServerSideProps = withSession(
     const guildCache = await redis.get(`guild:${context.query.guildID}`);
     let guild: RawGuild;
     if (!guildCache) {
-      guild = await fetch(`${API_ENDPOINT}/guilds/${context.query.guildID}?with_counts=true`, authHead).then(json);
+      guild = await fetch(`${API_ENDPOINT}/guilds/${context.query.guildID}?with_counts=true`, authHead).then(
+        json
+      );
       // @ts-expect-error
       if (guild.code || guild.message) return { props: { failed: true } };
 
@@ -116,11 +127,18 @@ export const getServerSideProps: GetServerSideProps = withSession(
       if (guild.banner)
         await redis.set(
           `guild:${context.query.guildID}:banner`,
-          `https://cdn.discordapp.com/banners/${guild.id}/${guild.banner}${guild.banner.startsWith('a_') ? '.gif' : '.png'}`
+          `https://cdn.discordapp.com/banners/${guild.id}/${guild.banner}${
+            guild.banner.startsWith('a_') ? '.gif' : '.png'
+          }`
         );
 
       if (guild.icon)
-        await redis.set(`guild:${context.query.guildID}:icon`, `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}${guild.icon.startsWith('a_') ? '.gif' : '.png'}`);
+        await redis.set(
+          `guild:${context.query.guildID}:icon`,
+          `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}${
+            guild.icon.startsWith('a_') ? '.gif' : '.png'
+          }`
+        );
     } else {
       guild = JSON.parse(guildCache);
     }
