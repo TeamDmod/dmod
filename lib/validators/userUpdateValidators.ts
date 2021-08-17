@@ -1,5 +1,4 @@
 import list from 'lib/data/blackListwords.json';
-import redis from 'lib/redis';
 import type { userData } from 'models/users';
 
 import { isBannerResolvable, user_flags } from '../constants';
@@ -9,8 +8,11 @@ export interface dataPassed {
   user_premium: number;
   updater?: userData;
   user: userData;
+  limited?: string;
 }
-type validatorFunctions = (args: dataPassed) => Promise<{ error: boolean; message?: string }>;
+type validatorFunctions = (
+  args: dataPassed
+) => Promise<{ error: boolean; message?: string; redis: boolean; redisARGS?: string[] }>;
 type Ivalidators = { [key: string]: validatorFunctions };
 interface vanityRateLimite {
   id: string;
@@ -100,7 +102,7 @@ const validators: Ivalidators = {
       error: false,
     };
   },
-  async vanity({ value, user }) {
+  async vanity({ value, user, limited }) {
     const vanity = value as string;
     const allowedMatch = vanity.match(VANITY_ALLOWED_REGEXP);
     const fobidenMatch = vanity.match(VANITY_FOBIDEN_REGEXP);
@@ -128,7 +130,6 @@ const validators: Ivalidators = {
     );
     if (data.length > 0) return { error: true, message: 'Vanity has taken.' };
 
-    const limited = await redis.get(`limited?type=vanitychange?id=${user._id}`);
     if (limited) {
       const limitedData: vanityRateLimite = JSON.parse(limited);
       if (limitedData.inc >= 3) return { error: true, message: "You're changing your vanity too fast." };
@@ -144,20 +145,26 @@ const validators: Ivalidators = {
       };
 
       // Reinitialize the redis timeout to delete this limit, with the correct timestamp/time left
-      await redis.setex(`limited?type=vanitychange?id=${user._id}`, timestamp, JSON.stringify(limitData));
-    } else {
-      await redis.setex(
+      return {
+        error: false,
+        redis: true,
+        redisARGS: [`limited?type=vanitychange?id=${user._id}`, timestamp, JSON.stringify(limitData)],
+      };
+    }
+
+    return {
+      error: false,
+      redis: true,
+      redisARGS: [
         `limited?type=vanitychange?id=${user._id}`,
         SECONDS_FOR_VANITY_RESET,
         JSON.stringify({
           id: user._id,
           time: Date.now(),
           inc: 1,
-        })
-      );
-    }
-
-    return { error: false };
+        }),
+      ],
+    };
   },
 
   DEFAULT() {

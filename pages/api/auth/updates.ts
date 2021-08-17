@@ -2,6 +2,7 @@ import { Embed, sendToWebhook } from 'lib/backend-utils';
 import { user_flags } from 'lib/constants';
 import connectToDatabase from 'lib/mongodb.connection';
 import rateLimit from 'lib/rateLimiting';
+import redis from 'lib/redis';
 import { typeValidators, validators } from 'lib/validators/userUpdateValidators';
 import tokenModule from 'models/token';
 import userModule, { userDataFound } from 'models/users';
@@ -105,8 +106,11 @@ export default rateLimit(async (req: NextApiRequest, res: NextApiResponse) => {
   let error = null;
 
   for await (const [key, value] of Object.entries(objectedUpdateQuery)) {
+    let limited: string | null;
+    if (key === 'vanity') limited = await redis.get(`limited?type=vanitychange?id=${user._id}`);
     const validation = validators[key] ?? validators.DEFAULT;
-    const validated = await validation({ value, ...validatorData });
+    const validated = await validation({ value, ...validatorData, limited });
+    if (validated.redis && key === 'vanity') await redis.send_command('SETEX', ...validated.redisARGS);
     if (validated.error) error = validated.message;
   }
 
