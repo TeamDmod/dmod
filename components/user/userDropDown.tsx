@@ -114,21 +114,25 @@ export default function UserDropDown({ user, fetcher }: props) {
         leaveTo='transform opacity-0 scale-95'>
         <Menu.Items className={styles.dropdown_items}>
           <Menu.Item>
-            <Link href={`/${user.vanity}`}>
-              <button>
-                <ProfileIcon />
-                <span>Profile</span>
-              </button>
-            </Link>
+            <button>
+              <Link href={`/${user.vanity}`}>
+                <a>
+                  <ProfileIcon />
+                  <span>Profile</span>
+                </a>
+              </Link>
+            </button>
           </Menu.Item>
 
           <Menu.Item>
-            <Link href='/account/settings'>
-              <button>
-                <AccountSettingsIcon />
-                <span>Settings</span>
-              </button>
-            </Link>
+            <button>
+              <Link href='/account/settings'>
+                <a>
+                  <AccountSettingsIcon />
+                  <span>Settings</span>
+                </a>
+              </Link>
+            </button>
           </Menu.Item>
 
           <Menu.Item>

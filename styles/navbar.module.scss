@@ -64,14 +64,31 @@
     background: transparent;
     border-radius: 4px;
     padding: 4px;
-    display: grid;
-    grid-template-columns: 28px 1fr;
-    text-align: left;
     box-shadow: none !important;
+
+    a {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      text-align: left;
+    }
+
+    span {
+      padding-left: 4px;
+    }
+
+    svg {
+      margin: auto;
+    }
 
     &:hover {
       background: #0b2041;
     }
+  }
+
+  .logout {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    text-align: left;
   }
 
   .logout:hover {
