@@ -4,6 +4,7 @@ import CreateGuildApplicationModal from 'components/guild/CreateGuildApplication
 import MetaTags from 'components/MetaTags';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import styles from 'styles/preview.module.scss';
 import { RawUserGivenGuild, RawUserGuildIs } from 'typings/typings';
 
 interface ApiUserGuildData {
@@ -51,9 +52,7 @@ export default function Server({ user }: any) {
     return (
       <main>
         <MetaTags title='dmod.gg - Servers ERROR' />
-        <div className='text-center text-xl'>
-          <h1 className='text-red-600'>An error has occored! Try again in a bit.</h1>
-        </div>
+        <h3 className='error'>An error has occored! Try again in a bit... 😔</h3>
       </main>
     );
   }
@@ -61,67 +60,52 @@ export default function Server({ user }: any) {
   return (
     <main>
       <MetaTags title='dmod.gg - Servers' description='dmod.gg servers list' />
-      <div className='space-y-6'>
-        {userGuildData.included.length > 0 && (
-          <div className='space-y-3 text-xl'>
-            <h1 className='text-center'>Guilds Applications found.</h1>
-            <div className='flex justify-center overflow-x-hidden'>
-              <div className='flex flex-col sm:grid grid-cols-3 gap-3 w-full sm:w-2/3'>
-                {userGuildData.included.map(guild => (
-                  <div
-                    key={guild.id}
-                    className='flex rounded-md bg-servercard py-2 px-4 cursor-pointer space-x-2 max-w-2xl'
-                    onClick={() => router.push(`/servers/${guild.id}`)}>
-                    <img
-                      draggable={false}
-                      className='rounded-full w-14 h-14 md:w-20 md:h-20'
-                      src={
-                        guild.icon
-                          ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=128`
-                          : `/logo.png`
-                      }
-                      alt='guild icon'
-                    />
-                    <span className='inline-flex flex-wrap content-center text-xl md:text-2xl overflow-x-hidden'>
-                      {guild.name}
-                    </span>
-                  </div>
-                ))}
+      {userGuildData.included.length > 0 && (
+        <>
+          <h1 className={styles.heading}>Your Servers</h1>
+          <div className={styles.card_container}>
+            {userGuildData.included.map(guild => (
+              <div key={guild.id} className={styles.card} onClick={() => router.push(`/servers/${guild.id}`)}>
+                <img
+                  draggable={false}
+                  className={styles.icon}
+                  src={
+                    guild.icon
+                      ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=128`
+                      : `/logo.png`
+                  }
+                  alt='guild icon'
+                />
+                <p className='truncate'>{guild.name}</p>
               </div>
-            </div>
+            ))}
           </div>
-        )}
+        </>
+      )}
 
-        <div className='space-y-3 text-xl'>
-          <h1 className='text-center'>Guilds Not found.</h1>
-          <div className='flex justify-center overflow-x-hidden'>
-            <div className='flex flex-col sm:grid grid-cols-3 gap-3 w-full sm:w-2/3'>
-              {userGuildData.excluded.map(guild => (
-                <div
-                  key={guild.id}
-                  className='flex rounded-md bg-servercard py-2 px-4 cursor-pointer space-x-2 max-w-2xl'
-                  onClick={() => {
-                    setGuildModleData(guild);
-                    setModalOpen(true);
-                  }}>
-                  <img
-                    draggable={false}
-                    className='rounded-full w-14 h-14 md:w-20 md:h-20'
-                    src={
-                      guild.icon
-                        ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=128`
-                        : `/logo.png`
-                    }
-                    alt='guild icon'
-                  />
-                  <span className='inline-flex flex-wrap content-center text-xl md:text-2xl overflow-x-hidden'>
-                    {guild.name}
-                  </span>
-                </div>
-              ))}
-            </div>
+      <h1 className={styles.heading}>Add Servers</h1>
+      <div className={styles.card_container}>
+        {userGuildData.excluded.map(guild => (
+          <div
+            key={guild.id}
+            className={styles.card}
+            onClick={() => {
+              setGuildModleData(guild);
+              setModalOpen(true);
+            }}>
+            <img
+              draggable={false}
+              className={styles.icon}
+              src={
+                guild.icon
+                  ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=128`
+                  : `/logo.png`
+              }
+              alt='guild icon'
+            />
+            <p className='truncate'>{guild.name}</p>
           </div>
-        </div>
+        ))}
       </div>
       <CreateGuildApplicationModal
         guild={selectedGuildModalData}

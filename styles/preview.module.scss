@@ -1,0 +1,48 @@
+.card {
+  display: flex;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  overflow-x: hidden;
+  background-color: #142045;
+  padding: 0.5rem 1rem;
+}
+
+.icon {
+  background-repeat: no-repeat;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background-position: center center;
+  background-size: 110%;
+}
+
+.card_container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+  margin: 1rem 4rem;
+
+  p {
+    margin: auto 0 auto 0.5rem;
+    font-size: larger;
+    font-weight: 500;
+  }
+}
+
+.heading {
+  text-align: center;
+  max-width: unset;
+}
+
+@media screen and (max-width: 768px) {
+  .card_container {
+    gap: 1rem;
+    margin: 1rem;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .card_container {
+    grid-template-columns: repeat(3, minmax(260px, 1fr));
+  }
+}
