@@ -27,9 +27,6 @@ export default function Profile({ profile }: props) {
               className={styles.banner}
               style={{
                 backgroundImage: `url(${bannerData.image})`,
-                backgroundSize: '100% ',
-                minWidth: '600px',
-                backgroundPosition: 'center center',
               }}
             />
           )}
@@ -54,9 +51,7 @@ export default function Profile({ profile }: props) {
           alt='User avatar'
           onError={({ currentTarget }) => {
             // eslint-disable-next-line no-param-reassign
-            currentTarget.src = `https://cdn.discordapp.com/embed/avatars/${
-              +profile.discriminator % 5
-            }.png`;
+            currentTarget.src = `https://cdn.discordapp.com/embed/avatars/${+profile.discriminator % 5}.png`;
           }}
         />
         <div className={styles.profile}>
@@ -71,10 +66,7 @@ export default function Profile({ profile }: props) {
               ([badge, displayName], i) =>
                 badge !== null && (
                   // eslint-disable-next-line react/no-array-index-key
-                  <span key={`badges${i}`}>
-                    <span>{displayName}</span>
-                    {badge}
-                  </span>
+                  <span key={`badges${i}`}>{badge}</span>
                 )
             )}
           </div>
