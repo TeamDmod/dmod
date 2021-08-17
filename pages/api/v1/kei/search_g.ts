@@ -1,4 +1,5 @@
 import connectToDatabase from 'lib/mongodb.connection';
+import rateLimit from 'lib/rateLimiting';
 import redis from 'lib/redis';
 import GuildModule from 'models/guilds';
 import PreviewGuildModule, { PreviewGuildData } from 'models/preview_guilds';
@@ -6,7 +7,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 const MAX_RETURN = 20;
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default rateLimit(async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'GET') {
     res.setHeader('Allow', 'GET');
     return res.status(405).end(`Method ${req.method} Not Allowed`);
@@ -98,7 +99,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       banner: await redis.get(`guild:${current._id}:banner`),
       icon: await redis.get(`guild:${current._id}:icon`),
     });
-  }, ([] as unknown) as Promise<(PreviewGuildData & { banner: string; icon: string })[]>);
+  }, [] as unknown as Promise<(PreviewGuildData & { banner: string; icon: string })[]>);
 
   res.json(results);
-};
+});

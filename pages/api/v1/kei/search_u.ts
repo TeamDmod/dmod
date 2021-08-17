@@ -1,10 +1,11 @@
 import connectToDatabase from 'lib/mongodb.connection';
+import rateLimit from 'lib/rateLimiting';
 import userModule from 'models/users';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 const MAX_RETURN = 20;
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default rateLimit(async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'GET') {
     res.setHeader('Allow', 'GET');
     res.status(405).end(`Method ${req.method} Not Allowed`);
@@ -53,4 +54,4 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       return Object.fromEntries(Object.entries(u.toObject()).filter(d => !['updates_access'].includes(d[0])));
     })
   );
-};
+});

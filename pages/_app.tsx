@@ -22,8 +22,9 @@ export default function App({ Component, pageProps }: any) {
   } as any);
   const [shouldFetchU, setUfetch] = useState(true);
   const [gwr, setGwr] = useState(false);
-  const [socketConnected, setConnected] = useState(false);
-  const [socketMessage, setSocketMessage] = useState<null | string>(null);
+  // socketConnected, socketMessage implement back later
+  const [, setConnected] = useState(false);
+  const [, setSocketMessage] = useState<null | string>(null);
 
   function getcc(): { token: string; gatewayHash: string } {
     if (!isServer) {
@@ -53,8 +54,8 @@ export default function App({ Component, pageProps }: any) {
 
       fetch(`${window.origin}/api/auth/current_user`)
         .then(d => d.json())
-        .then(({ user: _user }) => {
-          setUser(_user);
+        .then(data => {
+          setUser(data?.user ?? null);
         });
     }
   }, [shouldFetchU]);

@@ -1,14 +1,16 @@
 import { Embed, sendToWebhook } from 'lib/backend-utils';
 import { user_flags } from 'lib/constants';
 import connectToDatabase from 'lib/mongodb.connection';
+import rateLimit from 'lib/rateLimiting';
 import { typeValidators, validators } from 'lib/validators/userUpdateValidators';
 import tokenModule from 'models/token';
 import userModule, { userDataFound } from 'models/users';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default rateLimit(async (req: NextApiRequest, res: NextApiResponse) => {
   if (!req.headers.authorization) return res.status(401).json({ message: 'Unauthorized', success: false });
-  if (req.method !== 'PATCH') return res.status(400).json({ message: 'Method not supported', success: false });
+  if (req.method !== 'PATCH')
+    return res.status(400).json({ message: 'Method not supported', success: false });
   await connectToDatabase();
 
   async function returnWithWebhook(data: any, embed: Embed, status = 200) {
@@ -47,7 +49,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   // update admin check
   if (
     uperUser &&
-    ((((user.site_flags & user_flags.ADMIN) === user_flags.ADMIN || (user.site_flags & user_flags.DEVELOPER) === user_flags.DEVELOPER) &&
+    ((((user.site_flags & user_flags.ADMIN) === user_flags.ADMIN ||
+      (user.site_flags & user_flags.DEVELOPER) === user_flags.DEVELOPER) &&
       (uperUser.site_flags & user_flags.ADMIN) === user_flags.ADMIN) ||
       (uperUser.site_flags & user_flags.DEVELOPER) === user_flags.DEVELOPER)
   )
@@ -74,7 +77,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     ((!uperUser ? user.site_flags : uperUser.site_flags) & user_flags.ADMIN) === user_flags.ADMIN ||
     ((!uperUser ? user.site_flags : uperUser.site_flags) & user_flags.DEVELOPER) === user_flags.DEVELOPER;
 
-  const isMod = ((!uperUser ? user.site_flags : uperUser.site_flags) & user_flags.SITE_MOD) === user_flags.SITE_MOD;
+  const isMod =
+    ((!uperUser ? user.site_flags : uperUser.site_flags) & user_flags.SITE_MOD) === user_flags.SITE_MOD;
 
   const bodyData = JSON.parse(req.body);
   let typeError = false;
@@ -94,7 +98,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   );
 
   if (typeError) return res.json({ message: 'Invalid property in body', success: false });
-  if (Object.keys(objectedUpdateQuery).length <= 0) return res.json({ message: 'Body was validated to length of 0. Validation(s) failed', success: false });
+  if (Object.keys(objectedUpdateQuery).length <= 0)
+    return res.json({ message: 'Body was validated to length of 0. Validation(s) failed', success: false });
 
   const validatorData = { user_premium: user.premium, updater: uperUser?.toObject(), user: user.toObject() };
   let error = null;
@@ -108,7 +113,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (error) return res.json({ message: error, success: false });
 
   try {
-    const updateData = await userModule.findOneAndUpdate({ _id: user._id }, objectedUpdateQuery, { new: true });
+    const updateData = await userModule.findOneAndUpdate({ _id: user._id }, objectedUpdateQuery, {
+      new: true,
+    });
 
     const updateQKeys = Object.keys(objectedUpdateQuery);
     const updateJSON = updateQKeys.reduce((pas, cur, i) => {
@@ -122,11 +129,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       {
         color: parseInt('#19e302'.replace('#', ''), 16),
         description: `
-        From:
-        \`\`\`json\n${JSON.stringify(user.toObject(), null, 4)}\n\`\`\`
-        To:
-        \`\`\`json\n${JSON.stringify(updateData.toJSON(), null, 4)}\n\`\`\`
-        `,
+          From:
+          \`\`\`json\n${JSON.stringify(user.toObject(), null, 4)}\n\`\`\`
+          To:
+          \`\`\`json\n${JSON.stringify(updateData.toJSON(), null, 4)}\n\`\`\`
+          `,
         fields: [
           {
             name: 'Quick look',
@@ -135,13 +142,17 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           {
             name: `${uperUser ? 'Uper user update' : 'User self update'} \`${user.tag}\` (${user._id})`,
             value: `Body update targets; \`${updateQKeys.join(', ')}\`
-            (Admin: \`${isAdmin}\`) (Mod: \`${isMod}\`)`,
+              (Admin: \`${isAdmin}\`) (Mod: \`${isMod}\`)`,
           },
         ],
       }
     );
     // res.json({ message: Object.fromEntries(Object.entries(updateData.toObject()).filter(i => i[0] !== 'updates_access')), success: true });
   } catch (_) {
-    returnWithWebhook({ message: `Unknown update error: ${_.message ?? _}`, success: false }, { description: `Error while updating ${user._id}; ${_.message ?? _}` }, 500);
+    returnWithWebhook(
+      { message: `Unknown update error: ${_.message ?? _}`, success: false },
+      { description: `Error while updating ${user._id}; ${_.message ?? _}` },
+      500
+    );
   }
-};
+});

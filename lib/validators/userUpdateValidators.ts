@@ -1,4 +1,5 @@
-import list from 'lib/blackListwords.json';
+import list from 'lib/data/blackListwords.json';
+import redis from 'lib/redis';
 import type { userData } from 'models/users';
 
 import { isBannerResolvable, user_flags } from '../constants';
@@ -11,7 +12,14 @@ export interface dataPassed {
 }
 type validatorFunctions = (args: dataPassed) => Promise<{ error: boolean; message?: string }>;
 type Ivalidators = { [key: string]: validatorFunctions };
+interface vanityRateLimite {
+  id: string;
+  time: number;
+  inc: number;
+}
 
+// const SECONDS_FOR_VANITY_RESET = 20; // test 20 seconds
+const SECONDS_FOR_VANITY_RESET = 86400; // day
 export const DESCRIPTION_MAX_DATA = { PREMIUM: 4000, NORMAL: 2000 };
 export const DESCRIPTION_MIN = 30;
 
@@ -43,7 +51,12 @@ const validators: Ivalidators = {
       };
     }
 
-    const lengthError = des.length < DESCRIPTION_MIN ? 'to short' : des.length > DESCRIPTION_MAX_DATA.NORMAL ? 'to long' : 'unknow (failed to read proper length)';
+    const lengthError =
+      des.length < DESCRIPTION_MIN
+        ? 'to short'
+        : des.length > DESCRIPTION_MAX_DATA.NORMAL
+        ? 'to long'
+        : 'unknow (failed to read proper length)';
     return {
       error: true,
       message: `Description length ${lengthError}`,
@@ -87,7 +100,7 @@ const validators: Ivalidators = {
       error: false,
     };
   },
-  async vanity({ value }) {
+  async vanity({ value, user }) {
     const vanity = value as string;
     const allowedMatch = vanity.match(VANITY_ALLOWED_REGEXP);
     const fobidenMatch = vanity.match(VANITY_FOBIDEN_REGEXP);
@@ -96,12 +109,53 @@ const validators: Ivalidators = {
     if (!allowedMatch?.[0]) return { error: true, message: 'Vanity dose not fit reg.' };
 
     const noneCharacters = vanity.match(VANITY_ALL_NONE_CHARACTER) || [];
-    if (noneCharacters.length < VANITY_LENGTH_NONE_CHARACTER) return { error: true, message: 'Vanity must include minimum of 3 none specially allowed charterers.' };
+    if (noneCharacters.length < VANITY_LENGTH_NONE_CHARACTER)
+      return { error: true, message: 'Vanity must include minimum of 3 none specially allowed charterers.' };
 
-    if (list.some(item => vanity.toLowerCase().includes(item))) return { error: true, message: 'Vanity contains ban term.' };
+    if (
+      (list as unknown as { matching: string[] }).matching.some(item => vanity.toLowerCase().includes(item))
+    )
+      return { error: true, message: 'Vanity contains ban term.' };
 
-    const data: any[] = await fetch(`${process.env.BASE_URL}/kei/search_u?vanity=${vanity}`).then(d => d.json());
+    if (
+      (list as unknown as { exact: string[] }).exact.some(item => new RegExp(`^${item}$`, 'i').test(vanity))
+    )
+      return { error: true, message: 'Vanity name ban.' };
+
+    if (user.vanity === vanity) return { error: true, message: 'You already have this vanity.' };
+    const data: any[] = await fetch(`${process.env.BASE_URL}/kei/search_u?vanity=${vanity}`).then(d =>
+      d.json()
+    );
     if (data.length > 0) return { error: true, message: 'Vanity has taken.' };
+
+    const limited = await redis.get(`limited?type=vanitychange?id=${user._id}`);
+    if (limited) {
+      const limitedData: vanityRateLimite = JSON.parse(limited);
+      if (limitedData.inc >= 3) return { error: true, message: "You're changing your vanity too fast." };
+
+      const timestamp =
+        SECONDS_FOR_VANITY_RESET -
+        (new Date(Date.now()).getSeconds() - new Date(limitedData.time).getSeconds());
+
+      const limitData = {
+        id: user._id,
+        time: limitedData.time,
+        inc: limitedData.inc + 1,
+      };
+
+      // Reinitialize the redis timeout to delete this limit, with the correct timestamp/time left
+      await redis.setex(`limited?type=vanitychange?id=${user._id}`, timestamp, JSON.stringify(limitData));
+    } else {
+      await redis.setex(
+        `limited?type=vanitychange?id=${user._id}`,
+        SECONDS_FOR_VANITY_RESET,
+        JSON.stringify({
+          id: user._id,
+          time: Date.now(),
+          inc: 1,
+        })
+      );
+    }
 
     return { error: false };
   },

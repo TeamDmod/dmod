@@ -1,6 +1,7 @@
 import { resolveGuildMemberPerms } from 'lib/backend-utils';
 import { user_flags } from 'lib/constants';
 import connectToDatabase from 'lib/mongodb.connection';
+import rateLimit from 'lib/rateLimiting';
 import { typeValidators, validators } from 'lib/validators/serverUpdateValidators';
 import GuildModule from 'models/guilds';
 import PreviewGuildModule from 'models/preview_guilds';
@@ -13,7 +14,7 @@ const API_ENDPOINT = 'https://discord.com/api/v8';
 const json = (res: Response) => res.json();
 
 const validMethods = ['PATCH'];
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default rateLimit(async (req: NextApiRequest, res: NextApiResponse) => {
   if (!validMethods.includes(req.method)) {
     res.setHeader('Allow', validMethods);
     return res.status(405).end(`Method ${req.method} Not Allowed`);
@@ -126,4 +127,4 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     console.log(error);
   }
   // returnWithWebhook({ message: `Unknown update error: ${_.message ?? _}`, success: false }, { description: `Error while updating ${user._id}; ${_.message ?? _}` }, 500);
-};
+});
