@@ -55,10 +55,10 @@ const validators: Ivalidators = {
 
     const lengthError =
       des.length < DESCRIPTION_MIN
-        ? 'to short'
+        ? 'too short'
         : des.length > DESCRIPTION_MAX_DATA.NORMAL
-        ? 'to long'
-        : 'unknow (failed to read proper length)';
+        ? 'too long'
+        : 'unknown (failed to get length)';
     return {
       error: true,
       message: `Description length ${lengthError}`,
@@ -108,11 +108,11 @@ const validators: Ivalidators = {
     const fobidenMatch = vanity.match(VANITY_FOBIDEN_REGEXP);
 
     if ((fobidenMatch || []).length > 0) return { error: true, message: 'Forbiden character(s) in value.' };
-    if (!allowedMatch?.[0]) return { error: true, message: 'Vanity dose not fit reg.' };
+    if (!allowedMatch?.[0]) return { error: true, message: 'Vanity does not fit regex' };
 
     const noneCharacters = vanity.match(VANITY_ALL_NONE_CHARACTER) || [];
     if (noneCharacters.length < VANITY_LENGTH_NONE_CHARACTER)
-      return { error: true, message: 'Vanity must include minimum of 3 none specially allowed charterers.' };
+      return { error: true, message: 'Vanity must include minimum of 3 not specially allowed characters' };
 
     if (
       (list as unknown as { matching: string[] }).matching.some(item => vanity.toLowerCase().includes(item))
@@ -122,17 +122,17 @@ const validators: Ivalidators = {
     if (
       (list as unknown as { exact: string[] }).exact.some(item => new RegExp(`^${item}$`, 'i').test(vanity))
     )
-      return { error: true, message: 'Vanity name ban.' };
+      return { error: true, message: 'Vanity name ban' };
 
-    if (user.vanity === vanity) return { error: true, message: 'You already have this vanity.' };
+    if (user.vanity === vanity) return { error: true, message: 'You already have this vanity' };
     const data: any[] = await fetch(`${process.env.BASE_URL}/kei/search_u?vanity=${vanity}`).then(d =>
       d.json()
     );
-    if (data.length > 0) return { error: true, message: 'Vanity has taken.' };
+    if (data.length > 0) return { error: true, message: 'Vanity already taken' };
 
     if (limited) {
       const limitedData: vanityRateLimite = JSON.parse(limited);
-      if (limitedData.inc >= 3) return { error: true, message: "You're changing your vanity too fast." };
+      if (limitedData.inc >= 3) return { error: true, message: "You're changing your vanity too fast" };
 
       const timestamp =
         SECONDS_FOR_VANITY_RESET -
@@ -170,7 +170,7 @@ const validators: Ivalidators = {
   DEFAULT() {
     return {
       error: true,
-      message: 'Property validator not found.',
+      message: 'Property validator not found',
     };
   },
 };

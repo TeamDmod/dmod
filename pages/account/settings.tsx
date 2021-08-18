@@ -1,5 +1,3 @@
-// import 'tailwindcss/tailwind.css';
-
 import { Dialog, Switch } from '@headlessui/react';
 import AnimatedLoader from 'components/AnimatedLoader';
 import MetaTags from 'components/MetaTags';
