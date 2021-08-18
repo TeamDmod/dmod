@@ -2,7 +2,6 @@ import 'tailwindcss/tailwind.css';
 
 import { Switch } from '@headlessui/react';
 import GuildView from 'components/guild/guildView';
-import Layout from 'components/layout';
 import Metatags from 'components/MetaTags';
 import { Formik } from 'formik';
 import { resolveGuildMemberPerms } from 'lib/backend-utils';

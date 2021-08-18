@@ -1,5 +1,7 @@
 html,
-body {
+body,
+textarea {
+  color-scheme: dark;
   padding: 0;
   margin: 0;
   width: 100%;
@@ -23,7 +25,8 @@ header {
 
 main {
   background: linear-gradient(180deg, #061021 0%, #0b2041 100%);
-  min-height: calc(100vh - (50px + 2rem));
+  height: calc(100vh - (50px + 2rem));
+  overflow: hidden auto;
 
   display: grid;
 }
@@ -41,7 +44,8 @@ h6 {
   color: white;
 }
 
-p {
+p,
+label {
   color: lightgrey;
 }
 
@@ -62,7 +66,9 @@ button {
   font-size: 1rem;
   cursor: pointer;
 
-  &:hover {
+  &:hover,
+  &:focus,
+  &:active {
     box-shadow: 4px 4px 2px rgba(0, 0, 0, 0.25);
     transition: ease-in-out 200ms;
   }
@@ -81,4 +87,10 @@ button {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+@media screen and (max-width: 768px) {
+  main {
+    height: calc(100vh - (62px + 2rem));
+  }
 }
