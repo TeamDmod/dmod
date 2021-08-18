@@ -18,7 +18,10 @@
     "dispatch",
     "bot",
     "api",
-    "account"
+    "account",
+    "moderators",
+    "dmod(|.|-|_)",
+    "dmod(|.|-|_)gg"
   ],
   "matching": [
     "4r5e",
