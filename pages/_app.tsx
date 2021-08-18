@@ -1,4 +1,5 @@
 import '../styles/globals.scss';
+import '../styles/link.scss';
 import 'nprogress/nprogress.css';
 
 import Navbar from 'components/Navbar';

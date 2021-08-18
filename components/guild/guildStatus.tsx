@@ -15,7 +15,11 @@ export default function GuildStatus({ guild, shadow }: props) {
 
     tags.forEach(tag => {
       const tagElm = (
-        <span key={tag} className='hover:text-indigo-100 text-white cursor-pointer' title={tag} onClick={() => router.push(`/search?tags=${tag}`)}>
+        <span
+          key={tag}
+          className='hover:text-indigo-100 text-white cursor-pointer'
+          title={tag}
+          onClick={() => router.push(`/search?tags=${tag}`)}>
           {tag}
         </span>
       );
@@ -38,7 +42,9 @@ export default function GuildStatus({ guild, shadow }: props) {
       }, '');
 
     return caps.reduce((past, cerr, cerrIndex) => {
-      return cerrIndex !== caps.length - 1 ? past.concat(`, ${cerr}s`.slice(cerrIndex === 0 ? 2 : 0)) : past.concat(`, and ${cerr}s`);
+      return cerrIndex !== caps.length - 1
+        ? past.concat(`, ${cerr}s`.slice(cerrIndex === 0 ? 2 : 0))
+        : past.concat(`, and ${cerr}s`);
     }, '');
   }
 
@@ -48,8 +54,7 @@ export default function GuildStatus({ guild, shadow }: props) {
       style={{
         background: '#1A274D',
         boxShadow: shadow ? '-7px 0px 8px rgba(0, 0, 0, 0.25)' : '',
-      }}
-    >
+      }}>
       <span className='block text-center underline text-xl font-bold'>{guild.name}</span>
       <div style={{ lineHeight: '23.5px' }}>
         <span title='Short description'>
@@ -66,7 +71,8 @@ export default function GuildStatus({ guild, shadow }: props) {
         <br />
         <span title='Server tags'>
           {/* <b>Tags</b>: <span className='space-x-1'>{toLinkTags(['roblox', 'gaming'])}</span> */}
-          <b>Tags</b>: <span className='space-x-1'>{guild.tags.length > 0 ? toLinkTags(guild.tags) : 'None'}</span>
+          <b>Tags</b>:{' '}
+          <span className='space-x-1'>{guild.tags.length > 0 ? toLinkTags(guild.tags) : 'None'}</span>
         </span>
         <br />
         <span title='Server looking for'>
@@ -85,8 +91,9 @@ export default function GuildStatus({ guild, shadow }: props) {
           <>
             <span>
               <b>Emojis</b>:{' '}
-              <span className='flex space-x-1'>
-                {guild.emojis.map(emoji => {
+              <span className='flex flex-wrap space-x-1'>
+                {/* TODO: expand tab, 10 to 50 emojis */}
+                {guild.emojis.slice(0, 50).map(emoji => {
                   return (
                     <img
                       style={{
@@ -110,7 +117,13 @@ export default function GuildStatus({ guild, shadow }: props) {
       </div>
       <div>
         {guild.invite ? (
-          <a href={guild.vanity_url_code ? `https://discord.com/invite/${guild.vanity_url_code}` : `https://discord.com/invite/${guild.invite}`} target='__blank'>
+          <a
+            href={
+              guild.vanity_url_code
+                ? `https://discord.com/invite/${guild.vanity_url_code}`
+                : `https://discord.com/invite/${guild.invite}`
+            }
+            target='__blank'>
             <div className='bg-indigo-600 text-center px-0.5 py-2 rounded'>Join Server</div>
           </a>
         ) : (
