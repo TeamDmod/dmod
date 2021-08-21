@@ -3,6 +3,7 @@ import 'tailwindcss/tailwind.css';
 import { Switch } from '@headlessui/react';
 import GuildView from 'components/guild/guildView';
 import Metatags from 'components/MetaTags';
+import Editor from 'components/ui/Editor';
 import { Formik } from 'formik';
 import { resolveGuildMemberPerms } from 'lib/backend-utils';
 import { clsx } from 'lib/constants';
@@ -26,8 +27,9 @@ interface props {
   len: number;
 }
 
-export default function GuildSettings({ guild, uid, len }: props) {
+export default function GuildSettings({ guild: _guild, uid, len }: props) {
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [guild, setGuild] = useState(_guild);
 
   useEffect(() => {
     function _(evt) {
@@ -48,18 +50,12 @@ export default function GuildSettings({ guild, uid, len }: props) {
       <Metatags title={`${guild.name} - dmod.gg`} description='Server settings' />
       <span id='preview_392sf' className={previewOpen ? 'pre-open' : 'pre-close'} />
       <>
-        {/* <div className='ml-2'>
-          <button onClick={() => router.push(`/servers/${guild.id}`)} className='bg-indigo-600 rounded p-1'>
-            Back to view
-          </button>
-        </div> */}
         <div className='mx-4 my-2 text-center'>
           <button
             className='bg-red-600 rounded focus:outline-none px-3 py-2'
             onClick={() => setPreviewOpen(!previewOpen)}>
             Preview
           </button>
-          {/* <div className='absolute'>Test</div> */}
         </div>
         <Formik
           initialValues={{
@@ -67,7 +63,6 @@ export default function GuildSettings({ guild, uid, len }: props) {
             short_description: guild.short_description,
             invite: guild.vanity_url_code ?? guild.invite,
             recruiting: guild.recruiting,
-            completed: guild.completed,
             view: guild.view,
           }}
           validate={values => {
@@ -117,8 +112,7 @@ export default function GuildSettings({ guild, uid, len }: props) {
 
             const updateObjectMapping = Object.fromEntries(Object.entries(data).filter(([key]) => body[key]));
 
-            // eslint-disable-next-line no-param-reassign
-            guild = { ...guild, ...data };
+            setGuild({ ...guild, ...data });
             resetForm({ values: { ...values, ...updateObjectMapping } });
 
             setSubmitting(false);
@@ -195,7 +189,7 @@ export default function GuildSettings({ guild, uid, len }: props) {
                   <div className='flex flex-col'>
                     <label htmlFor='description'>Description</label>
                     <div className='ml-1'>
-                      <textarea
+                      {/* <textarea
                         className='bg-popupcard text-gray-100 focus:outline-none rounded'
                         id='description'
                         cols={60}
@@ -204,6 +198,11 @@ export default function GuildSettings({ guild, uid, len }: props) {
                         onBlur={handleBlur}
                         onChange={handleChange}
                         spellCheck='true'
+                      /> */}
+                      <Editor
+                        min={DESCRIPTION_MIN}
+                        max={DESCRIPTION_MAX_DATA.NORMAL}
+                        {...{ handleBlur, handleChange, value: values.description }}
                       />
                     </div>
                     {errors.description && <span>{errors.description}</span>}
@@ -273,30 +272,6 @@ export default function GuildSettings({ guild, uid, len }: props) {
                       </Switch>
                     </div>
                   </div>
-
-                  {/* One time markdown server complete */}
-                  {!guild.completed && (
-                    <div>
-                      <label htmlFor='completed'>Mark server a completed!</label>
-                      <div>
-                        <Switch
-                          checked={values.completed}
-                          onChange={completed =>
-                            setValues({ ...values, completed, view: !values.completed && !values.view })
-                          }
-                          className={`transition duration-300 ease-in-out transform  ${
-                            values.completed ? 'bg-blue-600' : 'bg-gray-300'
-                          } relative inline-flex items-center h-6 rounded-full w-11 focus:outline-none`}>
-                          <span className='sr-only'>Active</span>
-                          <span
-                            className={`transition duration-300 ease-in-out transform  ${
-                              values.completed ? 'translate-x-6' : 'translate-x-1'
-                            } inline-block w-4 h-4 transform bg-white rounded-full`}
-                          />
-                        </Switch>
-                      </div>
-                    </div>
-                  )}
                 </div>
               </form>
             </>

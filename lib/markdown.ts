@@ -19,9 +19,35 @@ export default class MarkDown {
     return safe;
   }
 
+  static getTagsList() {
+    return [
+      'b',
+      'i',
+      'em',
+      'strong',
+      'span',
+      'p',
+      'h1',
+      'h2',
+      'h3',
+      'h4',
+      'h5',
+      'h6',
+      'u',
+      'hr',
+      'br',
+      'code',
+      'pre',
+      'section',
+      'ul',
+      'small',
+      'a',
+    ];
+  }
+
   _processHtml(dirty: string) {
     const clean = sanitizeHtml(dirty, {
-      allowedTags: ['b', 'i', 'em', 'strong', 'span', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'u', 'hr', 'br', 'code', 'pre', 'section', 'ul', 'small', 'a'],
+      allowedTags: MarkDown.getTagsList(),
       allowedAttributes: {
         '*': ['style'],
         a: ['href', 'role', 'data-to', 'data-linking'],
@@ -40,10 +66,14 @@ export default class MarkDown {
       },
       allowedStyles: {
         '*': {
-          color: [/^#(0x)?[0-9a-f]+$/i, /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/],
+          color: [/^#(0x)?[0-9a-f]+$/i, /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/, /^\w+$/],
           'font-size': [/^\d+(?:px|em|%|rem)$/],
           'border-radius': [/^\d+(?:px|em|%|rem)$/],
-          'background-color': [/^#(0x)?[0-9a-f]+$/i, /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/],
+          'background-color': [
+            /^#(0x)?[0-9a-f]+$/i,
+            /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/,
+            /^\w+$/,
+          ],
           'text-align': [/^(left|right|center|end|start|inherit|initial|unset)$/],
         },
       },
@@ -56,7 +86,9 @@ export default class MarkDown {
   }
 
   _escapeMarkdown(str: string): string {
-    // eslint-disable-next-line no-useless-escape
-    return str.replace(/!\[.*\]\(.*\)/g, _ => _.replace(/[\[\]]/g, __ => `\\${__}`).replace(/[\(\)]/g, ___ => `\\${___}`));
+    return str.replace(/!\[.*\]\(.*\)/g, _ =>
+      // eslint-disable-next-line no-useless-escape
+      _.replace(/[\[\]]/g, __ => `\\${__}`).replace(/[\(\)]/g, ___ => `\\${___}`)
+    );
   }
 }

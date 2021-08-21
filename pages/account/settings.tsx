@@ -1,39 +1,21 @@
 import { Dialog, Switch } from '@headlessui/react';
 import AnimatedLoader from 'components/AnimatedLoader';
 import MetaTags from 'components/MetaTags';
+import Editor from 'components/ui/Editor';
+import InfoPopUp from 'components/ui/info';
 import Profile from 'components/user/profile';
 import { Formik } from 'formik';
 import { bannerFlatten, bannerResolver, bannerTypes, clsx } from 'lib/constants';
+import MarkDown from 'lib/markdown';
 import connectToDatabase from 'lib/mongodb.connection';
 import withSession from 'lib/session';
 import useUserGard from 'lib/useUserGard';
-import { validators } from 'lib/validators/userUpdateValidators';
+import { DESCRIPTION_MAX_DATA, DESCRIPTION_MIN, validators } from 'lib/validators/userUpdateValidators';
 import userModule, { userData } from 'models/users';
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styles from 'styles/settings.module.scss';
 import { ApiUser, withSessionGetServerSideProps } from 'typings/typings';
-
-interface MiniEditorProps {
-  value: string;
-  handleBlur: any;
-  handleChange: any;
-}
-
-function MiniEditor({ value, handleBlur, handleChange }: MiniEditorProps) {
-  return (
-    <textarea
-      className={styles.editor}
-      id='description'
-      cols={40}
-      rows={10}
-      value={value}
-      onBlur={handleBlur}
-      onChange={handleChange}
-      spellCheck
-    />
-  );
-}
 
 function XIcon() {
   return (
@@ -54,10 +36,11 @@ interface props {
   __setUser: (d: any) => void;
 }
 
-export default function Settings({ user, settings, __setUser }: props) {
+export default function Settings({ user, settings: _settings, __setUser }: props) {
   const { loading } = useUserGard(user);
   const [error, setError] = useState<string | null>(null);
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [settings, setSettings] = useState(_settings);
 
   function validate(values) {
     const errors: any = {};
@@ -119,13 +102,7 @@ export default function Settings({ user, settings, __setUser }: props) {
     if (Object.prototype.hasOwnProperty.call(updateObjectMapping, 'vanity'))
       __setUser({ ...user, vanity: updateObjectMapping.vanity });
 
-    /**
-     * NOTE: settings value is reset / destructuerd as to update the new date
-     * and not interfere with the values check. settings is destructuerd because "updates" patch doesn't
-     * return the users profile "update_access" token so the token will be destructuerd back into settings data.
-     */
-    // eslint-disable-next-line no-param-reassign
-    settings = { ...settings, ...data.message };
+    setSettings({ ...settings, ...data.message });
     resetForm({ values: { ...values, ...updateObjectMapping } });
 
     setSubmitting(false);
@@ -182,8 +159,31 @@ export default function Settings({ user, settings, __setUser }: props) {
                 Preview changes
               </button>
               <div className={clsx(styles.description, styles.container)}>
-                <label>Description</label>
-                <MiniEditor {...{ handleBlur, handleChange, value: values.description }} />
+                <label className={styles.info_label}>
+                  <span>Description</span>
+                  <small>(markdown and html support)</small>
+                  <InfoPopUp
+                    title='Description info'
+                    content={`You can use markdown and html. Though to avoid xss attacks you have a limited range of tags to use;<br/>
+                    <span class="tags-list-htg">${MarkDown.getTagsList().join(', ')}</span><br/>
+                    Tag attributes are limited allowing *only* the "style"s attribute for all tags, The "a" tag is allowed the "href" attribute for "https" links.
+                    The style attributes currently allowed; <span class="tags-list-htg">color, font-size, border-radius, background-color, text-align</span><br/>
+                    Allowed measurements; <span class="tags-list-htg">pixel(px), emphemeral unit(em), present(%), root emphemeral unit(rem)</span>
+                    <br/><br/>
+                    If you'd like to use <a href="https://www.markdownguide.org/basic-syntax/" target="markdownguide">markdown</a>
+                    the fetures are only limited by the tags listed above and the markdown parser. Note: "![bar](foo)" will be escaped.
+                    <br/><br/>
+                    <small>None-https links are ignored when clicked.</small><br/>
+                    <small class="res-added">Keep in mind this info was recently and something may have been missed or miss-informed. Thing may also change and/or not updated in time.</small>
+                    `}
+                  />
+                </label>
+
+                <Editor
+                  min={DESCRIPTION_MIN}
+                  max={DESCRIPTION_MAX_DATA.NORMAL}
+                  {...{ handleBlur, handleChange, value: values.description }}
+                />
               </div>
 
               <div className={styles.toggle_label}>

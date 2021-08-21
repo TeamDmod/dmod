@@ -171,9 +171,9 @@ export default function GuildView({ guild, isManager, Inpreview, hasApp, len }: 
       <div className='flex'>
         <div className='w-full'>
           <div>
-            {/* eslint-disable-next-line react/no-danger */}
             <div
               className='markdown-content-contaner m-3 text-lg'
+              // eslint-disable-next-line react/no-danger
               dangerouslySetInnerHTML={{ __html: new MarkDown(guild.description).render() }}
             />
           </div>

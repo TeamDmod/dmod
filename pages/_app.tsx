@@ -88,6 +88,7 @@ export default function App({ Component, pageProps }: any) {
   return (
     <>
       <div id='__jkicl' />
+      <div id='__info_j6t' />
       {/* {!socketConnected && (
         <span className='absolute right-1/2 top-1 w-max bg-gray-500 rounded px-1 bg-opacity-40'>
           {socketMessage

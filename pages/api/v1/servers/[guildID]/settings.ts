@@ -71,6 +71,13 @@ export default rateLimit(async (req: NextApiRequest, res: NextApiResponse) => {
   if (dbGuild.completed) canUpdate.shift();
 
   const resolvedBody = JSON.parse(req.body);
+  const markAsCompleted =
+    canUpdate.includes('completed') &&
+    Object.keys(resolvedBody).includes('view') &&
+    resolvedBody.view === true &&
+    !dbGuild.completed;
+
+  if (markAsCompleted) resolvedBody.completed = true;
   let typeError = false;
   const body = Object.fromEntries(
     Object.entries(resolvedBody).filter(([key, value]) => {
@@ -105,15 +112,11 @@ export default rateLimit(async (req: NextApiRequest, res: NextApiResponse) => {
     const Inew = await GuildModule.findOneAndUpdate({ _id: req.query.guildID }, body, { new: true });
     const { hasOwnProperty } = Object.prototype;
 
-    if (
-      hasOwnProperty.call(body, 'short_description') ||
-      hasOwnProperty.call(body, 'completed') ||
-      hasOwnProperty.call(body, 'view')
-    ) {
+    if (hasOwnProperty.call(body, 'short_description') || hasOwnProperty.call(body, 'view')) {
       await PreviewGuildModule.findOneAndUpdate(
         { _id: Inew._id },
         {
-          ...(canUpdate.includes('completed') ? { completed: true } : {}),
+          ...(markAsCompleted ? { completed: true } : {}),
           ...(Object.keys(body).includes('short_description')
             ? { short_description: body.short_description as string }
             : {}),

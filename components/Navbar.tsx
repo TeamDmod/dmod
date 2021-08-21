@@ -108,10 +108,8 @@ export default function Navbar({ user, fetcher }: { user: sessionFetchedUser; fe
           <ul>
             {links.map(link => {
               return (
-                <li>
-                  <Link key={link.name} href={link.link}>
-                    {link.name}
-                  </Link>
+                <li key={link.name}>
+                  <Link href={link.link}>{link.name}</Link>
                 </li>
               );
             })}

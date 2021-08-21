@@ -1,4 +1,4 @@
-import { bannerResolver, clsx, evalBadges, evalFlags } from 'lib/constants';
+import { bannerResolver, evalBadges, evalFlags } from 'lib/constants';
 import MarkDown from 'lib/markdown';
 import useAtagWatch from 'lib/useAtagWatch';
 import { userData } from 'models/users';
@@ -63,16 +63,19 @@ export default function Profile({ profile }: props) {
           <div className={styles.badges}>
             {/* Reverse as on pass in of the profile data the order is reversed */}
             {badges.reverse().map(
-              ([badge, displayName], i) =>
+              ([badge, displayName]) =>
                 badge !== null && (
-                  // eslint-disable-next-line react/no-array-index-key
-                  <span key={`badges${i}`}>{badge}</span>
+                  <span className={styles.badge_item} key={displayName}>
+                    <span className={styles.badge_name}>{displayName}</span>
+                    <span>{badge}</span>
+                  </span>
                 )
             )}
           </div>
           <div className={styles.bio}>
             <h3>🖋 About</h3>
             <div
+              className='markdown-content-contaner'
               /* eslint-disable-next-line react/no-danger */
               dangerouslySetInnerHTML={{
                 __html: new MarkDown(profile.description).render(),

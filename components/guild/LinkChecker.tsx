@@ -17,8 +17,7 @@ export default {
               elm.preventDefault();
               this.destroy();
             }
-          }}
-        >
+          }}>
           {/* @ts-expect-error */}
           <div className='model-ujt' id='model-sdfh' style={{ '--animation-dp': 'animatedINmodle' }}>
             <div className='top-sfoj'>
@@ -29,15 +28,14 @@ export default {
                 This link takes you to <b>{link}</b>. Are you sure you want to go there?
               </p>
             </div>
-            <div className='bt-15j space-x-4'>
+            <div className='bt-15j'>
               <button id='cancelosjf'>Cancel</button>
               <button
-                className='goto-sf my-2'
+                className='goto-sf'
                 onClick={() => {
                   window.open(link);
                   setTimeout(() => this.destroy(), 0);
-                }}
-              >
+                }}>
                 Go to
               </button>
             </div>

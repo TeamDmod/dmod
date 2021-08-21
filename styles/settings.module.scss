@@ -169,15 +169,11 @@
   flex-direction: column;
 }
 
-.editor {
-  outline: none;
-  resize: none;
-  color: grey;
-  background-color: #061021;
-  border: 1px solid #030811;
-  border-radius: 4px;
-  padding: 6px;
-  font-size: 1rem;
+.info_label {
+  display: flex;
+  & > * + * {
+    margin-left: calc(0.25rem * calc(1 - 0));
+  }
 }
 
 @media screen and (max-width: 768px) {
