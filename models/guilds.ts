@@ -68,6 +68,7 @@ const Guilds = new Schema({
 });
 
 export interface FieldData {
+  _id: string;
   /**
    * Postition of this field
    */
@@ -86,6 +87,7 @@ export interface FieldData {
 }
 
 export interface section {
+  _id: string;
   postition: number;
   title: string;
   description: string;

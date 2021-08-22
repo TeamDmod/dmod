@@ -188,7 +188,7 @@ export default function GuildView({ guild, isManager, Inpreview, hasApp, len }: 
                 style={{ backgroundColor: appColorStaus[guild.application_status] }}
                 onClick={() => {
                   if (hasApp) return;
-                  router.push(`/servers/${guild.id}/apply`);
+                  router.push(`/servers/${guild.id}/app`);
                 }}>
                 {appSatus[guild.application_status]
                   .replace('{time}', new Date(guild.application_status_data?.date).toDateString())

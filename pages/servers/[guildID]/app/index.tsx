@@ -1,4 +1,3 @@
-import Layout from 'components/layout';
 import Metatags from 'components/MetaTags';
 import { resolveType } from 'lib/constants';
 import connectToDatabase from 'lib/mongodb.connection';
