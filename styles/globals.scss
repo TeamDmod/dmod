@@ -23,6 +23,12 @@ header {
   min-height: 5rem;
 }
 
+.main {
+  background: linear-gradient(180deg, #061021 0%, #0b2041 100%);
+  height: calc(100vh - (50px + 2rem));
+  overflow: hidden auto;
+}
+
 main {
   background: linear-gradient(180deg, #061021 0%, #0b2041 100%);
   height: calc(100vh - (50px + 2rem));

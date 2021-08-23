@@ -85,7 +85,7 @@ module.exports = {
         'react/jsx-filename-extension': [1, { extensions: ['.tsx'] }],
         'react/react-in-jsx-scope': 0,
         'react/button-has-type': [0],
-        'react/prop-types': 1,
+        'react/prop-types': 0,
         'simple-import-sort/imports': 2,
         'jsx-a11y/anchor-is-valid': [
           2,

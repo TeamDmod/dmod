@@ -2,11 +2,13 @@ import 'tailwindcss/tailwind.css';
 
 import { Switch } from '@headlessui/react';
 import GuildView from 'components/guild/guildView';
+import SettingsView from 'components/guild/settingsView';
 import Metatags from 'components/MetaTags';
 import Editor from 'components/ui/Editor';
 import { Formik } from 'formik';
 import { resolveGuildMemberPerms } from 'lib/backend-utils';
 import { clsx } from 'lib/constants';
+import discordAPI from 'lib/discordAPI';
 import connectToDatabase from 'lib/mongodb.connection';
 import redis from 'lib/redis';
 import withSession from 'lib/session';
@@ -46,7 +48,7 @@ export default function GuildSettings({ guild: _guild, uid, len }: props) {
   }, []);
 
   return (
-    <main>
+    <SettingsView>
       <Metatags title={`${guild.name} - dmod.gg`} description='Server settings' />
       <span id='preview_392sf' className={previewOpen ? 'pre-open' : 'pre-close'} />
       <>
@@ -278,13 +280,11 @@ export default function GuildSettings({ guild: _guild, uid, len }: props) {
           )}
         </Formik>
       </>
-    </main>
+    </SettingsView>
   );
 }
 
-const API_ENDPOINT = 'https://discord.com/api/v8';
 const TIME = 60 * 60 * 2; // 2h in seconds
-const json = (res: Response) => res.json();
 
 export const getServerSideProps: GetServerSideProps = withSession(
   async (context: withSessionGetServerSideProps): Promise<GetServerSidePropsResult<any>> => {
@@ -295,17 +295,14 @@ export const getServerSideProps: GetServerSideProps = withSession(
     const guildData = await guilds.findOne({ _id: context.query.guildID as string });
     if (!guildData) return { notFound: true };
 
-    // const user = await userModule.findOne({ _id: session.id });
-    // const objectUser = user.toObject();
-    // if (!user) return { notFound: true };
+    const api = discordAPI({ auth: true });
 
-    const authHead = { headers: { Authorization: `Bot ${process.env.CLIENT_TOKEN}` } };
     const guildCache = await redis.get(`guild:${context.query.guildID}`);
     let guild: RawGuild;
     if (!guildCache) {
-      guild = await fetch(`${API_ENDPOINT}/guilds/${context.query.guildID}?with_counts=true`, authHead).then(
-        json
-      );
+      guild = (
+        await api.guilds(context.query.guildID as string).get<RawGuild>({ query: { with_counts: true } })
+      ).body;
       // @ts-expect-error
       if (guild.code || guild.message) return { notFound: true };
 
@@ -326,12 +323,12 @@ export const getServerSideProps: GetServerSideProps = withSession(
     if (!isLimited) {
       let member: RawGuildMember = null;
       if (session?.id) {
-        const Member = await fetch(
-          `${API_ENDPOINT}/guilds/${context.query.guildID}/members/${session.id}`,
-          authHead
-        );
-        const header = Object.fromEntries(Member.headers.entries());
-        if (header['x-ratelimit-remaining'] === '0') {
+        const Member = await api
+          .guilds(context.query.guildID as string)
+          .members(session.id)
+          .get<RawGuildMember>();
+
+        if (Member.headers['x-ratelimit-remaining'] === '0') {
           const waitTime = Math.floor(Math.random() * (5 - 3 + 1)) + 3;
           redis.setex('limited?type=memberfetch', waitTime, 1).then(value => {
             if (value === 'OK')
@@ -342,7 +339,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
             else console.log('OPPS!!! Faild to set a limiting mark for member fetching. ', value);
           });
         }
-        member = await Member.json();
+        member = Member.body;
       }
       // @ts-expect-error
       if (member && (member.code || member.message)) return { props: { failed: true } };

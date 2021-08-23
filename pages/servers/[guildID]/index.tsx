@@ -1,9 +1,9 @@
 import GuildView from 'components/guild/guildView';
-import Layout from 'components/layout';
 import Metatags from 'components/MetaTags';
 import crypto from 'crypto-js';
 import { genToken } from 'lib/backend-utils';
 import { resolveType } from 'lib/constants';
+import { discordAuthApi } from 'lib/discordAPI';
 import { isServer } from 'lib/isServer';
 import connectToDatabase from 'lib/mongodb.connection';
 import redis from 'lib/redis';
@@ -99,9 +99,7 @@ export default function guildView({ failed, guild: guild_, hash, ws, hasApp, len
   );
 }
 
-const API_ENDPOINT = 'https://discord.com/api/v8';
 const TIME = 60 * 60 * 2; // 2h in seconds
-const json = (res: Response) => res.json();
 
 export const getServerSideProps: GetServerSideProps = withSession(
   async (context: withSessionGetServerSideProps): Promise<GetServerSidePropsResult<any>> => {
@@ -111,14 +109,14 @@ export const getServerSideProps: GetServerSideProps = withSession(
     const guildData = await guilds.findOne({ _id: context.query.guildID as string });
     if (!guildData) return { notFound: true };
 
-    const authHead = { headers: { Authorization: `Bot ${process.env.CLIENT_TOKEN}` } };
-
     const guildCache = await redis.get(`guild:${context.query.guildID}`);
     let guild: RawGuild;
     if (!guildCache) {
-      guild = await fetch(`${API_ENDPOINT}/guilds/${context.query.guildID}?with_counts=true`, authHead).then(
-        json
-      );
+      guild = (
+        await discordAuthApi
+          .guilds(context.query.guildID as string)
+          .get<RawGuild>({ query: { with_counts: true } })
+      ).body;
       // @ts-expect-error
       if (guild.code || guild.message) return { props: { failed: true } };
 
