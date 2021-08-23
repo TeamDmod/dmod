@@ -1,13 +1,12 @@
 import { decryptToken } from 'lib/backend-utils';
+import discordAPI from 'lib/discordAPI';
 import rateLimit from 'lib/rateLimiting';
 import withSession from 'lib/session';
 import credentialsData from 'models/credentials';
 import GuildModule from 'models/guilds';
+import tokenModule from 'models/token';
 import { NextApiResponse } from 'next';
 import { RawUserGivenGuild, withSessionRequest } from 'typings/typings';
-
-const API_ENDPOINT = 'https://discord.com/api/v8';
-const json = (res: Response) => res.json();
 
 // 4 request per minute
 export default rateLimit(
@@ -16,15 +15,20 @@ export default rateLimit(
     const session = req.session.get('user');
 
     if (!session) return res.status(401).json({ data: null, success: false });
+    if (!req.headers.authorization) return res.status(401).json({ data: null, success: false });
+
+    const token = await tokenModule.findOne({ for: session.id, type: 'user' });
+    if (!token || (token && token.for !== session.id))
+      return res.status(401).json({ data: null, success: false });
 
     const results = await credentialsData.findOne({ _id: session.id });
     const decryptAccessToken = decryptToken(results.AccessToken, true);
 
-    let userGuilds: RawUserGivenGuild[] = await fetch(`${API_ENDPOINT}/users/@me/guilds`, {
-      headers: {
-        Authorization: `Bearer ${decryptAccessToken}`,
-      },
-    }).then(json);
+    let userGuilds = (
+      await discordAPI({ auth: true, tokenType: 'Bearer', authToken: decryptAccessToken })
+        .users('@me')
+        .guilds.get<RawUserGivenGuild[]>()
+    ).body;
 
     if (!userGuilds.filter) return res.status(401).json({ data: null, success: false });
 

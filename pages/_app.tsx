@@ -53,7 +53,8 @@ export default function App({ Component, pageProps }: any) {
       setGwr(false);
       setUfetch(false);
 
-      fetch(`${window.origin}/api/auth/current_user`)
+      const { token } = getcc();
+      fetch(`${window.origin}/api/auth/current_user`, { headers: { authorization: token } })
         .then(d => d.json())
         .then(data => {
           setUser(data?.user ?? null);

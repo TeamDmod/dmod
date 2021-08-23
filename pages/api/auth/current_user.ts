@@ -1,4 +1,5 @@
 import { decryptToken } from 'lib/backend-utils';
+import discordAPI from 'lib/discordAPI';
 import connectToDatabase from 'lib/mongodb.connection';
 import rateLimit from 'lib/rateLimiting';
 import withSession from 'lib/session';
@@ -8,26 +9,27 @@ import userModule from 'models/users';
 import { NextApiResponse } from 'next';
 import { withSessionRequest } from 'typings/typings';
 
-const API_ENDPOINT = 'https://discord.com/api/v8';
-const json = (res: Response) => res.json();
-
 export default rateLimit(
   { max: 4, windowMs: 60 * 1000 },
   withSession(async (req: withSessionRequest, res: NextApiResponse) => {
     const user = req.session.get('user');
 
     if (!user || (user && !user.id)) return res.json({ user: null });
+    if (!req.headers.authorization) return res.status(401).json({ user: null, message: 'unauthorized' });
     await connectToDatabase();
+
+    const token = await tokenModule.findOne({ for: user.id, type: 'user' });
+    if (!token || (token && token.for !== user.id))
+      return res.status(401).json({ user: null, message: 'unauthorized' });
 
     const results = await credentialsData.findOne({ _id: user.id });
     if (!results) return res.json({ user: null });
     const decryptAccessToken = decryptToken(results.AccessToken, true);
 
-    const fetchedUser = await fetch(`${API_ENDPOINT}/users/@me`, {
-      headers: {
-        Authorization: `Bearer ${decryptAccessToken}`,
-      },
-    }).then(json);
+    const fetched = await discordAPI({ auth: true, tokenType: 'Bearer', authToken: decryptAccessToken })
+      .users('@me')
+      .get<any>();
+    const fetchedUser = fetched.body;
 
     /**
      * Check for a unauth code error meaning that the user most likely

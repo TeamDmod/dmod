@@ -26,7 +26,12 @@ export default function Server({ user }: any) {
     if (!user) router.push('/');
     if (user && !user.awaiting) {
       console.log('we bee featching');
-      fetch(`${window.origin}/api/discord/guilds`)
+      let token: string;
+      try {
+        token = localStorage.getItem('@pup/token');
+        // eslint-disable-next-line no-empty
+      } catch {}
+      fetch(`${window.origin}/api/discord/guilds`, { headers: { authorization: token } })
         .then(_ => _.json())
         .then(data => {
           if (!data.success) setIsError(true);

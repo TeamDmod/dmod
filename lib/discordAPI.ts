@@ -32,7 +32,7 @@ export type route = API &
   };
 
 export default function discordAPI({ v = 8, auth = false, authToken = null, tokenType = 'Bot' } = {}): route {
-  const route = [''];
+  let route = [''];
   if (typeof window !== 'undefined')
     throw Error('Oops cant use this in the browser. must be used server sided.');
 
@@ -52,11 +52,13 @@ export default function discordAPI({ v = 8, auth = false, authToken = null, toke
               status: number;
               statusText?: string;
               ok?: boolean;
+              route: string;
             } = {
               raw: '',
               body: null,
               status: null,
               headers: null,
+              route: route.join('/'),
             };
 
             const options = {
@@ -65,6 +67,7 @@ export default function discordAPI({ v = 8, auth = false, authToken = null, toke
               headers: {} as any,
               method: name,
             };
+            route = ['']; // clear the routes to stop route stacking
 
             if (auth) options.headers.Authorization = `${tokenType} ${authToken ?? process.env.CLIENT_TOKEN}`;
             if (data && name === 'post') options.headers['content-type'] = 'application/json';
@@ -82,13 +85,7 @@ export default function discordAPI({ v = 8, auth = false, authToken = null, toke
                 response.body = res.headers['content-type'].includes('application/json')
                   ? JSON.parse(response.raw)
                   : response.raw;
-                if (response.ok) {
-                  resolve(response);
-                } else {
-                  const error = new Error(`${res.statusCode} ${res.statusMessage}`);
-                  Object.assign(error, response);
-                  reject(error);
-                }
+                resolve(response);
               });
             });
 
@@ -110,4 +107,8 @@ export default function discordAPI({ v = 8, auth = false, authToken = null, toke
   return new Proxy(noop, handler);
 }
 
+/**
+ * @warn This should only be used for one time request.
+ * Request routes stack.
+ */
 export const discordAuthApi = discordAPI({ auth: true });

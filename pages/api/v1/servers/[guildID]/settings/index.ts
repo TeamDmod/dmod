@@ -1,5 +1,6 @@
-import { resolveGuildMemberPerms } from 'lib/backend-utils';
+import { resolveGuildMemberPerms, sendToWebhook } from 'lib/backend-utils';
 import { user_flags } from 'lib/constants';
+import discordApi from 'lib/discordAPI';
 import connectToDatabase from 'lib/mongodb.connection';
 import rateLimit from 'lib/rateLimiting';
 import { typeValidators, validators } from 'lib/validators/serverUpdateValidators';
@@ -10,9 +11,6 @@ import userModule from 'models/users';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { RawGuild, RawGuildMember } from 'typings/typings';
 
-const API_ENDPOINT = 'https://discord.com/api/v8';
-const json = (res: Response) => res.json();
-
 const validMethods = ['PATCH'];
 export default rateLimit(async (req: NextApiRequest, res: NextApiResponse) => {
   if (!validMethods.includes(req.method)) {
@@ -22,21 +20,12 @@ export default rateLimit(async (req: NextApiRequest, res: NextApiResponse) => {
   if (!req.headers.authorization || !req.body)
     return res.status(401).json({ message: 'unauthorized', code: 401 });
 
-  const canUpdate = [
-    'completed',
-    'description',
-    'short_description',
-    'recruiting',
-    'look_types',
-    'view',
-    'tags',
-    'invite',
-    'applyed',
-  ];
+  const canUpdate = ['completed', 'description', 'short_description', 'recruiting', 'view', 'invite'];
   const [user_id, user_token] = req.headers.authorization.split('=+');
   if (!user_id || !user_token || !req.query.guildID || typeof req.query.guildID !== 'string')
     return res.status(401).json({ message: 'unauthorized', code: 401 });
   await connectToDatabase();
+  const api = discordApi({ auth: true });
 
   const userToken = await tokenModule.findOne({ token: user_token, type: 'user' });
   if (!userToken) return res.status(401).json({ message: 'unauthorized', code: 401 });
@@ -48,18 +37,15 @@ export default rateLimit(async (req: NextApiRequest, res: NextApiResponse) => {
   const dbGuild = await GuildModule.findOne({ _id: req.query.guildID });
   if (!dbGuild) return res.status(404).json({ message: 'Guild not found', code: 404 });
 
-  const authHead = { headers: { Authorization: `Bot ${process.env.CLIENT_TOKEN}` } };
-
-  const guild: RawGuild = await fetch(`${API_ENDPOINT}/guilds/${req.query.guildID}`, authHead).then(json);
+  const guild = (await api.guilds(req.query.guildID).get<RawGuild>()).body;
   // @ts-expect-error
   if (guild.code || guild.message) return res.status(401).json({ message: 'Guild not found', code: 401 });
 
-  const member: RawGuildMember = await fetch(
-    `${API_ENDPOINT}/guilds/${req.query.guildID}/members/${user_id}`,
-    authHead
-  ).then(json);
+  const request = await api.guilds(req.query.guildID).members(user_id).get<RawGuildMember>();
+  const member = request.body;
   // @ts-expect-error
-  if (member.code || member.message) return res.status(401).json({ message: 'unauthorized', code: 401 });
+  if (member.code || member.message)
+    return res.status(401).json({ message: 'member unauthorized', code: 401 });
 
   const memberPerms = member ? resolveGuildMemberPerms(guild, member) : 0;
   const isManager =
@@ -128,6 +114,9 @@ export default rateLimit(async (req: NextApiRequest, res: NextApiResponse) => {
     res.json(Inew.toObject());
   } catch (error) {
     console.log(error);
+    sendToWebhook({
+      description: `Error while updating guild; ${guild.name} (${guild.id}); ${error.message ?? error}`,
+    }).catch(console.log);
+    return res.status(500).send({ message: `Unknown update error: ${error.message ?? ''}`, success: false });
   }
-  // returnWithWebhook({ message: `Unknown update error: ${_.message ?? _}`, success: false }, { description: `Error while updating ${user._id}; ${_.message ?? _}` }, 500);
 });
