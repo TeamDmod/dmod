@@ -12,7 +12,8 @@ const json = (res: Response) => res.json();
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.query.error) return res.redirect('/servers');
   if (!req.query.state) return res.redirect('/servers');
-  if (!req.query.code) return res.redirect(req.query.guild_id ? `/api/auth/invite?id=${req.query.guild_id}` : '/servers');
+  if (!req.query.code)
+    return res.redirect(req.query.guild_id ? `/api/auth/invite?id=${req.query.guild_id}` : '/servers');
   if (typeof req.query.state !== 'string' || typeof req.query.code !== 'string') return res.redirect('/');
   await connectToDatabase();
 
@@ -35,10 +36,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     },
   }).then(json);
 
+  if (token.scope !== 'bot') return res.send('Scopes Pollution');
+
   const tokenGivenGuild: RawGuild = token.guild;
 
   const short_description = 'Not much is known about this server.';
-  const description_default = '~!~ Server description has not been edited, So not much is yet known about this server. ~!~';
+  const description_default =
+    '~!~ Server description has not been edited, So not much is yet known about this server. ~!~';
 
   try {
     await GuildModule.create({

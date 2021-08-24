@@ -80,6 +80,11 @@ export default rateLimit(
       );
     }
 
-    res.json({ user: { ...fetchedUser, ...(user_object ? { vanity: user_object.vanity } : {}) } });
+    const toShave = ['locale', 'mfa_enabled', 'accent_color', 'banner_color', 'banner'];
+    const shaved = Object.fromEntries(
+      Object.entries(fetchedUser).filter(([item]) => !toShave.includes(item))
+    );
+
+    res.json({ user: { ...shaved, ...(user_object ? { vanity: user_object.vanity } : {}) } });
   })
 );

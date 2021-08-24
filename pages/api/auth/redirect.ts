@@ -39,6 +39,13 @@ export default withSession(async (req: withSessionRequest, res: NextApiResponse)
     },
   }).then(json);
 
+  const scopes: string[] = userAccessData.scope.split(' ');
+  const allowedScops = ['guilds', 'identify'];
+  if (scopes.some(s => !allowedScops.includes(s))) return res.send('Scopes Pollution');
+
+  // "identify" is a required scope
+  if (!scopes.includes('identify')) return res.redirect('/api/auth/login');
+
   const encryptedAccesssToken = crypto.AES.encrypt(
     userAccessData.access_token,
     process.env.ENCRYPT_KEY
