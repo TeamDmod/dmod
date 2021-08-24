@@ -1,8 +1,8 @@
 import { resolveGuildMemberPerms, sendToWebhook } from 'lib/backend-utils';
 import { user_flags } from 'lib/constants';
 import discordApi from 'lib/discordAPI';
+import rateLimit from 'lib/middelware/rateLimiting';
 import connectToDatabase from 'lib/mongodb.connection';
-import rateLimit from 'lib/rateLimiting';
 import { typeValidators, validators } from 'lib/validators/serverUpdateValidators';
 import GuildModule from 'models/guilds';
 import PreviewGuildModule from 'models/preview_guilds';

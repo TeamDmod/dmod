@@ -69,6 +69,7 @@ const Guilds = new Schema({
 
 export interface FieldData {
   _id: string;
+  section_id: string;
   /**
    * Postition of this field
    */
@@ -78,6 +79,7 @@ export interface FieldData {
   type: FieldTypes;
   /**
    * The max and min length content can be if text or choice
+   * -1 if length dosent matter; e.g: [-1, -1]
    */
   length: [number, number];
   /**

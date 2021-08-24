@@ -1,7 +1,7 @@
 import { decryptToken } from 'lib/backend-utils';
 import discordAPI from 'lib/discordAPI';
+import rateLimit from 'lib/middelware/rateLimiting';
 import connectToDatabase from 'lib/mongodb.connection';
-import rateLimit from 'lib/rateLimiting';
 import withSession from 'lib/session';
 import credentialsData from 'models/credentials';
 import tokenModule from 'models/token';

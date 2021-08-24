@@ -1,6 +1,6 @@
 import { decryptToken } from 'lib/backend-utils';
 import discordAPI from 'lib/discordAPI';
-import rateLimit from 'lib/rateLimiting';
+import rateLimit from 'lib/middelware/rateLimiting';
 import withSession from 'lib/session';
 import credentialsData from 'models/credentials';
 import GuildModule from 'models/guilds';

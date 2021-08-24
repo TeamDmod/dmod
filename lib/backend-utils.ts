@@ -6,9 +6,19 @@ const json = (res: Response) => res.json();
 
 export async function hasBetaAccess(id: string): Promise<boolean> {
   const DMOD_SERVER_ID = '791278367960858635';
-  const ACCESS_GRANT_ROLES = ['793593475316449301', '801746227712622593', '793858311815430166', '870610354273665065', '870610643139575848', '864587664342908949', '791734893657980929'];
+  const ACCESS_GRANT_ROLES = [
+    '793593475316449301',
+    '801746227712622593',
+    '793858311815430166',
+    '870610354273665065',
+    '870610643139575848',
+    '864587664342908949',
+    '791734893657980929',
+  ];
 
-  const Member = await fetch(`${API_ENDPOINT}/guilds/${DMOD_SERVER_ID}/members/${id}`, { headers: { Authorization: `Bot ${process.env.CLIENT_TOKEN}` } });
+  const Member = await fetch(`${API_ENDPOINT}/guilds/${DMOD_SERVER_ID}/members/${id}`, {
+    headers: { Authorization: `Bot ${process.env.CLIENT_TOKEN}` },
+  });
   // eslint-disable-next-line no-new
   if (Member.headers.get('x-ratelimit-remaining') === '0') {
     return new Promise(reslove =>
@@ -64,6 +74,14 @@ export function decryptToken(token: string, string: boolean = false) {
 export function genToken() {
   const gem = () => Math.random().toString(31).substr(2);
   return `${gem()}.${gem() + gem()}`;
+}
+
+export function createID() {
+  let s = '';
+  const car = '1234567890-_qwertyuiopsdfghjklzxcvbnmQWERTYUIOPLAKSJFHGBVNXMZ';
+  const len = Math.floor(Math.random() * (30 - 20 + 1)) + 20;
+  for (let i = 0; i < len; i += 1) s += car[Math.floor(Math.random() * car.length)];
+  return s;
 }
 
 export function isSnowflake(str: string) {
@@ -127,7 +145,8 @@ export function resolveGuildMemberPerms(guild: RawGuild, member: RawGuildMember)
     permissions |= Number(role.permissions);
   }
 
-  if ((permissions & discord_permission_flags.ADMINISTRATOR) === discord_permission_flags.ADMINISTRATOR) return ALL;
+  if ((permissions & discord_permission_flags.ADMINISTRATOR) === discord_permission_flags.ADMINISTRATOR)
+    return ALL;
 
   return permissions;
 }

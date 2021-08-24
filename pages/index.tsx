@@ -2,10 +2,9 @@ import AccessError from 'components/error/AccessError';
 import Footer from 'components/footer';
 import GuildPreviewCard from 'components/guildPreviewCard';
 import MetaTags from 'components/MetaTags';
-import { clsx } from 'lib/constants';
 import { PreviewGuildData } from 'models/preview_guilds';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styles from 'styles/home.module.scss';
 
 export default function Home() {
@@ -13,11 +12,22 @@ export default function Home() {
   const [search, setSearch] = useState('');
 
   const router = useRouter();
+  const MakeListRequest = useMemo(() => {
+    return () => {
+      fetch(`${window.origin}/api/v1/kei/search_g?all=true`)
+        .then(res => res.json())
+        .then(d => {
+          if (d.code === 429) {
+            setTimeout(MakeListRequest, 60 * 1000);
+            return;
+          }
+          setList(d);
+        });
+    };
+  }, []);
 
   useEffect(() => {
-    fetch(`${window.origin}/api/v1/kei/search_g?all=true`).then(async res => {
-      setList(await res.json());
-    });
+    MakeListRequest();
   }, []);
 
   function searchRedirect() {

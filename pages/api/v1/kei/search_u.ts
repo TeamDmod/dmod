@@ -1,5 +1,5 @@
+import rateLimit from 'lib/middelware/rateLimiting';
 import connectToDatabase from 'lib/mongodb.connection';
-import rateLimit from 'lib/rateLimiting';
 import userModule from 'models/users';
 import type { NextApiRequest, NextApiResponse } from 'next';
 

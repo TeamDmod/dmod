@@ -1,7 +1,7 @@
 import { Embed, sendToWebhook } from 'lib/backend-utils';
 import { user_flags } from 'lib/constants';
+import rateLimit from 'lib/middelware/rateLimiting';
 import connectToDatabase from 'lib/mongodb.connection';
-import rateLimit from 'lib/rateLimiting';
 import redis from 'lib/redis';
 import { typeValidators, validators } from 'lib/validators/userUpdateValidators';
 import tokenModule from 'models/token';

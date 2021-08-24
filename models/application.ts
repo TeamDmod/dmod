@@ -32,6 +32,10 @@ const userApplication = new Schema({
     type: String,
     default: null,
   },
+  apv: {
+    type: Number,
+    default: 1,
+  },
 });
 
 export enum processingType {
@@ -58,6 +62,8 @@ export interface userApplicationData {
   user_id: string;
   tag: string;
   avatar: string;
+  /** Application version */
+  apv: number;
   /**
    * Position this user applyed for in the server
    * Note: currenly only position is "moderator"
