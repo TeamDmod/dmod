@@ -1,5 +1,6 @@
 import '../styles/globals.scss';
 import '../styles/link.scss';
+import '../styles/applications/base.scss'; // temp
 import 'nprogress/nprogress.css';
 
 import Navbar from 'components/Navbar';

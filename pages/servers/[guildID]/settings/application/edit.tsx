@@ -1,3 +1,6 @@
+import 'tailwindcss/tailwind.css';
+
+import Editing from 'components/application/editing';
 import Metatags from 'components/MetaTags';
 import { resolveGuildMemberPerms } from 'lib/backend-utils';
 import { discordAuthApi } from 'lib/discordAPI';
@@ -6,6 +9,7 @@ import redis from 'lib/redis';
 import withSession from 'lib/session';
 import guilds, { GuildData } from 'models/guilds';
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
+import React from 'react';
 import { RawGuild, RawGuildMember, withSessionGetServerSideProps } from 'typings/typings';
 
 interface props {
@@ -17,6 +21,7 @@ export default function ApplicationEdit({ guild }: props) {
   return (
     <div className='main'>
       <Metatags title={`Editing - ${guild.name}' application`} />
+      <Editing sections={guild.sections} />
     </div>
   );
 }
@@ -98,7 +103,9 @@ export const getServerSideProps: GetServerSideProps = withSession(
       props: {
         uid: session.id,
         guild: {
-          ...Object.fromEntries(Object.entries(guild).filter(([prop]) => prop !== 'roles')),
+          ...Object.fromEntries(
+            Object.entries(guild).filter(([prop]) => !['roles', 'emojis', 'stickers'].includes(prop))
+          ),
           guild_description: guild.description,
           ...guildData.toObject(),
         },
