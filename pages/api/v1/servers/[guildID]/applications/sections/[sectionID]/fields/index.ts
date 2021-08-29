@@ -11,7 +11,10 @@ export default rateLimit(
       return res.status(405).end(`Method ${req.method} Not Allowed`);
     }
 
-    const { sectionID } = req.query;
+    const { sectionID, nonce: _nonce } = req.query;
+    const nonce = (Array.isArray(_nonce) ? _nonce[0] : _nonce) ?? null;
+    if (typeof nonce !== 'string' && nonce !== null)
+      return res.status(400).json({ message: 'Invalid nonce', code: 400 });
 
     switch (req.method) {
       case 'GET': {
@@ -30,6 +33,8 @@ export default rateLimit(
 
         const section = req.application.sections.find(s => s._id === sectionID);
         if (!section) return res.status(404).json({ message: 'Section not found', code: 404 });
+        if (section.fields.length >= 60)
+          return res.status(400).json({ message: 'Max field reached', code: 400 });
 
         const body = JSON.parse(req.body);
         const { hasOwnProperty: has } = Object.prototype;
@@ -61,7 +66,7 @@ export default rateLimit(
           { arrayFilters: [{ 'elm._id': sectionID }] }
         );
 
-        res.json(field);
+        res.json({ field, nonce });
         break;
       }
 

@@ -34,7 +34,7 @@ export default rateLimit(
           { arrayFilters: [{ 'elm._id': sectionID }] }
         );
 
-        res.json(field);
+        res.json({ field });
         break;
       }
 
@@ -74,7 +74,7 @@ export default rateLimit(
           { arrayFilters: [{ 'elm._id': sectionID }, { 'element._id': fieldID }] }
         );
 
-        res.json(newField);
+        res.json({ field: newField });
         break;
       }
 

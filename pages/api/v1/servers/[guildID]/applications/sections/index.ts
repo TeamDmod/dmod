@@ -52,7 +52,7 @@ export default rateLimit(
           fields: [],
         };
         await req.application.updateOne({ $push: { sections: section } });
-        res.json(section);
+        res.json({ section });
         break;
       }
 

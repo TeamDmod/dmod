@@ -45,10 +45,12 @@ export default rateLimit(
         );
 
         res.json({
-          _id: section._id,
-          postition: section.postition,
-          title: body.title ?? section.title,
-          description: body.description ?? section.description,
+          section: {
+            _id: section._id,
+            postition: section.postition,
+            title: body.title ?? section.title,
+            description: body.description ?? section.description,
+          },
         });
         break;
       }
