@@ -69,7 +69,7 @@ export default function discordAPI({ v = 8, auth = false, authToken = null, toke
             };
             route = ['']; // clear the routes to stop route stacking
 
-            if (auth) options.headers.Authorization = `${tokenType} ${authToken ?? process.env.CLIENT_TOKEN}`;
+            if (auth) options.headers.authorization = `${tokenType} ${authToken ?? process.env.CLIENT_TOKEN}`;
             if (data && name === 'post') options.headers['content-type'] = 'application/json';
             if (data && name === 'get') options.path += `?${q}`;
 

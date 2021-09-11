@@ -76,7 +76,7 @@ export default function GuildView({ guild, isManager, Inpreview, hasApp, len }: 
 
   return (
     <>
-      <div className='top-section relative overflow-x-hidden'>
+      <div className='top-section relative overflow-x-hidden' style={{ minHeight: '210px' }}>
         <div
           className='guild-banner w-full h-52 bg-no-repeat'
           style={{
