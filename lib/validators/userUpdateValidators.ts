@@ -14,7 +14,7 @@ type validatorFunctions = (
   args: dataPassed
 ) => Promise<{ error: boolean; message?: string; redis: boolean; redisARGS?: string[] }>;
 type Ivalidators = { [key: string]: validatorFunctions };
-interface vanityRateLimite {
+interface vanityRateLimit {
   id: string;
   time: number;
   inc: number;
@@ -26,7 +26,7 @@ export const DESCRIPTION_MAX_DATA = { PREMIUM: 4000, NORMAL: 2000 };
 export const DESCRIPTION_MIN = 30;
 
 const VANITY_ALLOWED = ['_', '.', '\\-'];
-const VANITY_FOBIDEN_REGEXP = new RegExp(`[^${VANITY_ALLOWED}a-z\\d]`, 'g');
+const VANITY_FORBIDDEN_REGEXP = new RegExp(`[^${VANITY_ALLOWED}a-z\\d]`, 'g');
 const VANITY_ALLOWED_REGEXP = new RegExp(`[${VANITY_ALLOWED}a-z\\d]{3,30}`);
 // const VANITY_ALL_CHARACTER = new RegExp(`[${VANITY_ALLOWED}]`, 'g');
 const VANITY_ALL_NONE_CHARACTER = new RegExp(`[a-z\\d]`, 'g');
@@ -34,9 +34,9 @@ const VANITY_LENGTH_NONE_CHARACTER = 3;
 
 // Note: Removes function repeat
 const validatorPasses = Object.create(null);
-const byPassedPropertys: string[] = ['active', 'pronouns', 'username', 'discriminator', 'avatar'];
+const byPassedProperties: string[] = ['active', 'pronouns', 'username', 'discriminator', 'avatar'];
 
-byPassedPropertys.forEach(value => {
+byPassedProperties.forEach(value => {
   validatorPasses[value] = () => {
     return { error: false };
   };
@@ -75,7 +75,7 @@ const validators: Ivalidators = {
   },
   site_flags({ value, user }) {
     const ERROR_MESSAGE = 'Admin user can not be deadmined, by the api nor can they be admined, by the api.';
-    // The new flages trying to be updated to.
+    // The new flags trying to be updated to.
     const flags = value as number;
     // If the user is currently a admin/dev
     const userIsAdmin = (user.site_flags & user_flags.ADMIN) === user_flags.ADMIN;
@@ -105,9 +105,9 @@ const validators: Ivalidators = {
   async vanity({ value, user, limited }) {
     const vanity = value as string;
     const allowedMatch = vanity.match(VANITY_ALLOWED_REGEXP);
-    const fobidenMatch = vanity.match(VANITY_FOBIDEN_REGEXP);
+    const forbiddenMatch = vanity.match(VANITY_FORBIDDEN_REGEXP);
 
-    if ((fobidenMatch || []).length > 0) return { error: true, message: 'Forbiden character(s) in value.' };
+    if ((forbiddenMatch || []).length > 0) return { error: true, message: 'Forbidden character(s) in value.' };
     if (!allowedMatch?.[0]) return { error: true, message: 'Vanity does not fit regex' };
 
     const noneCharacters = vanity.match(VANITY_ALL_NONE_CHARACTER) || [];
@@ -131,7 +131,7 @@ const validators: Ivalidators = {
     if (data.length > 0) return { error: true, message: 'Vanity already taken' };
 
     if (limited) {
-      const limitedData: vanityRateLimite = JSON.parse(limited);
+      const limitedData: vanityRateLimit = JSON.parse(limited);
       if (limitedData.inc >= 3) return { error: true, message: "You're changing your vanity too fast" };
 
       const timestamp =
@@ -176,7 +176,7 @@ const validators: Ivalidators = {
 };
 
 type ItypeValidators = { [key: string]: (...args1: any[]) => boolean };
-// type ratingProprtyField = [string, (item: any) => boolean];
+// type ratingPropertyField = [string, (item: any) => boolean];
 
 const typeValidators: ItypeValidators = {
   description: (text: string) => typeof text === 'string',
@@ -188,14 +188,14 @@ const typeValidators: ItypeValidators = {
   // ratings: (ratings: ratingData[]) => {
   //   const isArray = Array.isArray(ratings);
   //   if (!isArray) return true;
-  //   const propertys: ratingProprtyField[] = [
+  //   const properties: ratingPropertyField[] = [
   //     ['_id', input => typeof input === 'string'],
   //     ['createdAt', input => Object.prototype.toString.call(input) === '[object Date]'],
   //     ['comment', input => typeof input === 'string'],
   //     ['rating', input => typeof input === 'number'],
   //   ];
 
-  //   const AllRatingData = ratings.every(rating => Object.entries(rating).every(([key, value]) => propertys.find(prop => prop[0] === key)[1](value)));
+  //   const AllRatingData = ratings.every(rating => Object.entries(rating).every(([key, value]) => properties.find(prop => prop[0] === key)[1](value)));
   //   return isArray && AllRatingData;
   // },
   username: (text: string) => typeof text === 'string',

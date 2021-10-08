@@ -11,9 +11,9 @@ export async function hasBetaAccess(id: string): Promise<boolean> {
   const Member = await fetch(`${API_ENDPOINT}/guilds/${DMOD_SERVER_ID}/members/${id}`, { headers: { Authorization: `Bot ${process.env.CLIENT_TOKEN}` } });
   // eslint-disable-next-line no-new
   if (Member.headers.get('x-ratelimit-remaining') === '0') {
-    return new Promise(reslove =>
+    return new Promise(resolve =>
       setTimeout(async () => {
-        reslove(await hasBetaAccess(id));
+        resolve(await hasBetaAccess(id));
       }, 2000)
     );
   }
@@ -57,8 +57,8 @@ export function sendToWebhook(embed: Embed) {
 }
 
 export function decryptToken(token: string, string: boolean = false) {
-  const decript = crypto.AES.decrypt(token, process.env.ENCRYPT_KEY);
-  return string ? decript.toString(crypto.enc.Utf8) : decript;
+  const decrypt = crypto.AES.decrypt(token, process.env.ENCRYPT_KEY);
+  return string ? decrypt.toString(crypto.enc.Utf8) : decrypt;
 }
 
 export function genToken() {
