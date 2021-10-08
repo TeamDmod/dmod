@@ -83,8 +83,8 @@ export default function GuildStatus({ guild, shadow }: props) {
           <b>Premium Tier</b>: {PREMIUM_TIER[guild.premium_tier]}
         </span>
         <br />
-        <span title='Server verifction level'>
-          <b>Verfiction Level</b>: {VERIFICATION_LEVEL[guild.verification_level]}
+        <span title='Server verification level'>
+          <b>Verification Level</b>: {VERIFICATION_LEVEL[guild.verification_level]}
         </span>
         <br />
         {guild.emojis.length > 0 && (
