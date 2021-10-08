@@ -8,7 +8,7 @@ const API_ENDPOINT = 'https://discord.com/api/v8';
 const json = (res: Response) => res.json();
 
 const passes = Object.create(null);
-const pass = ['recruiting', 'look_types', 'tags', 'applyed', 'view', 'completed'];
+const pass = ['recruiting', 'look_types', 'tags', 'applied', 'view', 'completed'];
 
 pass.forEach(value => {
   passes[value] = () => {
@@ -39,10 +39,10 @@ const validators = {
 
     const lengthError =
       value.length < SHORT_DESCRIPTION_MIN
-        ? 'to short'
+        ? 'too short'
         : value.length > SHORT_DESCRIPTION_MAX_DATA.NORMAL
-        ? 'to long'
-        : 'unknow (failed to read proper length)';
+        ? 'too long'
+        : 'unknown (failed to read proper length)';
     return {
       error: true,
       message: `Short description length ${lengthError}`,
@@ -60,7 +60,7 @@ const validators = {
       return { error: true, message: 'Invalid invite code' };
     if (data.guild.id !== guildID)
       return { error: true, message: 'Invalid invite, invite is not from this guild' };
-    // TODO: Figuer out a way to get the alowed max user count for a server.
+    // TODO: Figure out a way to get the allowed max user count for a server.
     // if (!data.max_uses) return { error: true, message: 'Failed to fetch max users count' };
 
     const _expiresTimestamp = 'expires_at' in data ? new Date(data.expires_at).getTime() : null;
@@ -79,14 +79,14 @@ const validators = {
 
 type ItypeValidator = { [key: string]: (input: any) => boolean };
 
-// TODO: move to validotor to check length and use premium
+// TODO: move to validator to check length and use premium
 const typeValidators: ItypeValidator = {
   description: input => typeof input === 'string',
   short_description: input => typeof input === 'string',
   recruiting: input => typeof input === 'number' && input > -1,
   look_types: input => Array.isArray(input) && input.every(i => typeof i === 'string'),
   tags: input => Array.isArray(input) && input.every(i => typeof i === 'string'),
-  applyed: input => Array.isArray(input) && input.every(i => typeof i === 'string'),
+  applied: input => Array.isArray(input) && input.every(i => typeof i === 'string'),
   view: input => typeof input === 'boolean',
   completed: input => typeof input === 'boolean',
   invite: input => typeof input === 'string',

@@ -21,7 +21,7 @@ export default function Editor({ value, handleBlur, handleChange, max, min, id }
 
   return (
     <>
-      <div className='contaner_mini'>
+      <div className='container_mini'>
         <textarea
           className='editor_mini'
           id={id ?? 'description'}
@@ -48,7 +48,7 @@ export default function Editor({ value, handleBlur, handleChange, max, min, id }
         padding: 6px;
         font-size: 1rem;
       }
-      .contaner_mini {
+      .container_mini {
         position: relative;
       }
       .range_content {

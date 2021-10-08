@@ -234,7 +234,7 @@ export const DEFAULT_BANNER_COLOR = 'rgb(76,29,149)';
 
 const user_badges_display_name = {
   STAFF: 'Staff',
-  VERIFIED: 'Verifed',
+  VERIFIED: 'Verified',
   TOP_RANKING: 'Top rank',
   EARLY_SUPPORTER: '',
   // ADMIN: '', // 16
@@ -246,8 +246,8 @@ const user_badges_display_name = {
   GRAPHIC_DESIGNER: 'Graphic Designer', // 512
 };
 
-export function evalBadges(resoloved: { [key: string]: boolean }): [JSX.Element, string][] {
-  return Object.entries(resoloved).reduce((past, [key, has]) => (has ? [[user_badges[key], user_badges_display_name[key]]].concat(past) : past), []);
+export function evalBadges(resolved: { [key: string]: boolean }): [JSX.Element, string][] {
+  return Object.entries(resolved).reduce((past, [key, has]) => (has ? [[user_badges[key], user_badges_display_name[key]]].concat(past) : past), []);
 }
 
 export function clsx(...args: string[]) {
@@ -315,7 +315,7 @@ export function resolveType(str: string): string {
   return `${str}.png`;
 }
 
-export function NormilizeSearchQ(searchFlat: string): string {
+export function NormalizeSearchQ(searchFlat: string): string {
   let search = `q=${searchFlat}`;
   const mu = (str: string) => str.replace(/\s+/g, '%20');
 

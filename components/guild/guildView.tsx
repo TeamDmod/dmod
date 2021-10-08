@@ -18,14 +18,14 @@ interface props {
   len: number;
 }
 
-const appSatus = [
+const appStatus = [
   'Applications Closed',
   'Applications Open',
   'Applications Full',
   'Applications opining {time}',
   'Applications open with {slots}',
 ];
-const appColorStaus = [
+const appColorStatus = [
   'rgb(191, 42, 29)',
   'rgb(20, 184, 110)',
   'rgb(76, 29, 149)',
@@ -62,7 +62,7 @@ export default function GuildView({ guild, isManager, Inpreview, hasApp, len }: 
   //   window.scrollTo({
   //     top: 0,
   //     behavior: 'smooth',
-  //     /* you can also use 'auto' behaviour
+  //     /* you can also use 'auto' behavior
   //        in place of 'smooth' */
   //   });
   // }
@@ -88,7 +88,7 @@ export default function GuildView({ guild, isManager, Inpreview, hasApp, len }: 
             backgroundPosition: 'center center',
           }}
         />
-        <div className='icon-contaner flex justify-center'>
+        <div className='icon-container flex justify-center'>
           <div
             className='guild-icon w-32 h-32 rounded-full absolute top-7'
             style={{
@@ -172,7 +172,7 @@ export default function GuildView({ guild, isManager, Inpreview, hasApp, len }: 
         <div className='w-full'>
           <div>
             <div
-              className='markdown-content-contaner m-3 text-lg'
+              className='markdown-content-container m-3 text-lg'
               // eslint-disable-next-line react/no-danger
               dangerouslySetInnerHTML={{ __html: new MarkDown(guild.description).render() }}
             />
@@ -185,12 +185,12 @@ export default function GuildView({ guild, isManager, Inpreview, hasApp, len }: 
               <div
                 title='Currently Under Development'
                 className={clsx('rounded px-2 py-1', hasApp ? '' : 'cursor-pointer')}
-                style={{ backgroundColor: appColorStaus[guild.application_status] }}
+                style={{ backgroundColor: appColorStatus[guild.application_status] }}
                 onClick={() => {
                   if (hasApp) return;
                   router.push(`/servers/${guild.id}/apply`);
                 }}>
-                {appSatus[guild.application_status]
+                {appStatus[guild.application_status]
                   .replace('{time}', new Date(guild.application_status_data?.date).toDateString())
                   .replace(
                     '{slots}',
