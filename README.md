@@ -36,6 +36,6 @@ All the information on licensing can be viewed [here](https://github.com/dmod-gg
 
 ### Links 
 Website: http://dmod.gg/<br>
-Twitter: https://twitter.com/dmodgg/<br>
+Twitter: https://twitter.com/TeamDmod/<br>
 Discord: https://discord.gg/Moderate<br>
-Newsletter: https://dmod.substack.com
+Newsletter: https://www.getrevue.co/profile/dmod
