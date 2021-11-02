@@ -128,7 +128,7 @@ export default function Footer() {
             links={[
               {
                 name: 'Github',
-                href: 'https://github.com/TeamDmod/dmod',
+                href: 'https://github.com/TeamDmod',
                 target: '_blank',
                 external: true,
               },
