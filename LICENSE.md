@@ -33,7 +33,7 @@
 </h2>
 
 ### Approved hosting locations
-- [Dmod Github](https://github.com/dmod-gg)
+- [Dmod Github](https://github.com/TeamDmod)
 - [Dmod.gg](https://dmod.gg)
 - [Dmod Discord](https://discord.com/invite/VUTu3HyRpN)
 
