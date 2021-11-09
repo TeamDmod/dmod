@@ -102,7 +102,7 @@ export default function Footer() {
             links={[
               {
                 name: 'Twitter',
-                href: 'https://twitter.com/dmodgg',
+                href: 'https://twitter.com/TeamDmod',
                 target: '_blank',
                 external: true,
               },
