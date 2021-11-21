@@ -32,10 +32,10 @@ The appropriate formatting guidelines will be updated soon.
 
 ## Licensing
 
-All the information on licensing can be viewed [here](https://github.com/dmod-gg/dmod/blob/master/LICENSE.md)
+All the information on licensing can be viewed [here](https://github.com/TeamDmod/dmod/blob/master/LICENSE.md)
 
 ### Links 
 Website: http://dmod.gg/<br>
 Twitter: https://twitter.com/TeamDmod/<br>
-Discord: https://discord.gg/Moderate<br>
+Discord: https://dmod.gg/discord<br>
 Newsletter: https://www.getrevue.co/profile/dmod
