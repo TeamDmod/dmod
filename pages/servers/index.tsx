@@ -1,5 +1,4 @@
 import AnimatedLoader from 'components/AnimatedLoader';
-import CreateGuildApplicationModal from 'components/guild/CreateGuildApplicationModal';
 // import GuildCard from 'components/GuildCard';
 import MetaTags from 'components/MetaTags';
 import { useRouter } from 'next/router';
@@ -15,8 +14,6 @@ interface ApiUserGuildData {
 export default function Server({ user }: any) {
   const [loading, setLoading] = useState(true);
   const [IsError, setIsError] = useState(false);
-  const [IsModalOpen, setModalOpen] = useState(false);
-  const [selectedGuildModalData, setGuildModleData] = useState(null);
 
   const [userGuildData, setData] = useState<ApiUserGuildData>({} as ApiUserGuildData);
 
@@ -52,7 +49,7 @@ export default function Server({ user }: any) {
     return (
       <main>
         <MetaTags title='dmod.gg - Servers ERROR' />
-        <h3 className='error'>An error has occored! Try again in a bit... 😔</h3>
+        <h3 className='error'>An error has occored! Please try again later... 😔</h3>
       </main>
     );
   }
@@ -89,10 +86,7 @@ export default function Server({ user }: any) {
           <div
             key={guild.id}
             className={styles.card}
-            onClick={() => {
-              setGuildModleData(guild);
-              setModalOpen(true);
-            }}>
+            >
             <img
               draggable={false}
               className={styles.icon}
@@ -107,11 +101,6 @@ export default function Server({ user }: any) {
           </div>
         ))}
       </div>
-      <CreateGuildApplicationModal
-        guild={selectedGuildModalData}
-        closeModal={() => setModalOpen(false)}
-        isOpen={IsModalOpen}
-      />
     </main>
   );
 }
