@@ -20,7 +20,7 @@
     "@headlessui/react": "^1.2.0",
     "@popperjs/core": "^2.9.2",
     "@y0c/react-datepicker": "^1.0.4",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "btoa": "^1.2.1",
     "crypto-js": "^4.0.0",
     "dotenv": "^8.2.0",
