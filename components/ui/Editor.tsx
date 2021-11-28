@@ -24,7 +24,7 @@ export default function Editor({ value, handleBlur, handleChange, max, min, id }
       <div className='container_mini'>
         <textarea
           className='editor_mini'
-          id={id ?? 'description'}
+          id={id ?? 'bio'}
           cols={40}
           rows={10}
           value={value}

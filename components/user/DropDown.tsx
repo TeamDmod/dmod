@@ -1,14 +1,12 @@
 import { Menu, Transition } from '@headlessui/react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { ParsedUrlQuery } from 'querystring';
+import { signOut } from 'next-auth/react';
 import React, { Fragment } from 'react';
 import styles from 'styles/navbar.module.scss';
 import { ApiUser } from 'typings/typings';
 
 interface props {
   user: ApiUser;
-  fetcher: any;
 }
 
 function AccountSettingsIcon() {
@@ -56,52 +54,26 @@ function ProfileIcon() {
   );
 }
 
-const toBack = [
-  {
-    from: /\/servers\/\d+\/settings\/?$/,
-    to: (query: ParsedUrlQuery) => `/servers/${query.guildID}`,
-  },
-  {
-    from: /\/account\/?.*/,
-    to: () => `/`,
-  },
-  {
-    from: /\/servers\/?/,
-    to: () => `/`,
-  },
-];
+// const toBack = [
+//   {
+//     from: /\/servers\/\d+\/settings\/?$/,
+//     to: (query: ParsedUrlQuery) => `/servers/${query.guildID}`,
+//   },
+//   {
+//     from: /\/account\/?.*/,
+//     to: () => `/`,
+//   },
+//   {
+//     from: /\/servers\/?/,
+//     to: () => `/`,
+//   },
+// ];
 
-export default function UserDropDown({ user, fetcher }: props) {
-  const router = useRouter();
-
-  function LogoutSoft() {
-    localStorage.removeItem('@pup/token');
-    localStorage.removeItem('@pup/hash');
-    const toRedirect = toBack.find(reg => reg.from.test(router.asPath));
-
-    fetch(`${window.location.origin}/api/auth/logout`).then(async () => {
-      if (toRedirect) {
-        await router.push(toRedirect.to(router.query));
-        fetcher(true);
-      } else {
-        fetcher(true);
-      }
-    });
-  }
-
-  function userAvatarUrl(): string | null {
-    let base = `https://cdn.discordapp.com/avatars/${user.id}/`;
-    const disc = +user.discriminator;
-
-    if (!user.avatar) return (base = `https://cdn.discordapp.com/embed/avatars/${disc % 5}.png?size=64`);
-    const isAnimated = user.avatar.startsWith('a_');
-    return (base += `${user.avatar}.${isAnimated ? 'gif' : 'png'}?size=64`);
-  }
-
+export default function UserDropDown({ user }: props) {
   return (
     <Menu as={Fragment}>
       <Menu.Button className={styles.user_button}>
-        <img className={styles.user_avatar} src={userAvatarUrl()} alt='User Avatar' />
+        <img className={styles.user_avatar} src={user?.avatar} alt='User Avatar' />
       </Menu.Button>
 
       <Transition
@@ -115,7 +87,7 @@ export default function UserDropDown({ user, fetcher }: props) {
         <Menu.Items className={styles.dropdown_items}>
           <Menu.Item>
             <button>
-              <Link href={`/${user.vanity}`}>
+              <Link href={`/${user?.vanity}`}>
                 <a>
                   <ProfileIcon />
                   <span>Profile</span>
@@ -136,7 +108,7 @@ export default function UserDropDown({ user, fetcher }: props) {
           </Menu.Item>
 
           <Menu.Item>
-            <button className={styles.logout} onClick={LogoutSoft}>
+            <button className={styles.logout} onClick={() => signOut({ redirect: false })}>
               <LogoutIcon />
               <span>Logout</span>
             </button>

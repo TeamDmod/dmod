@@ -1,21 +1,18 @@
 import { Dialog, Switch } from '@headlessui/react';
-import AnimatedLoader from 'components/AnimatedLoader';
 import MetaTags from 'components/MetaTags';
 import Editor from 'components/ui/Editor';
 import InfoPopUp from 'components/ui/info';
-import Profile from 'components/user/profile';
+import Profile from 'components/user/Profile';
 import { Formik } from 'formik';
 import { bannerFlatten, bannerResolver, bannerTypes, clsx } from 'lib/constants';
 import MarkDown from 'lib/markdown';
-import connectToDatabase from 'lib/mongodb.connection';
-import withSession from 'lib/session';
-import useUserGard from 'lib/useUserGard';
+import clientPromise from 'lib/mongodb';
 import { DESCRIPTION_MAX_DATA, DESCRIPTION_MIN, validators } from 'lib/validators/userUpdateValidators';
-import userModule, { userData } from 'models/users';
-import { GetServerSideProps, GetServerSidePropsResult } from 'next';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/react';
 import React, { useState } from 'react';
 import styles from 'styles/settings.module.scss';
-import { ApiUser, withSessionGetServerSideProps } from 'typings/typings';
+import { ApiUser } from 'typings/typings';
 
 function XIcon() {
   return (
@@ -30,17 +27,10 @@ function XIcon() {
   );
 }
 
-interface props {
-  user: ApiUser;
-  settings: userData;
-  __setUser: (d: any) => void;
-}
-
-export default function Settings({ user, settings: _settings, __setUser }: props) {
-  const { loading } = useUserGard(user);
+export default function Settings({ user }: { user: ApiUser }) {
   const [error, setError] = useState<string | null>(null);
   const [previewOpen, setPreviewOpen] = useState(false);
-  const [settings, setSettings] = useState(_settings);
+  const [settings, setSettings] = useState(user);
 
   function validate(values) {
     const errors: any = {};
@@ -75,21 +65,22 @@ export default function Settings({ user, settings: _settings, __setUser }: props
       ...(settings.banner === bannerflat ? {} : { banner: bannerflat }),
     });
 
-    let token: string;
-    try {
-      token = localStorage.getItem('@pup/token');
-      // eslint-disable-next-line no-empty
-    } catch {}
+    const fetchData = async () => {
+      const res = await fetch(`/api/users/${user.uid}`, {
+        method: 'PUT',
+        body: JSON.stringify(body),
+      });
+      const json = await res.json();
+      return {
+        status: res.status,
+        message: json,
+      };
+    };
 
-    const data = await fetch(`${window.origin}/api/auth/updates`, {
-      method: 'PATCH',
-      body: JSON.stringify(body),
-      headers: {
-        authorization: `${settings._id}=+${token}`,
-      },
-    }).then(d => d.json());
+    const data = await fetchData();
+    console.log(data);
 
-    if (!data.success) {
+    if (data.status !== 200) {
       setError(data.message);
       setTimeout(() => setError(null), 3000);
       return;
@@ -99,34 +90,31 @@ export default function Settings({ user, settings: _settings, __setUser }: props
       Object.entries(data.message).filter(([key]) => ValidValues[key])
     );
 
-    if (Object.prototype.hasOwnProperty.call(updateObjectMapping, 'vanity'))
-      __setUser({ ...user, vanity: updateObjectMapping.vanity });
-
     setSettings({ ...settings, ...data.message });
     resetForm({ values: { ...values, ...updateObjectMapping } });
 
     setSubmitting(false);
   }
 
-  if (loading)
-    return (
-      <main>
-        <MetaTags title='Loading...' />
-        <AnimatedLoader />
-      </main>
-    );
+  // if (session.status === 'loading')
+  //   return (
+  //     <main>
+  //       <MetaTags title='Loading...' />
+  //       <AnimatedLoader />
+  //     </main>
+  //   );
 
-  const bannerData = bannerResolver(settings.banner);
+  const bannerData = bannerResolver('');
 
   return (
     <main>
       <MetaTags title={`${user.username} - Settings`} description='User settings' />
       <Formik
         initialValues={{
-          description: settings.description,
-          active: settings.active,
+          bio: user.bio || '',
+          public: user.public || false,
           bannerData,
-          vanity: settings.vanity,
+          vanity: user.vanity,
         }}
         validate={validate}
         onSubmit={submitForm}>
@@ -135,7 +123,7 @@ export default function Settings({ user, settings: _settings, __setUser }: props
             <Dialog open={previewOpen} onClose={() => setPreviewOpen(false)} className={styles.preview}>
               <Profile
                 profile={{
-                  ...settings,
+                  ...user,
                   ...values,
                   banner: bannerFlatten(
                     values.bannerData ?? {
@@ -182,17 +170,17 @@ export default function Settings({ user, settings: _settings, __setUser }: props
                 <Editor
                   min={DESCRIPTION_MIN}
                   max={DESCRIPTION_MAX_DATA.NORMAL}
-                  {...{ handleBlur, handleChange, value: values.description }}
+                  {...{ handleBlur, handleChange, value: values.bio }}
                 />
               </div>
 
               <div className={styles.toggle_label}>
-                <label>Active</label>
+                <label>Public</label>
                 <Switch
-                  checked={values.active}
-                  onChange={active => setValues({ ...values, active })}
+                  checked={values.public}
+                  onChange={active => setValues({ ...values, public: active })}
                   className={styles.switch}>
-                  <span className={clsx(styles.toggle, values.active ? '' : styles.active)} />
+                  <span className={clsx(styles.toggle, values.public ? '' : styles.active)} />
                 </Switch>
               </div>
 
@@ -281,29 +269,26 @@ export default function Settings({ user, settings: _settings, __setUser }: props
   );
 }
 
-export const getServerSideProps: GetServerSideProps = withSession(
-  async (context: withSessionGetServerSideProps): Promise<GetServerSidePropsResult<any>> => {
-    await connectToDatabase();
-    const session = context.req.session.get('user');
+export const getServerSideProps: GetServerSideProps = async context => {
+  const session: { user: ApiUser } = (await getSession(context)) as unknown as { user: ApiUser };
 
-    if (!session)
-      return {
-        redirect: {
-          destination: 'api/auth/login',
-          permanent: false,
-        },
-      };
-
-    const user = await userModule.findOne({ _id: session.id });
-    const objectUser = user.toObject();
-
+  if (!session) {
     return {
-      props: {
-        settings: objectUser,
-      },
+      notFound: true,
     };
   }
-);
+
+  const client = await clientPromise;
+  const db = client.db();
+
+  const user = await db.collection('users').findOne({ uid: session.user.uid });
+
+  return {
+    props: {
+      user: JSON.parse(JSON.stringify(user)),
+    },
+  };
+};
 
 /**
  * bottom 600ms cubic-bezier(0.68, -0.55, 0.265, 1.55) 0s, background-color 400ms ease-out 0s

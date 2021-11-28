@@ -10,7 +10,11 @@ export interface withSessionRequest extends NextApiRequest {
 
 export type withSessionGetServerSideProps = GetServerSidePropsContext & { req: { session: Session } };
 export interface ApiUser {
+  banner: string;
+  bio: string;
+  public: boolean;
   id: string;
+  uid: string;
   username: string;
   avatar: string;
   discriminator: string;

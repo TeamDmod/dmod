@@ -13,12 +13,7 @@ function CrossIcon() {
       stroke='currentColor'
       viewBox='0 0 24 24'
       xmlns='http://www.w3.org/2000/svg'>
-      <path
-        strokeLinecap='round'
-        strokeLinejoin='round'
-        strokeWidth={2}
-        d='M4 4L18 18M18 4L4 18'
-      />
+      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M4 4L18 18M18 4L4 18' />
     </svg>
   );
 }
@@ -28,10 +23,9 @@ export default function AccessError() {
   const router = useRouter();
 
   useEffect(() => {
-    if (!router.query._access || typeof router.query._access !== 'string')
-      return;
-    setOpen(router.query._access === '0');
-  }, [router.query._access]);
+    if (!router.query.error || typeof router.query.error !== 'string') return;
+    setOpen(router.query.error === 'AccessDenied');
+  }, [router.query.error]);
 
   return (
     <div id='access_error-sdf'>
@@ -64,8 +58,7 @@ export default function AccessError() {
             <div id='model-b8u'>
               <h1 id='model-91'>Access denied</h1>
               <p>
-                Oops looks like you don't have access to login. Make sure you're
-                in{' '}
+                Oops looks like you don't have access to login. Make sure you're in{' '}
                 <Link href='/discord'>
                   <a className='text-blue-400 cursor-pointer'>dmod.gg server</a>
                 </Link>{' '}

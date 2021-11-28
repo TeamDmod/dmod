@@ -1,11 +1,9 @@
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import styles from 'styles/navbar.module.scss';
-import { sessionFetchedUser } from 'typings/typings';
 
-import UserLoader from './user/userLoader';
+import UserLoader from './user/Loader';
 
 function BurgerIcon() {
   return (
@@ -35,36 +33,9 @@ function CrossIcon() {
   );
 }
 
-export default function Navbar({ user, fetcher }: { user: sessionFetchedUser; fetcher: any }) {
+export default function Navbar() {
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const [active, setActive] = useState(false);
-  const [winlogOpen, setWinlogOpen] = useState(false);
-  const router = useRouter();
-
-  function openLoginWindow() {
-    if (winlogOpen) return;
-    const left = screen.width / 2 - 480 / 2;
-    const top = screen.height / 2 - 800 / 2;
-    const win = window.open(
-      `${window.location.origin}/api/auth/login`,
-      '',
-      `width=480,height=800,resizable=no,top=${top},left=${left}`
-    );
-    setWinlogOpen(true);
-
-    const close_inter = setInterval(async () => {
-      if (win.closed) {
-        setWinlogOpen(false);
-        if (!localStorage.getItem('reject')) {
-          fetcher(true);
-        } else {
-          localStorage.removeItem('reject');
-          router.push({ query: { _access: 0 } });
-        }
-        clearInterval(close_inter);
-      }
-    }, 1000);
-  }
 
   const links = [
     // {
@@ -84,8 +55,6 @@ export default function Navbar({ user, fetcher }: { user: sessionFetchedUser; fe
       link: '/discord',
     },
   ];
-
-  // <UserLoader oplm={openLoginWindow} fetcher={fetcher} user={user} />
 
   return (
     <header className={styles.navbar}>
@@ -115,7 +84,7 @@ export default function Navbar({ user, fetcher }: { user: sessionFetchedUser; fe
             })}
           </ul>
         )}
-        <UserLoader oplm={openLoginWindow} fetcher={fetcher} user={user} />
+        <UserLoader />
       </nav>
     </header>
   );

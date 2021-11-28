@@ -1,14 +1,13 @@
 import MetaTags from 'components/MetaTags';
-import Profile from 'components/user/profile';
-import connectToDatabase from 'lib/mongodb.connection';
-import withSession from 'lib/session';
-import users, { userData } from 'models/users';
-import { GetServerSideProps, GetServerSidePropsResult } from 'next';
+import Profile from 'components/user/Profile';
+import clientPromise from 'lib/mongodb';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/react';
 import React from 'react';
-import { ApiUser, withSessionGetServerSideProps } from 'typings/typings';
+import { ApiUser } from 'typings/typings';
 
 interface props {
-  profile: userData;
+  profile: any;
   isOwner: boolean;
   user: ApiUser;
 }
@@ -16,30 +15,43 @@ interface props {
 export default function userProfile({ profile }: props) {
   return (
     <>
-      <MetaTags title={`Dmod.gg - ${profile.username}`} description={`${profile.username}'s profile`} image={profile.avatarURL} />
+      <MetaTags
+        title={`Dmod.gg - ${profile.username}`}
+        description={`${profile.username}'s profile`}
+        image={profile.avatar}
+      />
       <Profile profile={profile} />
     </>
   );
 }
 
-export const getServerSideProps: GetServerSideProps = withSession(
-  async (context: withSessionGetServerSideProps): Promise<GetServerSidePropsResult<any>> => {
-    await connectToDatabase();
-    const session = context.req.session.get('user');
+export const getServerSideProps: GetServerSideProps = async context => {
+  const client = await clientPromise;
+  const db = client.db();
+  const session: { user: ApiUser } = (await getSession(context)) as unknown as { user: ApiUser };
 
-    const user = await users.findOne({ vanity: context.query.vanity as string });
+  const user = JSON.parse(
+    JSON.stringify(await db.collection('users').findOne({ vanity: context.query.vanity as string }))
+  );
+  const isOwner = session?.user?.id === user?._id;
 
-    if (user) {
-      return {
-        props: {
-          profile: user.toObject(),
-          isOwner: !!session && user.id === session.id,
-        },
-      };
-    }
+  if (user?.public || isOwner) {
+    const data = {
+      username: user.username,
+      discriminator: user.discriminator,
+      avatar: user.avatar,
+      bio: user.bio || '',
+    };
 
     return {
-      notFound: true,
+      props: {
+        profile: data,
+        isOwner,
+      },
     };
   }
-);
+
+  return {
+    notFound: true,
+  };
+};
