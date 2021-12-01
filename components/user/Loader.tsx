@@ -35,7 +35,7 @@ export default function UserLoader() {
   }
 
   if (status === 'authenticated') {
-    return <UserDropDown user={session.user as ApiUser} />;
+    return <UserDropDown user={session.user} />;
   }
 
   return (
