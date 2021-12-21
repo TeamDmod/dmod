@@ -8,17 +8,20 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@master
-      
+
       - name: Install Node v14
         uses: actions/setup-node@v2
         with:
           node-version: '14'
-        
+
       - name: Install dependencies
         run: npm install
+
+      - name: Generate prisma client
+        run: npx prisma generate
 
       - name: Run Linter
         run: npm run lint
 
       - name: Run typescript pretty check
-        run:  npm run tspretty
+        run: npm run tspretty
