@@ -43,6 +43,7 @@ model User {
   profile       Profile?
   accounts      Account[]
   sessions      Session[]
+  guilds        GuildUser[]
 
   @@map("users")
 }
@@ -80,4 +81,34 @@ model Profile {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("profiles")
+}
+
+model Guild {
+  id      String      @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  name    String
+  icon    String?
+  members GuildUser[]
+
+  // TODO: Add guild settings
+
+  @@map("guilds")
+}
+
+model GuildUser {
+  id          String        @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  guildId     String        @map("guild_id")
+  userId      String        @map("user_id")
+  type        GuildUserType @map("type")
+  permissions Int?
+
+  guild Guild @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("guild_users")
+}
+
+enum GuildUserType {
+  OWNER
+  MANAGER
+  MODERATOR
 }
