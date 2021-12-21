@@ -1,21 +1,11 @@
-import { MongoDBAdapter } from '@next-auth/mongodb-adapter';
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { hasBetaAccess } from 'lib/backend-utils';
-import clientPromise from 'lib/mongodb';
+import { prisma } from 'lib/prisma';
 import NextAuth from 'next-auth';
 import Discord from 'next-auth/providers/discord';
 
-interface User {
-  id: string;
-  username: string;
-  discriminator: string;
-  avatar: string;
-  email: string;
-  verified: boolean;
-  public_flags: number;
-}
-
 export default NextAuth({
-  adapter: MongoDBAdapter(clientPromise),
+  adapter: PrismaAdapter(prisma),
   providers: [
     Discord({
       clientId: process.env.CLIENT_ID,
@@ -23,6 +13,7 @@ export default NextAuth({
       authorization: 'https://discord.com/api/oauth2/authorize?scope=identify+guilds',
       profile(profile) {
         let image_url: string;
+        let banner: string;
 
         if (profile.avatar === null) {
           const defaultAvatarNumber = parseInt(profile.discriminator, 10) % 5;
@@ -32,15 +23,27 @@ export default NextAuth({
           image_url = `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.${format}`;
         }
 
+        if (profile.banner === null) {
+          banner = `color:${profile.banner_color}`;
+        } else {
+          const format = profile.avatar.startsWith('a_') ? 'gif' : 'png';
+          banner = `https://cdn.discordapp.com/banners/${profile.id}/${profile.banner}.${format}`;
+        }
+
         return {
           id: profile.id,
           uid: profile.id,
           username: profile.username,
           discriminator: profile.discriminator,
           avatar: image_url,
-          verified: profile.verified,
-          public_flags: profile.public_flags,
-          vanity: `${profile.id}`,
+          profile: {
+            create: {
+              bio: "I'm new to dmod! Not much is known about me yet :(",
+              public: false,
+              banner,
+              flags: 0,
+            },
+          },
         };
       },
     }),
@@ -61,4 +64,5 @@ export default NextAuth({
       return betaUser ? true : '/?error=AccessDenied';
     },
   },
+  secret: process.env.AUTH_SECRET,
 });

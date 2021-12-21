@@ -3,11 +3,6 @@ import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 import React, { Fragment } from 'react';
 import styles from 'styles/navbar.module.scss';
-import { ApiUser } from 'typings/typings';
-
-interface props {
-  user: ApiUser;
-}
 
 function AccountSettingsIcon() {
   return (
@@ -69,7 +64,7 @@ function ProfileIcon() {
 //   },
 // ];
 
-export default function UserDropDown({ user }: props) {
+export default function UserDropDown({ user }) {
   return (
     <Menu as={Fragment}>
       <Menu.Button className={styles.user_button}>

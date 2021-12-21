@@ -1,0 +1,114 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["mongoDb"]
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGODB_URI")
+}
+
+model Account {
+  id                 String  @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  userId             String  @map("user_id")
+  type               String
+  provider           String
+  providerAccountId  String  @map("provider_account_id")
+  refresh_token      String?
+  access_token       String?
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?
+  session_state      String?
+
+  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model User {
+  id            String    @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  uid           String    @unique
+  username      String?
+  discriminator String?
+  email         String?   @unique
+  emailVerified DateTime? @map("email_verified")
+  avatar        String?
+  locale        String?
+  profile       Profile?
+  accounts      Account[]
+  sessions      Session[]
+  guilds        GuildUser[]
+
+  @@map("users")
+}
+
+model Session {
+  id           String   @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String   @id @map("_id") @db.ObjectId
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verificationtokens")
+}
+
+model Profile {
+  id           String   @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  userId       String   @map("user_id")
+  public       Boolean  @default(false)
+  bio          String?
+  banner       String?
+  pronouns     String?
+  vanity       String?  @unique
+  website      String?
+  timezone     String?
+  flags        Int?
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("profiles")
+}
+
+model Guild {
+  id      String      @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  name    String
+  icon    String?
+  members GuildUser[]
+
+  // TODO: Add guild settings
+
+  @@map("guilds")
+}
+
+model GuildUser {
+  id          String        @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  guildId     String        @map("guild_id")
+  userId      String        @map("user_id")
+  type        GuildUserType @map("type")
+  permissions Int?
+
+  guild Guild @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("guild_users")
+}
+
+enum GuildUserType {
+  OWNER
+  MANAGER
+  MODERATOR
+}
